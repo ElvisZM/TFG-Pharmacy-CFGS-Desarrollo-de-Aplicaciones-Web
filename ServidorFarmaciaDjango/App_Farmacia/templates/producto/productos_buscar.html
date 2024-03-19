@@ -1,0 +1,51 @@
+{% extends 'principal.html' %}
+{% load static %}
+{% load bootstrap_icons %}
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+{% block cabecera %}
+    <div class ="cabecera">
+        <h1>PRODUCTOS | LISTA</h1>
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    {% block busqueda %}
+    {% endblock %}
+    <div class="descripcion_body">
+        <div class="descripcion_body-texto">
+            {% for producto in productos_mostrar %}
+                {% include 'producto/producto.html' %}
+                {% for proveedor in producto.prov_sum_prod.all %}
+                    <h2>Proveedor: {{ proveedor.nombre_prov|truncatewords:1 }}</h2>
+                    <h2>Dirección: {{ proveedor.direccion_prov|truncatewords:3}}</h2>
+                {% endfor %}
+                <div class="row btn-group">             
+                    <div class="mb-2 ">
+                        <button type="button" 
+                                class="btn btn-outline-primary"> 
+                                <a class="text-decoration-none" href="{% url 'producto_editar' producto.id %}" ><span class="text-dark">Editar Producto </span></a>
+                        </button>
+                    </div>
+
+                    <div class="">
+                        <form action = "{% url 'producto_eliminar' producto.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                                <span>Eliminar Producto</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+            {% empty %}
+                <h2> No se encontraron resultados de su busqueda. </h2>
+            {% endfor %}
+        </div>
+   
+    </div>
+{% endblock %}

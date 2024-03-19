@@ -1,0 +1,31 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'farmacia_editar' farmacia.id %}" method = "post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.nombre_farm show_label=True %}
+                {% spaceless %}
+                {% if formulario.is_bound %}
+                    {{ formulario.nombre_farm.value }}
+                {% endif %}
+                {% endspaceless %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.direccion_farm show_label=True %}
+        </div>
+            
+        <div class="mb-4">
+            {% bootstrap_field formulario.telefono_farm show_label=True %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+</form>
+
+
+{% endblock %}

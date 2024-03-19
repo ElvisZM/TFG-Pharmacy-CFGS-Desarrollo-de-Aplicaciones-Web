@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+    {% load bootstrap5 %}
+    <head>
+        <title>P.Sur Pharmacy | Cuidamos de ti</title>
+        <link rel="shortcut icon" type="image/jpg" href="{% static "imagenes/LogoIcon.png" %}"/>
+        <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+        <script src="{% static 'javascript/myjavascript.js' %}"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        {% bootstrap_css %}
+
+    </head>
+    <body>
+        
+        {% include "estructura/nav.html" %}
+
+        {% block cabecera%}
+        {% endblock %}
+
+        {% block contenido%}
+        {% endblock %}
+
+
+        {% block contenido_adicional %}
+        {% endblock %}
+
+        {% include "estructura/piepagina.html" %}
+        
+    </body>
+</html>

@@ -1,0 +1,663 @@
+*{  
+    text-decoration: none; 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+.container-menu{ 
+    width: 90%; 
+    height: auto; 
+    margin: auto;
+}
+
+.header{    
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    height: auto;
+}
+
+
+.logo-signup{
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;  
+}
+
+.logo-signup > a > img {
+    display: flex;
+    height: 8rem;
+    justify-content: end;
+}
+
+.logo-signup > h4 {
+    font-weight: lighter;
+    color: #1a1d32;
+}
+
+.bodyformulario {
+    background-color: rgb(255, 160, 122, 0.2);
+}
+
+.botonformulario {
+    display: block;
+    margin-top: 1%;
+    width:20%;
+    padding: 1.5%;
+    border-radius: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    background-color: rgb(48, 124, 126, 0.938);
+    color: white;
+    cursor: pointer;
+}
+
+.formulario > p {
+    margin: 5% 0;
+    width: 60%;
+    font-size: small;
+}
+
+.formulario > p > a{
+    color: #1a1d32;
+}
+
+
+.logo{
+    padding: 5px; 
+    
+}
+
+.menu-expansible {
+    flex-grow: 1; 
+    flex-basis: 80%; 
+}
+
+.menu-expansible ul {
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 100%; 
+    list-style: none;
+}
+
+.menu-expansible a { 
+    text-transform: uppercase; 
+    color: #262b4f; 
+    background-color: white;
+    padding: 15px; 
+    transition: all 300ms; 
+    text-decoration: none;
+}
+
+.menu-expansible a:hover{ 
+    background-color: pink; 
+    color: white; 
+}
+
+.menu-expansible li{ 
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+}
+
+.submenu{ 
+    display: none; 
+    position: absolute; 
+    z-index: 1; 
+    left: -24.25%; 
+    top: 100%; 
+    text-align: left; 
+    width: 200%;
+    
+}
+
+.submenucrud{
+    display: none; 
+    position: absolute; 
+    z-index: 1; 
+    left: -21.8%; 
+    top: 100%; 
+    text-align: left; 
+    width: 170%;
+}
+
+.listacruds{ 
+    display: none; 
+    position: absolute; 
+    z-index: 1; 
+    left: -17.25%; 
+    top: 100%; 
+    text-align: left; 
+    width: 150%;
+    
+}
+
+.submenulista{
+    display: none; 
+    position: absolute; 
+    z-index: 1; 
+    left: 85%; 
+    top: 0; 
+    text-align: left; 
+    width: 150%;   
+}
+
+
+.login {
+    position:relative;
+}
+
+.submenulogin {
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
+    top:100%;
+    right:0%;
+    width: 220%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+
+}
+
+.submenulogin > li {
+    text-align: left;
+    background-color: white;
+    z-index:1;
+    margin: 0;
+}
+
+.submenulogin form {
+    margin: auto;
+    text-align: left;
+    background-color: white;
+    z-index:1;
+}
+
+.submenulogin > li > i{
+    padding-top: 5%;
+    text-align: center;
+}
+
+.submenulogin form i{
+    padding-top: 5%;
+    text-align: center;
+}
+
+
+.submenulogin > li > input {
+    border-radius: 15px;
+    text-align: center;
+    width: 58%;
+    margin-left: 21%;
+    padding: 3%;
+}
+
+.submenulogin form input {
+    border-radius: 15px;
+    text-align: center;
+    width: 58%;
+    margin-left: 21%;
+    padding: 3%;
+}
+
+.submenulogin > li > a > button {  
+    width: 100%;
+    padding: 3%;
+    font-size: large;
+    background-color: rgb(255, 160, 122, 1);
+    /*background: linear-gradient(to bottom, #262b4f 0%, rgba(48, 124, 126, 0.938) 100%); /*Con la funcion linear-gradient dentro del background, puedo hacer que el boton empiece por un color y termine en otro. En esta línea indico que se ejecutará desde arriba hacia abajo de modo que empieze por el color azul marino y termine en un azul clarito*/
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.submenulogin form button {  
+    width: 100%;
+    padding: 3%;
+    font-size: large;
+    background-color: rgb(255, 160, 122, 1);
+    /*background: linear-gradient(to bottom, #262b4f 0%, rgba(48, 124, 126, 0.938) 100%); /*Con la funcion linear-gradient dentro del background, puedo hacer que el boton empiece por un color y termine en otro. En esta línea indico que se ejecutará desde arriba hacia abajo de modo que empieze por el color azul marino y termine en un azul clarito*/
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 0;
+}
+
+
+.submenulogin > li > h4 {
+    padding-left: 12%;
+    margin: 0;
+}
+
+.submenulogin > li > p {
+    margin-top: 3%;
+    padding-left: 3%;
+    margin-bottom: 5%;
+}
+
+
+.carrusel{
+    width: 90%;
+    height: auto;
+    margin: 3% auto;
+    overflow: hidden;
+}
+
+.carrusel ul{
+    display: flex;
+    padding: 0;
+    width: 500%;
+    animation: carrusel 20s infinite ease-in-out;
+}
+
+.carrusel li{
+    width: 100%;
+    list-style: none;
+    position: relative;
+}
+
+.carrusel img{
+    width: 100%;
+    height: auto;
+}  
+
+.texto1 {
+    position: absolute;
+    text-align: left;
+    width: 40%;
+    top: 50px;
+    color: white;
+    padding: 40px;
+}
+
+.texto1 h2 {
+    font-family:'Times New Roman', Times, serif;
+    font-size: 60px;
+}
+
+.texto1 p {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 80%;
+    margin-top: 10px;
+}
+
+.texto1 button{
+    width: 25%;
+    padding: 10px;
+    margin-top: 50px;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.texto h2 {
+    font-family:'Times New Roman', Times, serif;
+    font-size: 60px;
+}
+
+.texto p {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 80%;
+    margin-top: 10px;
+}
+
+.texto button {
+    width: 25%;
+    padding: 10px;
+    margin-top: 50px;
+    background-color: #262b4f;
+    color: white;
+}
+
+.texto {
+    position: absolute;
+    text-align: left;
+    width: 40%;
+    top: 50px;
+    color: #262b4f;
+    padding: 40px;
+}
+
+@keyframes carrusel{
+    0% {margin-left: 0;}
+    15% {margin-left: 0;}
+
+    20% {margin-left: -100%;}
+    35% {margin-left: -100%;}
+    
+    40% {margin-left: -200%;}
+    55% {margin-left: -200%;}
+    
+    60% {margin-left: -300%;}
+    75% {margin-left: -300%;}
+
+    80% {margin-left: -400%;}
+    95% {margin-left: -400%;}
+
+    100% {margin-left: 0;}
+
+}
+
+.card{
+    width: 100%;
+
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;
+}
+
+.botones{
+    width: 70%;
+    position: absolute;
+    bottom: 3%;
+}
+
+.botones > button {
+    margin-left: 6%;
+    margin-right: 5%;
+}
+
+#ó {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.google-apple > button{
+    width: 40%;
+    padding: 3%;
+    border-radius: 15px;
+    margin-left: 6%; 
+    cursor: pointer;
+}
+
+#parrafo-google-apple{
+    margin-top: 0;
+    margin-left: 5%;
+}
+
+.menu-expansible li .submenu{ 
+    display: none; 
+}
+
+.menu-expansible li .submenulogin{ 
+    display: none; 
+}
+
+.menu-expansible li .submenucrud{ 
+    display: none; 
+}
+
+.menu-expansible li .listacruds{ 
+    display: none; 
+}
+
+.menu-expansible li:hover .submenu{ 
+    display: block; 
+}
+
+.menu-expansible li:hover .submenulogin{ 
+    display: block; 
+}
+
+.menu-expansible li:hover .submenucrud{ 
+    display: block; 
+}
+
+.menu-expansible li:hover .listacruds{ 
+    display: block; 
+}
+
+.listacruds li .submenulista{ 
+    display: none; 
+}
+
+.listacruds li:hover .submenulista{ 
+    display: block; 
+}
+
+.submenulogin input{    
+    width: 100%;    
+    height: auto;   
+    margin-top: 3px;    
+    margin-bottom: 10px;   
+}
+
+.submenulogin a{
+    text-transform: initial; 
+    padding:0;  
+    margin:0;   
+    background-color: rgb(255, 160, 122, 0.2);
+}
+
+.submenulogin a:hover{ 
+    background-color: white;
+    color: #262b4f;
+}
+
+.cabecera {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #1a1d32;
+    margin-bottom: 2%;
+    width: 40%;
+}
+
+.cabecera > h1 {
+    margin-left: 20.5%;
+}
+
+.cabecera > h5 {
+    margin-left: 7.5%;
+    margin-top: 1%;
+    font-weight: bold;
+}
+
+
+.cabecera1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #1a1d32;
+    margin-bottom: 2%;
+}
+
+.cabecera1 > h1 {
+    margin-left: 20.5%;
+}
+
+.cabecera1 > h5 {
+    margin-left: 7.5%;
+    margin-top: 1%;
+    font-weight: bold;
+}
+
+.cabecera2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #1a1d32;
+    margin-bottom: 2%;
+    text-align: center;
+}
+
+
+.text-topventas {
+    font-weight: bold;
+    color:#262b4f;
+    width: 90%;
+    margin-top: 0;
+    margin-bottom: 2%;
+}
+
+.descripcion_body {
+    width: 100%;
+    background-color: rgb(255, 160, 122, 0.2);
+    margin-top: 0%;
+    margin-bottom: 5%;
+}
+
+.descripcion_body-texto {
+    display: inline-block;
+    width: 90%;
+    margin-top: 2%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2%;
+    padding-left: 20%;
+    padding-right: 20%;
+    color: #1a1d32;
+}
+
+.descripcion_body-texto > h2 {
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+
+.descripcion_body-texto > p {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+
+.descripcion_body-texto > ul > li {
+    margin-top: 3%;
+}
+
+.descripcion_body-texto > ul > li > a {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 4%;
+    margin-bottom: 4%;
+    color: #1a1d32;
+    text-decoration: none;
+}
+
+.descripcion_body-texto > div > h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+
+.footer {
+    width: 100%;
+    background-color: #262b4f;
+    color: white;
+    margin-top: 4%;
+}
+
+.footer a {
+    color: white;
+}
+
+.contenedorpie{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 2% 2.3fr 2% 0.3fr 2% 5%;
+    grid-template-areas: 
+        "farma farma farma farma"
+        "linea1 linea1 linea1 linea1"
+        "servicio legal psur siguenos"
+        "linea2 linea2 linea2 linea2"
+        "entregas entregas confianza opinion"
+        "linea3 linea3 linea3 linea3"
+        "pago pago pago pago"
+    ;
+    width: 90%;
+    margin: 1% auto;   
+}
+
+.mifarma {
+    grid-area: farma;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 3% auto;
+}
+
+.mifarma > p {
+    align-self: end;
+}
+
+.mifarma > img {
+    width: 8%;
+}
+
+.linea-top {
+    grid-area: linea1;
+}
+
+.linea-medium {
+    grid-area: linea2;
+}
+
+.linea-bottom {
+    grid-area: linea3;
+}
+
+.servicio {
+    grid-area: servicio;
+}
+
+.contenedorpie h2 {
+    padding-bottom: 4%;
+}
+
+.contenedorpie p {
+    padding-bottom: 4%;
+}
+
+.mapa {
+    margin-top: 2%;
+    width: 80%;
+    height: 50%;
+}
+
+.legal {
+    grid-area: legal;
+}
+
+.psur {
+    grid-area: psur;
+}
+
+.siguenos i{
+    grid-area: siguenos;
+    padding-right: 3%;
+}
+
+.siguenos > p {
+    margin-top: 5%;
+}
+
+
+.entregas {
+    grid-area: entregas;   
+}
+
+.entregas p {
+    display: inline-flex;
+    margin-right: 2%;
+    margin-top: 3%;
+    
+}
+
+.confianza {
+    grid-area: confianza;
+}
+
+.opiniones {
+    grid-area: opinion;
+}
+
+.pago {
+    grid-area: pago;
+    display: flex;
+    justify-content: space-between;
+}

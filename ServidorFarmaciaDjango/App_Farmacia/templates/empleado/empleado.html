@@ -1,0 +1,10 @@
+<div>
+    <h2>Empleado/a: {{ empleado.usuario.first_name|truncatewords:2 }}</h2>
+    <h2>Email: {{ empleado.usuario.email }}</h2>
+    <h2>Direccion: {{ empleado.direccion_emp }}</h2>
+    <h2>Teléfono: {{ empleado.telefono_emp }}</h2>
+    <h2>Fecha de Alta: {{ empleado.usuario.date_joined }}</h2>
+    <h2>Último Inicio Sesion: {{ empleado.usuario.last_login }}</h2>
+    <h2>Salario: {{ empleado.salario }} €</h2>
+    <h2>Farmacia: {{ empleado.farm_emp.nombre_farm|truncatewords:1 }}</h2>
+</div>

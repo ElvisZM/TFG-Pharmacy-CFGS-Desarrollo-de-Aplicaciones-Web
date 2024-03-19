@@ -1,0 +1,50 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'promocion_buscar_avanzado' %}" method = "GET">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.nombre_promo show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.descripcion_promo show_label=True %}
+        </div>
+            
+        <div class="w-25 ">
+            {% bootstrap_field formulario.valor_promo show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_desde show_label=True %}
+            <div class="invalid-feedback">
+                {% for error in formulario.fecha_desde.errors %} 
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_hasta show_label=True %}
+            <div class="invalid-feedback">
+                {% for error in formulario.fecha_hasta.errors %} 
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>  
+
+        <div class="w-25 ">
+            {% bootstrap_field formulario.cliente_promo show_label=True %}
+        </div>
+
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons%}
+    </div>
+</form>
+
+
+{% endblock %}

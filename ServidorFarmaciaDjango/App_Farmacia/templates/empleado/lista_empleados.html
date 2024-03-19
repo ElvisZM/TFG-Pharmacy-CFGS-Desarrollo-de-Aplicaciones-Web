@@ -1,0 +1,66 @@
+{% extends 'principal.html' %}
+{% load static %}
+{% load bootstrap_icons %}
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+{% block cabecera %}
+    <div class="d-flex justify-content-evenly">
+        <div class ="cabecera">
+            <h1>EMPLEADOS | LISTA </h1>
+        </div>
+        <div>
+            <form action="{% url 'empleado_buscar' %}" class="d-flex" role="search" method="GET">
+                <input name="textoBusqueda" class="form-control w-75 " type="search" placeholder="Busque aquí su empleado" aria-label="Search">
+                <button class="btn btn-light btn-outline-dark ms-2" type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block contenido %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-0 mt-5" role="alert">
+                {{ message }}
+                <button type"button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="descripcion_body">
+        <div class="descripcion_body-texto">    
+            {% for empleado in empleados %}
+                {% include 'empleado/empleado.html' %}
+                {% if request.user.is_authenticated and perms.App_Farmacia.add_empleado %}
+                <div class="row btn-group">             
+                    <div class="mb-2 ">
+                        <button type="button" 
+                                class="btn btn-outline-primary"> 
+                                <a class="text-decoration-none" href="{% url 'empleado_editar' empleado.id %}" ><span class="text-dark">Editar Empleado</span></a>
+                        </button>
+                    </div>
+
+                    <div class="">
+                        <form action = "{% url 'empleado_eliminar' empleado.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                                <span>Eliminar Empleado</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+                <br>
+                <br>
+                <br>
+                <hr>
+            {% empty %}
+            <h2> No se encontraron datos. </h2>
+            {% endfor %}
+        </div>
+    {% block busqueda %}
+    {% endblock %}
+    </div>
+{% endblock %}

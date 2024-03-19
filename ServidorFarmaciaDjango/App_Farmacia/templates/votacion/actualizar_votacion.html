@@ -1,0 +1,35 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'votacion_editar' votacion.id %}" method = "post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.puntuacion show_label=True %}
+                {% spaceless %}
+                {% if formulario.is_bound %}
+                    {{ formulario.puntuacion.value }}
+                {% endif %}
+                {% endspaceless %}
+        </div>
+            
+        <div class="mb-4">
+            {% bootstrap_field formulario.comenta_votacion show_label=True %}
+        </div>
+        
+        <div class="mb-4">
+            {% bootstrap_field formulario.voto_producto show_label=True %}
+        </div>
+        
+        <div class="mb-4">
+            {% bootstrap_field formulario.voto_cliente show_label=True %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+</form>
+
+
+{% endblock %}

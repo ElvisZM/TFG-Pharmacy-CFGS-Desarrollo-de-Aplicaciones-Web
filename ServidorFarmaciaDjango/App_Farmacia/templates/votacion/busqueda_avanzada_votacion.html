@@ -1,0 +1,54 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'votacion_buscar_avanzado' %}" method = "GET">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.puntuacion show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_desde show_label=True %}
+            <div class="invalid-feedback">
+                {% for error in formulario.fecha_desde.errors %} 
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_hasta show_label=True %}
+            <div class="invalid-feedback">
+                {% for error in formulario.fecha_hasta.errors %} 
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>  
+
+        <div class="mb-4 ">
+            {% bootstrap_field formulario.comenta_votacion show_label=True %}
+        </div>
+
+        <div class="d-flex mb-4 justify-content-around">
+
+            <div class="w-25 ">
+                {% bootstrap_field formulario.voto_producto show_label=True %}
+            </div>
+
+            <div class="w-25 ">
+                {% bootstrap_field formulario.voto_cliente show_label=True %}
+            </div>
+
+        </div>   
+            
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons%}
+    </div>
+</form>
+
+
+{% endblock %}

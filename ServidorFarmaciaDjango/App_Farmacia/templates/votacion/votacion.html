@@ -1,0 +1,7 @@
+<div>
+    <h2>Puntuacion: {{ votacion.puntuacion }}</h2>
+    <h2>Fecha: {{ votacion.fecha_votacion|date:"d-m-Y" }}</h2>
+    <h2>Comentario: {{ votacion.comenta_votacion }}</h2>
+    <h2>Producto Votado: {{ votacion.voto_producto.nombre_prod|truncatewords:1 }}</h2>
+    <h2>Cliente: {{ votacion.voto_cliente.usuario.first_name|truncatewords:1 }}</h2>
+</div>

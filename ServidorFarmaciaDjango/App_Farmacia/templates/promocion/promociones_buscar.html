@@ -1,0 +1,47 @@
+{% extends 'principal.html' %}
+{% load static %}
+{% load bootstrap_icons %}
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+{% block cabecera %}
+    <div class ="cabecera">
+        <h1>PROMOCIONES | LISTA</h1>
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    {% block busqueda %}
+    {% endblock %}
+    <div class="descripcion_body">
+        <div class="descripcion_body-texto">
+            {% for promocion in promociones_mostrar %}
+                {% include 'promocion/promocion.html' %}
+                <div class="row btn-group">             
+                    <div class="mb-2 ">
+                        <button type="button" 
+                                class="btn btn-outline-primary"> 
+                                <a class="text-decoration-none" href="{% url 'promocion_editar' promocion.id %}" ><span class="text-dark">Editar Promocion </span></a>
+                        </button>
+                    </div>
+
+                    <div class="">
+                        <form action = "{% url 'promocion_eliminar' promocion.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                                <span>Eliminar Promocion</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+            {% empty %}
+            <h2> No se encontraron resultados de su busqueda. </h2>
+            {% endfor %}
+        </div>
+   
+    </div>
+{% endblock %}

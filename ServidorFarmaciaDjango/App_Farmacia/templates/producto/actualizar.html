@@ -1,0 +1,43 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'producto_editar' producto.id %}" method = "post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.nombre_prod show_label=True %}
+                {% spaceless %}
+                {% if formulario.is_bound %}
+                    {{ formulario.nombre_prod.value }}
+                {% endif %}
+                {% endspaceless %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.descripcion show_label=True %}
+        </div>
+            
+        <div class="d-flex mb-4 justify-content-between">
+
+            <div class="w-25">
+                {% bootstrap_field formulario.precio show_label=True %}
+            </div>
+
+            <div class="w-25">
+                {% bootstrap_field formulario.farmacia_prod show_label=True %}
+            </div>
+
+            <div class="w-25 ">
+                {% bootstrap_field formulario.prov_sum_prod show_label=True %}
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </div>
+</form>
+
+
+{% endblock %}

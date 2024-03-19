@@ -1,0 +1,25 @@
+{% load static %}
+
+<div class="text-topventas">
+    <h3>Top Ventas</h3>
+</div>
+<div class="grid-container">   
+    {% for producto in productos %}
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex mb-2">
+                    <h4 class="card-title">Nombre: {{ producto.nombre_prod}}</h4>
+                </div>
+                <h6 class="card-subtitle mb-2">Descripcion: {{ producto.descripcion}}</h6>
+                <p class="card-text">Precio: {{ producto.precio }}€</p>
+                <p class="card-text">Farmacia: {{ producto.farmacia_prod.nombre_farm}}</p>
+                {% for proveedor in producto.prov_sum_prod.all %}
+                    <p class="card-text">Proveedor del Producto: {{ proveedor.nombre_prov }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% empty %}
+        <h2> No se encontraron datos. </h2>
+    {% endfor %}
+</div>
+

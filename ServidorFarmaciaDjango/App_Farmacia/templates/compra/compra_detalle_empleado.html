@@ -1,0 +1,11 @@
+{% for compra in compras %}
+    {% include 'compra/compra.html' %}
+    {% for detalle_compra in compra.producto_compra.all %}
+        <h2>Cantidad Compra: {{ detalle_compra.cantidad_prod_comprado }}</h2>
+        <h2>Precio Ud: {{ detalle_compra.precio_ud }}</h2>
+    {% endfor %}
+{% empty %}
+<h2>Lo sentimos, la compra solicitada no existe.</h2>
+{% endfor %}
+
+{# TENGO QUE HACER VARIOS HTML TENIENDO EN CUENTA LA VARIABLE QUE SEA EL DE LA VIEW #}

@@ -1,0 +1,12 @@
+<div>
+    <h2> Fecha Compra: {{ compra.fecha_compra|date:"d-m-Y" }}</h2>
+    <h2> Cliente: {{ compra.cliente_compra.nombre_cli|truncatewords:1 }} </h2>
+    {% for producto in compra.producto_compra.all %}
+        <h2>Producto comprado: {{ producto.nombre_prod|truncatewords:2 }} </h2>
+        {%for det in producto.detallecompra_set.all %}
+            <h2>Cantidad: {{ det.cantidad_prod_comprado }}
+            <h2>Precio Unidad: {{ det.precio_ud }} </h2>
+        {% endfor %}
+    {% endfor %}
+    <h2> Empleado: {{ compra.empleado_compra.nombre_emp|truncatewords:2 }} </h2>
+</div> 

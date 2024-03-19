@@ -1,0 +1,24 @@
+{% extends 'principal.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+{% block cabecera %}
+    <div class ="cabecera">
+        <h1>FARMACIAS | ESPECIFICA Y SUS PRODUCTOS </h1>
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    <div class="descripcion_body">
+        <div class="descripcion_body-texto">
+            {% include 'farmacia/farmacia.html' %}
+            {% for producto in productos %}
+                <h2>Producto: {{ producto.nombre_prod|truncatewords:1 }}</h2>
+                <h2>Descripcion Producto: {{ producto.descripcion }}</h2>
+                <h2>Precio: {{ producto.precio }}</h2>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

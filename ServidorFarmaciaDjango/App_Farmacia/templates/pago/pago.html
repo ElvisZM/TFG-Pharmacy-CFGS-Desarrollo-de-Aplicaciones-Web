@@ -1,0 +1,8 @@
+<div>
+    <h2>Banco: {{ pago.get_banco_display }}</h2>
+    <h2>Cuenta Bancaria: {{ pago.cuenta_bancaria }}</h2>
+    <h2>Fecha Pago: {{ pago.fecha_pago|date:"m-d-Y" }}</h2>
+    <h2>Cliente: {{ pago.cliente.nombre_cli|truncatewords:1 }}</h2>
+    <h2>Plan Subscripcion: {{ pago.subscripcion_pago.plan_sub|truncatewords:5 }}</h2>
+    <h2>Precio: {{ pago.subscripcion_pago.precio }}</h2>
+</div>

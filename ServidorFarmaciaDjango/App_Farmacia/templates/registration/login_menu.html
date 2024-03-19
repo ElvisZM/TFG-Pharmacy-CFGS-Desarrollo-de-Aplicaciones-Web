@@ -1,0 +1,15 @@
+<form class="bodyformulario" action = "{% url 'login_menu' %}" method = "post">
+    {% csrf_token %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <li><i class="fa-solid fa-user"></i> </li>
+    <li><input type="text" name="username" id="usuario" placeholder="Usuario"></li>
+    <li><i class="fa-solid fa-lock"></i> </li>
+    <li><input type="password" name="password" id="contrasenya" placeholder="********"></li>
+    <li><button type="submit">Acceder</button></li>
+</form>

@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title mb-3">Gerente: {{ gerente.usuario.first_name }}</h4>
+        <h6 class="card-subtitle mb-2">Email: {{ gerente.usuario.email }}</h6>
+        <p class="card-text">Dirección: {{ gerente.direccion_ger }}</p>
+        <p class="card-text">Teléfono: {{ gerente.telefono_ger }}</p>
+        <p class="card-text">Fecha de Alta: {{ gerente.usuario.date_joined }}</p>
+        <p class="card-text">Último Inicio Sesión: {{ gerente.usuario.last_login }}</p>
+        <p class="card-text">Salario: {{ gerente.salario_ger }} €</p>
+        <p class="card-text">Farmacia: {{ gerente.gerente_farm.nombre_farm }}</p>
+    </div>
+    {% if request.user.is_authenticated and perms.App_Farmacia.add_gerente %}
+    <div class="botones btn-group">             
+        <button type="button" class="btn btn-outline-primary"> 
+            <a class="text-decoration-none" href="{% url 'gerente_editar' gerente.id %}" ><span class="text-dark">Editar</span></a>
+        </button>
+
+        <form action="{% url 'gerente_eliminar' gerente.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                <span>Eliminar</span>
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>

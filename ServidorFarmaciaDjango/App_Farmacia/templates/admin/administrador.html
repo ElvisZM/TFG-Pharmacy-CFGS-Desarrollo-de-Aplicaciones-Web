@@ -1,0 +1,8 @@
+<div>
+    <h2>Administrador/a: {{ administrador.usuario.first_name|truncatewords:2 }}</h2>
+    <h2>Email: {{ administrador.usuario.email }}</h2>
+    <h2>Direccion: {{ administrador.direccion_admin }}</h2>
+    <h2>Teléfono: {{ administrador.telefono_admin }}</h2>
+    <h2>Fecha de Alta: {{ administrador.usuario.date_joined }}</h2>
+    <h2>Último Inicio Sesion: {{ administrador.usuario.last_login }}</h2>
+</div>

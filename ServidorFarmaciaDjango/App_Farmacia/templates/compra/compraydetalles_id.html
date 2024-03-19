@@ -1,0 +1,28 @@
+{% extends 'principal.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+{% block cabecera %}
+    <div class ="cabecera">
+        <h1>COMPRAS | ESPECIFICA Y SUS DETALLES (#5)</h1>
+    </div>
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="descripcion_body">
+        <div class="descripcion_body-texto">    
+            {% for compra in compras_id %}
+                {% include 'compra/compra.html' %}
+                {% for detcompra in compra.producto_compra.all %}
+                    <h2>Cantidad Compra: {{ detcompra.cantidad_prod_comprado }}</h2>
+                    <h2>Precio Ud: {{ detcompra.precio_ud }}</h2>
+                {% endfor %}
+            {% empty %}
+                <h2>Lo sentimos, la compra solicitada no existe.</h2>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

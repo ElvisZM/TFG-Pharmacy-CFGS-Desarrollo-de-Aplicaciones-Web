@@ -1,0 +1,52 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form class="container" action ="{% url 'gerente_create' %}" method = "post">
+    {% csrf_token %}
+    <div class="mb-4 w-50">
+        {% bootstrap_field formulario.username %}
+    </div>
+    <div class="mb-4 w-50">
+        {% bootstrap_field formulario.first_name %}
+    </div>
+    <div class="w-50">
+        {% bootstrap_field formulario.email %}
+    </div>
+    <div class="d-flex justify-content-between mb-4 ">
+        <div class="w-50">
+            {% bootstrap_field formulario.password1 %}
+        </div>
+        <div class="w-25">
+            {% bootstrap_field formulario.password2 %}
+        </div>
+    </div>
+    <div class="d-flex justify-content-between mb-4 ">
+        <div class= "w-50">
+            {% bootstrap_field formulario.direccion_ger %}
+        </div>
+        <div class="w-25">
+            {% bootstrap_field formulario.date_joined %}
+        </div>
+    </div>
+    <div class="d-flex justify-content-between mb-4 ">
+        <div>
+            {% bootstrap_field formulario.telefono_ger %}
+        </div>
+        <div>
+            {% bootstrap_field formulario.salario_ger %}
+        </div>
+
+        <div class="mb-4 w-25">
+            {% bootstrap_field formulario.gerente_farm show_label=True %}
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+
+</form>
+
+
+{% endblock %}

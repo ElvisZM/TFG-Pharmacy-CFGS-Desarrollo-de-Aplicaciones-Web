@@ -1,0 +1,40 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'producto_buscar_avanzado' %}" method = "GET">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.nombre_prod show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.descripcion show_label=True %}
+        </div>
+            
+        <div class="d-flex mb-4 justify-content-between">
+
+            <div class="w-25">
+                {% bootstrap_field formulario.precio show_label=True %}
+            </div>
+
+            <div class="w-25">
+                {% bootstrap_field formulario.farmacia_prod show_label=True %}
+            </div>
+
+            <div class="w-25 ">
+                {% bootstrap_field formulario.prov_sum_prod show_label=True %}
+            </div>
+
+        </div>
+
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons%}
+    </div>
+</form>
+
+
+{% endblock %}

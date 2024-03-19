@@ -1,0 +1,125 @@
+{% extends "principal.html" %}
+
+{% block cabecera %}
+    
+    
+
+    {% if request.user.is_authenticated %}
+    <div class="cabecera1 d-flex">
+      <h5>¡Hola, {{ request.user.username }}!</h5>
+      <h1>MI PROYECTO API - INICIO</h1>
+    </div>
+    {% else %}
+    <div class="cabecera2">
+      <h1>MI PROYECTO API - INICIO</h1>
+    </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block contenido %}
+{% load static %}
+<div class="carrusel">
+  <ul>
+      <li>
+          <img src="{% static "imagenes/carrusel1.jpg" %}" alt="imgcarrusel-1">
+          <div class="texto1">
+              <h2>La salud no tiene precio </h2>
+              <p>La mejor manera de anticiparse al Black Friday. Consigue ahora los mayores descuentos en parafarmacia.</p>
+              <button>Ver más</button>
+          </div>
+      </li>
+      <li>
+          <img src="{% static "imagenes/carrusel2.jpg" %}" alt="imgcarrusel-2">
+          <div class="texto">
+              <h2>15% de descuento</h2>
+              <p>En productos de máxima calidad para que ellos crezcan felices y tú disfrutes del momento.</p>
+              <button>Ver más</button>
+          </div>
+      </li>
+      <li>
+          <img src="{% static "imagenes/carrusel3.jpg" %}" alt="imgcarrusel-3">
+          <div class="texto">
+              <h2>30% dto en 2º ud</h2>
+              <p>Productos naturales y biodegradables para la salud de hoy y del manyana.</p>
+              <button>Ver más</button>
+          </div>
+      </li>
+      <li>
+          <img src="{% static "imagenes/carrusel4.jpg" %}" alt="imgcarrusel-4">
+          <div class="texto">
+              <h2>20% de descuento </h2>
+              <p>La salud es fundamental. Empieza por el cuidado de tu piel.</p>
+              <button>Ver más</button>
+          </div>
+      </li>
+      <li>
+          <img src="{% static "imagenes/carrusel5.jpg" %}" alt="imgcarrusel-5">
+          <div class="texto">
+              <h2>¡Vuelve la cajita más esperada!</h2>
+              <p>PSur Secret es la cajita de salud, dermocosmética y bienestar que te va a sorprender con 23 productos de marcas referentes en el mercado. ¡Por sólo 49,99€!</p>
+              <button>Ver más</button>
+          </div>
+      </li>
+  </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}
+
+
+
+{% block contenido_adicional %}
+{% load static %}
+
+  
+    <div class="descripcion_body">
+      <div class="descripcion_body-texto">
+        {% include "producto/productos_destacados.html" %}
+
+          <h2>P.Sur Pharmacy: tu farmacia online de confianza</h2>
+  
+          <p>La <b>farmacia online</b> que te acompanya desde hace anyos ha cambiado su nombre a P.Sur Pharmacy. Ahora esta farmacia te presenta un <b>catálogo de productos de parafarmacia y farmacia más amplio con más de 30.000 productos</b> de las mejores marcas de farmacia.</p>
+          
+          <p>P.Sur Pharmacy se ha convertido en el referente de las farmacias online de Espanya, porque somos la farmacia de barrio pero en versión online. Aquí encontrarás toda la facilidad, confianza y cercanía de <b>tu farmacia favorita y disponible las 24h</b> para que hagas tus pedidos cuando quieras y con la certeza de que los recibirás en el menor tiempo posible.</p>
+  
+          <h2>Beneficios de una parafarmacia y farmacia online</h2>
+  
+          <p>El mayor beneficio de hacer tus compras a través de P.Sur Pharmacy tu farmacia online de confianza es la <b>disponibilidad de todos los productos que necesitas los 365 días anyo</b> y con solo un click los tendrás en tu casa en un tiempo muy reducido, porque nuestros envíos tardan muy poco tiempo, entre 24-48h.</p>
+  
+          <p>El objetivo principal de P.Sur Pharmacy como farmacia online es que nuestros usuarios se sientan acompanyados y que estén seguros de que <b>nuestra farmacia siempre estará a su disposición</b>, no solo a través de productos si no con los diversos consejos y recomendaciones de nuestros especialistas y farmacéuticos expertos.</p>
+  
+          <p>Además, para nosotros es fundamental que el <b>proceso de compra sea lo más rápido</b>, seguro y que los precios que encontrarás en el catálogo de productos de nuestra farmacia online tenga precios accesibles.</p>
+  
+          <h3>Tu farmacia online barata</h3>
+  
+          <p>Si algo nos caracteriza en P.Sur Pharmacy, es nuestro trabajo incesable para poder ofrecer tus productos de farmacia al mejor precio. No solo es cuestión de encontrar la farmacia online más barata, sino también de tener una garantía de que los productos cumplen con todas las garantías legales. Nuestra farmacia cumple estrictamente con los estándares y requerimientos. Atida además te ofrece tus productos favoritos de parafarmacia online.</p>
+  
+          <h3>¿Por qué comprar en nuestra farmacia online?</h3>
+  
+          <p>Es una realidad que cada vez más gente elige comprar productos de farmacia online o los productos de parafarmacia a través de internet. Es algo de lo que nos dimos cuenta hace muchos anyos, por eso puedes adquirir tus productos online durante los 365 días del anyo 24 horas al día. Además podemos ofrecerte un precio muy competitivo en miles de tus productos favoritos.</p>
+  
+          <h3>Formas de pago</h3>
+  
+          <p>Nuestra farmacia online P.Sur Pharmacy permite pagar a través de tarjeta de crédito o débito, Bizum y Paypal.</p>
+  
+          <h3>Pago 100% seguro</h3>
+  
+          <p>Utilizamos los <b>sistemas de pago más seguros</b> para que no tengas problemas para pagar tus pedidos. Para nosotros, la seguridad de sus datos es lo más importante.</p>
+  
+          <h3>Farmacéuticos expertos</h3>
+  
+          <p>Para P.Sur Pharmacy tu farmacia online de confianza es crucial proveer del <b>asesoramiento farmacéutico a través de consejos, recomendaciones y sugerencias</b>, porque sabemos la importancia que tiene la información de expertos en temas de la salud.</p>
+  
+          <h3>Catálogo de productos</h3>
+  
+          <p>Contamos con una amplia variedad de productos y marcas. Nuestro catálogo tiene más de 30.000 referencias que se dividen en múltiples categorías.</p>
+  
+          <h3>Cupones, descuentos y ofertas en nuestra farmacia</h3>
+  
+          <p>En nuestra farmacia online puedes encontrar periódicamente cupones de descuento y las mejores ofertas online en tus productos favoritos. Comprar tus productos online baratos es posible gracias a la sección de promociones, donde encontrarás las mejores promos de farmacia (2x1, 3x2…) y descuentos que no querrás dejar pasar.</p>
+  
+      </div>
+  </div>
+{% endblock %}

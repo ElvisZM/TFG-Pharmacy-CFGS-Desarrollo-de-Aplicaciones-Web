@@ -1,0 +1,39 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load bootstrap5 %}
+
+<form action ="{% url 'promocion_editar' promocion.id %}" method = "post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="mb-4">
+            {% bootstrap_field formulario.nombre_promo show_label=True %}
+                {% spaceless %}
+                {% if formulario.is_bound %}
+                    {{ formulario.nombre_promo.value }}
+                {% endif %}
+                {% endspaceless %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.descripcion_promo show_label=True %}
+        </div>
+            
+        <div class="mb-4">
+            {% bootstrap_field formulario.valor_promo show_label=True %}
+        </div>
+        
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_fin_promo show_label=True %}
+        </div>
+        
+        <div class="mb-4">
+            {% bootstrap_field formulario.cliente_promo show_label=True %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+</form>
+
+
+{% endblock %}
