@@ -36,6 +36,8 @@ h6{
     list-style: none;
 }
 
+//CADA PRIMER LI DEL MENU//
+
 .apartados{
     position: relative;
     text-transform: uppercase;
@@ -76,7 +78,6 @@ h6{
     .letras-animacion >h5{
         color: white;
         animation: fromLeft 500ms linear;
-
     }
     transform: scale(1.2,1.2);
 }
@@ -90,6 +91,8 @@ h6{
     }
 }
 
+//APARTADO INTERIOR, SEGUNDO LI//
+
 .apartados:hover ul{
     display: block;
 }
@@ -102,6 +105,9 @@ h6{
 .apartados-interior:hover a{
     font-weight: bold;
 }
+
+
+//BARRA BUSQUEDA//
 
 .busqueda{
     display: flex;
@@ -130,6 +136,8 @@ h6{
     font-weight: bold;
 
 }
+
+//ANIMACIONES//
 
 .pildora{
     animation-name: rotate-pill;
@@ -167,4 +175,93 @@ h6{
     padding: 10px;
     border-radius: 2em;
     box-sizing: border-box;
+}
+
+
+//LOGIN//
+
+
+.apartado-cuenta{
+    position: relative;
+    text-transform: uppercase;
+    border-radius: 2em;
+    transition: all 300ms;
+    z-index: 1;
+
+}
+.letras-animacion{
+    overflow: hidden;
+}
+
+.apartado-cuenta > a, .letras-animacion > h5{
+    color: #262b4f;
+    font-weight: bold;
+}
+
+.apartado-cuenta > ul {
+    display:none;
+    list-style: none;
+    background-color: #262b4f;
+    width: 300%;
+    border-radius: 1em;
+    position: absolute;
+    top: 2.30em;
+    right: 0;
+    overflow: visible;
+    text-align: center;
+}
+
+.apartado-cuenta > ul > li{
+    padding: 0.5em;
+}
+
+.apartado-cuenta:hover, .apartado-cuenta:hover i{
+    background-color: #262b4f;
+    color: white;
+    .letras-animacion >h5{
+        color: white;
+    }
+    transform: scale(1.2,1.2);
+}
+
+//APARTADO INTERIOR CUENTA, SEGUNDO LI//
+
+.apartado-cuenta:hover ul{
+    display: block;
+}
+
+
+.apartado-cuenta-interior:hover a{
+    font-weight: bold;
+}
+
+
+.apartado-cuenta-interior button{
+    width: 18.5em;
+    padding: 0.5em;
+    border-radius: 2em;
+    background-color: white;
+}
+
+.apartado-cuenta-interior button:hover{
+    color: white;
+    background-color: salmon;
+    font-weight: bold;
+}
+
+.google-facebook{
+    display: flex;
+    width: 17.5;
+}
+
+.google-facebook > button > i{
+    color: #262b4f;
+    background-color: white;
+}
+
+.google-facebook >button:hover{
+    i{
+        color: white;
+        background-color: salmon;
+    }
 }
