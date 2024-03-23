@@ -1,105 +1,63 @@
 <div class="container-menu">
-  <div class="text-end">
+  <div class="text-end me-4 ">
       <h6>Fecha Inicio: </h6>
   </div>
 
   <div class="header">
-      <div class="logo">
-          <a href="#"><img src="#" alt="logotipo web"/></a>
-      </div>
-      <div class="menu-expansible">
-          <ul>
-              <li><a href="#"> Ejercicios <i class="fa-solid fa-chevron-down"></i></a>
-                  <ul class="submenu">
-                      <li></li>
-                  </ul>
-              </li>
-              <li><a href="#">Lista de Solicitudes API <i class="fa-solid fa-chevron-down"></i></a>
-                  <ul class="listacruds">
-                      
-                      <li><a href="#">Farmacias</a>
-                          <ul class="submenulista">
-                              <li><a href="#">Lista de Farmacias API</a> </li>
-                              <li><a href="#">Crear Farmacia API</a></li>
-                          </ul>
-                      </li>
-                      <li><a href="#">Votaciones</a>
-                          <ul class="submenulista">
-                              <li><a href="#">Lista de Votaciones API Mejorado</a></li>
-                              <li><a href="#">Crear Votacion API</a></li>
-                              <li><a href="#">Busq. Avanzada Votacion</a></li>
-                          </ul>
-                      </li>
-                      <li><a href="#">Empleados</a>
-                          <ul class="submenulista">
-                              <li><a href="#">Lista de Empleados API</a> </li>
-                              <li><a href="#">Lista de Empleados API Mejorado</a> </li>
-                              <li><a href="#">Busq. Avanzada Producto</a></li>
-                          </ul>
-                      </li>
-                      <li><a href="#">Clientes</a>
-                          <ul class="submenulista">
-                              <li><a href="#">Lista de Clientes API Mejorado</a> </li>
-                              <li><a href="#">Lista de Clientes Promocion Cumple</a> </li>
+    <div class="logo">
+        <a href="#"><img src="../assets/imagenes/Logo.jpg" alt="logotipo web"/></a>
+    </div>
+    <div class="menu-expansible">
+        <ul>
+            <li class="apartados ms-5"><a href="#"><div class="letras-animacion d-flex"><h5 class="me-2">Categorías</h5> <i class="fa-solid fa-list"></i></div></a>
+                <ul>
+                    <li class="apartados-interior"><a href="#">Cosmética y Belleza</a>
+                    </li>
+                    <li class="apartados-interior"><a href="#">Salud e Higiene</a>
+                    </li>
+                    <li class="apartados-interior"><a href="#">Bebé y Mamá</a>
+                    </li>
+                    <li class="apartados-interior"><a href="#">Vitaminas y Suplementos</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="apartados ms-4"><a href="#"><div class="letras-animacion d-flex"> <h5 class="me-2">Promociones</h5> <i class="fa-solid fa-percent"></i></div></a>
+            </li>
+            <li class="apartados"><a href="#"><div class="letras-animacion d-flex"><h5 class="me-2">Productos</h5><i class="pildora fa-solid fa-pills"></i></div></a>
+                <ul>
+                    <li class="apartados-interior"><a href="#">Crear Producto</a></li>
+                    <li class="apartados-interior"><a href="#">Busq. Avanzada Producto API</a></li>
+                </ul>
+            </li>    
+            <li>
+                <form action="#" class="busqueda" role="search" method="GET">
+                  <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search">
+                  <button class="btn btn-light btn-outline-dark" type="submit">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </li>
 
-                          </ul>
-                      </li>
-
-                      <li><a href="#">Promociones</a>
-                          <ul class="submenulista">
-                              <li><a href="#">Lista de Promociones API Mejorado</a> </li>
-                              <li><a href="#">Promocion Birthday Clientes</a> </li>
-                          </ul>
-                      </li>
-                      <li><a href="#">Tratamientos</a>
-                          <ul class="submenulista">
-                              <li><a href="#">Lista de Tratamientos API Mejorado</a> </li>
-                              <li><a href="#">Crear Tratamiento API Mejorado</a> </li>
-                          </ul>
-                      </li>
-                  </ul>
-              </li>
-              <li><a href="#">Productos <i class="fa-solid fa-chevron-down"></i></a>
-                  <ul class="submenucrud">
-                      <li><a href="#">Lista de Productos API</a></li> 
-                      <li><a href="#">Lista de Productos API Mejorado</a></li> 
-
-                      <li><a href="#">Crear Producto API</a></li>
-
-                      <li><a href="#">Busq. Avanzada Producto API</a></li>
-                  </ul>
-              </li>    
-              <li>
-                  <form action="#" class="d-flex m-3" role="search" method="GET">
-                    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
-                  </form>
-              </li>
-
-              <li class="login mt-2"><a href="#"><i class="fa-regular fa-user"></i> Cuenta </a>
-                  <ul class="submenulogin" style="width: 20em; padding-top:1.5em;">
-                      <li><h4>¿Todavía no conoces nuestras ventajas?</h4></li>
-                      <li><a href="#"><button>¡Empieza ya!</button></a></li>
-                      <li>
-                          <p id="ó"><b> O usar </b></p>
-                      </li>
-                      <li>
-                          <div class="google-apple">
-                              <button><a href="#"><i class="fa-brands fa-google fa-2xl"></i></a></button>
-                          </div>
-                      </li>
-                      <li>
-                          <div class="google-apple">
-                              <button><a href="#"><i class="fa-solid fa-cart-shopping"></i></a></button>
-                          </div>
-                      </li>
-                      <li><a class="desconectarse mt-4" href="#"><button>Desconectarse</button></a></li>
-                  </ul>
-              </li>
-
-          </ul>
-      </div>
-      
+            <li class="apartados"><a href="#"> <div class="letras-animacion d-flex"><i class="me-2 fa-regular fa-user"></i><h5> Cuenta</h5></div> </a>
+                <ul>
+                    <li><h4>¿Todavía no conoces nuestras ventajas?</h4></li>
+                    <li><a href="#"><button>¡Empieza ya!</button></a></li>
+                    <li>
+                        <p id="ó"><b> O usar </b></p>
+                    </li>
+                    <li>
+                        <div class="google-apple">
+                            <button><a href="#"><i class="fa-brands fa-google fa-2xl"></i></a></button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="google-apple">
+                            <button><a href="#"><i class="fa-solid fa-cart-shopping"></i></a></button>
+                        </div>
+                    </li>
+                    <li><a class="desconectarse mt-4" href="#"><button>Desconectarse</button></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
   </div>
 </div>
 
