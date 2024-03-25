@@ -73,7 +73,7 @@ h6{
     padding: 1em;
 }
 
-.apartados:hover, .apartados:hover i{
+.apartados:hover{
     background-color: #262b4f;
     color: white;
     .letras-animacion >h5{
@@ -81,6 +81,11 @@ h6{
         animation: fromLeft 500ms linear;
     }
     transform: scale(1.2,1.2);
+}
+
+.apartados:hover i, .apartado-cuenta > a:hover i{
+    background-color: transparent;
+    color: white;
 }
 
 @keyframes fromLeft{
@@ -97,7 +102,6 @@ h6{
 .apartados:hover ul{
     display: block;
 }
-
 
 .apartados-interior > a{
     color: white;
@@ -244,10 +248,19 @@ h6{
     background-color: white;
 }
 
+.apartado-cuenta-interior > button > i{
+    background-color: transparent;
+    color:#262b4f;
+}
+
 .apartado-cuenta-interior button:hover{
     color: white;
-    background-color: salmon;
+    background-color: rgb(255, 160, 122, 0.2);
     font-weight: bold;
+    i{
+        background-color: transparent;
+        color: white;
+    }
 }
 
 .google-facebook{
@@ -258,11 +271,4 @@ h6{
 .google-facebook > button > i{
     color: #262b4f;
     background-color: white;
-}
-
-.google-facebook >button:hover{
-    i{
-        color: white;
-        background-color: salmon;
-    }
 }

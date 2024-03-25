@@ -1,21 +1,21 @@
-import { Component, NgModule, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { FooterComponent } from './footer/footer.component';
-
-
-
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DatosService } from './servicios/datos.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
-  title = 'ClienteFarmaciaAngular17';
+export class AppComponent {
+  palabraBusqueda: string = '';
 
+  constructor(private datosService: DatosService, private router: Router) { }
 
+  buscar(){
+    this.datosService.setPalabraBuscada(this.palabraBusqueda);
+    this.router.navigate(['/buscador/query', this.palabraBusqueda]);
+  }
 
-  
 }
+

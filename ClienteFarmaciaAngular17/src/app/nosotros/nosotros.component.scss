@@ -1,0 +1,17 @@
+.nosotros{
+    width: 100%;
+    background-color: rgb(255, 160, 122, 0.2);
+    margin-top: 2%;
+    margin-bottom: 4%;
+    > *{
+        width: 62%;
+        margin: auto;
+    }
+    > h3{
+        font-weight: bold;
+        padding-bottom: 2%;
+    }
+    >p{
+        padding-bottom: 2%;
+    }
+}

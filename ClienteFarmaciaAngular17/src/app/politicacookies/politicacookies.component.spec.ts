@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
+import { PoliticacookiesComponent } from './politicacookies.component';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('PoliticacookiesComponent', () => {
+  let component: PoliticacookiesComponent;
+  let fixture: ComponentFixture<PoliticacookiesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeComponent]
+      imports: [PoliticacookiesComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(PoliticacookiesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

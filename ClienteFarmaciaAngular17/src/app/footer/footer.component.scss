@@ -1,0 +1,56 @@
+img{
+    height: 13rem;
+    border-radius: 7rem;
+}
+
+footer{
+    background-color: #262b4f;
+    >*{
+        color: white;
+    }
+    overflow: hidden;
+}
+
+div a i{
+    transition: all 300ms;
+}
+
+div a:hover i{
+    transform: scale(1.5,1.5);
+}
+
+nav ul{
+    text-decoration: none;
+    padding: 0;
+    margin: 1rem auto;
+}
+
+nav ul li{
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid white;
+}
+
+nav ul li a{
+    transition: all 300ms;
+}
+
+nav ul li:hover a{
+    padding-left: 40px;
+    font-weight: bold;
+
+}
+
+a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+p:hover > a{
+    transform: scale(1.5,1.5);
+}
+
+iframe{
+    border-radius: 10px;
+}
