@@ -27,6 +27,7 @@ class registrar_usuario(generics.CreateAPIView):
     
     def create(self, request, *args, **kwargs):
         serializers = UsuarioSerializerRegistro(data=request.data)
+        
         if serializers.is_valid():
             try:
                 rol = int(request.data.get('rol'))

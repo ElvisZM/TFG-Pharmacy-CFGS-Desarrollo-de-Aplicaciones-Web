@@ -69,7 +69,7 @@
 }
 
 
-.ele-form .form-control{
+.ele-form .form-control, .phone-form .form-control, .birthday-form .form-control{
     background-color: #eee;
     border: none;
     margin: 8px 0;
@@ -91,32 +91,6 @@
     outline: none;
 }
 
-.birthday-form .form-control{
-    background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 6em;
-    outline: none;
-    
-}
-
-.birthday-form{
-    margin-right: 0.5em;
-}
-
-.rol-form{
-    background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 45em;
-    outline: none;
-}
 
 .form-container{
     position: absolute;
@@ -184,7 +158,7 @@
     overflow: hidden;
     transition: all 0.6s ease-in-out;
     border-radius: 150px 0 0 100px;
-    z-index: 1000;
+    z-index: 5;
     font-weight: bold;
 }
 
@@ -242,3 +216,18 @@
     transform: translateX(200%);
 }
 
+.validaciones > h6{
+    display: block;
+    font-size: 15px;
+    border-radius: 8px;
+    width: auto;
+    font-weight: bold;
+}
+
+.validacionespassword{
+    display: block !important;
+    font-size: 15px;
+    border-radius: 8px;
+    width: auto;
+    font-weight: bold;
+}

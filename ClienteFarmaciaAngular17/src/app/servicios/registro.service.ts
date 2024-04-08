@@ -8,11 +8,11 @@ import { catchError } from 'rxjs/operators';
 })
 
 export class RegistroService {
-  private apiUrlRegistro = 'http://elviszm12.pythonanywhere.com/api/v1/registrar/usuario';
+  private apiUrlRegistro = 'http://0.0.0.0:8000/api/v1/registrar/usuario';
 
   constructor(private http: HttpClient) { }
 
-  registroUsuario(dataSignUp: any): Observable<any>{ 
+  registerUser(dataSignUp: any): Observable<any>{ 
     return this.http.post<any>(this.apiUrlRegistro, dataSignUp)
       .pipe(
         catchError(error => {

@@ -1,6 +1,6 @@
-window.addEventListener('load', inicializar);
 
-function inicializar() {
+var accessObj = {
+    loginStyle() {
     const container = document.getElementById('container');
     const registerBtn = document.getElementById('register');
     const loginBtn = document.getElementById('login');
@@ -11,5 +11,8 @@ function inicializar() {
 
     loginBtn.addEventListener('click', () => {
         container.classList.remove("active");
-    });
+    })
+    }
 }
+
+module.exports = {accessObj}

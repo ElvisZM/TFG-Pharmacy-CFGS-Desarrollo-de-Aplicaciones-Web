@@ -209,3 +209,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://0.0.0.0:4200",
     "http://127.0.0.1:8001"
 ]
+
+
+PHARMACY_MODEL = 'App_ProductProvider.models.Farmacia'
+
+PRODUCT_MODEL = 'App_ProductProvider.models.Producto'
+
+REVIEW_MODEL = 'App_SellsClients.models.Votacion'
+
+CLIENT_MODEL = 'App_AuthUsers.models.Cliente'
+
+EMPLOYEE_MODEL = 'App_AuthUsers.models.Empleado'
