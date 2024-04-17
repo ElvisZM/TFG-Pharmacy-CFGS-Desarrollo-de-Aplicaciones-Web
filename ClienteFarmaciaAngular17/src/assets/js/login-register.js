@@ -14,5 +14,3 @@ var accessObj = {
     })
     }
 }
-
-module.exports = {accessObj}

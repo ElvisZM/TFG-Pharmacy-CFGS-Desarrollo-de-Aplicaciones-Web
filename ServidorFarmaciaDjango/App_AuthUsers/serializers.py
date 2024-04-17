@@ -39,3 +39,13 @@ class UsuarioSerializerRegistro(serializers.Serializer):
 
         return telefono
         
+
+class UsuarioSerializer(serializers.ModelSerializer):
+    
+    date_joined = serializers.DateTimeField(format=('%d-%m-%Y'))
+    
+    last_login = serializers.DateTimeField(format=('%d-%m-%Y'))
+    
+    class Meta:
+        model = Usuario
+        fields = '__all__'

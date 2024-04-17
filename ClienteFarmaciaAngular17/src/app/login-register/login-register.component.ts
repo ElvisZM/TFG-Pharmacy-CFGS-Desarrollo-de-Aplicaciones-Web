@@ -6,6 +6,7 @@ import { LoginService } from '../servicios/login.service';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
+import { AuthService } from '../servicios/auth.service';
 
 
 
@@ -35,10 +36,9 @@ export class LoginRegisterComponent implements OnInit{
   login_username: string="";
   login_password1: string="";
 
+  errorMessage: string ="";
 
-  scriptLoaded: boolean = false;
-
-  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute) {
+  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService) {
     this.FormRegister = this.fb.group({
       register_name:['', Validators.required],
       register_email:['', Validators.required],
@@ -49,6 +49,7 @@ export class LoginRegisterComponent implements OnInit{
       register_password2:['', Validators.required],
       register_adress:['', Validators.required],
       
+
     }, {validator: this.PasswordValidator}),
     this.FormLogin = this.fb.group({
       login_username:['', Validators.required],
@@ -59,19 +60,20 @@ export class LoginRegisterComponent implements OnInit{
     accessObj.loginStyle();
   }
   ngDoCheck(): void {
-      this.loadScript('../../assets/js/login-register.js');
+      // this.loadScript('../../assets/js/login-register.js');
     };
 
-  loadScript(scriptUrl: string): void {
-    try {
-      const script = document.createElement('script');
-      script.src = scriptUrl;
-      document.body.appendChild(script);
+  // loadScript(scriptUrl: string): void {
+  //   try {
+  //     const script = document.createElement('script');
+  //     script.src = scriptUrl;
+  //     document.body.appendChild(script);
       
-    } catch (error) {
-      console.error('Error al cargar script:', error);
-    }
-  }
+  //   } catch (error) {
+  //     console.error('Error al cargar script:', error);
+  //   }
+  // }
+
   PasswordValidator(formGroup: FormGroup) {
     const password1 = formGroup.get('register_password1')?.value;
     const password2 = formGroup.get('register_password2')?.value;
@@ -110,6 +112,14 @@ export class LoginRegisterComponent implements OnInit{
     }
   };
 
-
+  login() {
+    const user = {username:this.login_username,password:this.login_password1}
+    this.loginService.login(user).subscribe((data)=>{
+      this.authService.setTokenCookie(data.access_token);
+      this.router.navigate(['/']);
+    }, error => {
+      this.errorMessage = "Credenciales incorrectas. Por favor, inténtalo de nuevo."
+    })
+  }
 
 }

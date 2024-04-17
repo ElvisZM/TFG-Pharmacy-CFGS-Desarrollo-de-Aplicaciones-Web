@@ -1,7 +1,0 @@
-<div>
-    <h2>Promocion: {{ promocion.nombre_promo }}</h2>
-    <h2>Descripcion: {{ promocion.descripcion_promo|truncatewords:1 }}</h2>
-    <h2>Valor de la Promocion: {{promocion.valor_promo}}</h2>
-    <h2>Fecha Expira: {{ promocion.fecha_fin_promo|date:"m-d-Y" }}</h2>
-    <h2>Cliente: {{ promocion.cliente_promo.usuario.first_name|truncatewords:2 }}</h2>
-</div>

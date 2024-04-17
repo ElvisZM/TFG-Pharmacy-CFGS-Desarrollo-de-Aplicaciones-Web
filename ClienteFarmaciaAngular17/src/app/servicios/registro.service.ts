@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 
 export class RegistroService {
-  private apiUrlRegistro = 'http://0.0.0.0:8000/api/v1/registrar/usuario';
+  private apiUrlRegistro = 'http://127.0.0.1:8000/service/auth/users/registrar/usuario';
 
   constructor(private http: HttpClient) { }
 

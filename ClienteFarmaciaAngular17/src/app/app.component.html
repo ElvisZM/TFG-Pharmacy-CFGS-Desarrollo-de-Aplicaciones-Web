@@ -37,7 +37,7 @@
               </li>
   
               <li class="apartado-cuenta"><a href="#"><div class="letras-animacion d-flex"><i class="me-2 fa-regular fa-user"></i><h5> Cuenta</h5></div> </a>
-                  <ul>
+                  <ul *ngIf="!token"> 
                       <li class="apartado-cuenta-interior" ><h5>¿Todavía no conoces nuestras ventajas?</h5></li>
                       <span class="nav_image">
                       </span>
@@ -51,12 +51,17 @@
                               <button><i class="fa-brands fa-facebook fa-xl"></i></button>
                           </div>
                       </li>
+                  </ul>
+                
+                  <ul *ngIf="token">
                       <li class="apartado-cuenta-interior">
                           <div class="google-facebook">
                               <button>Mi carrito <i class="fa-solid fa-cart-shopping"></i></button>
                           </div>
                       </li>
-                      <li class="apartado-cuenta-interior"><button>Desconectarse <i class="fa-solid fa-right-from-bracket"></i></button></li>
+                      <li class="apartado-cuenta-interior">
+                        <button (click)="logoutAccount()">Desconectarse <i class="fa-solid fa-right-from-bracket"></i></button>
+                      </li>
                   </ul>
               </li>
           </ul>

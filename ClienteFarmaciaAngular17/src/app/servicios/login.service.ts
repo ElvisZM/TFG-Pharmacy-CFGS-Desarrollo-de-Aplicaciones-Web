@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class LoginService {
-  private token_url = 'http://127.0.0.1:8000/api/v1/usuario/token/';
+  private token_url = 'http://127.0.0.1:8000/service/auth/users/usuario/token/';
 
   constructor(private http:HttpClient) { }
 

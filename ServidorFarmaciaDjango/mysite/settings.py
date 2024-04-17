@@ -9,11 +9,15 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import environ
+import os
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_seed',
     'debug_toolbar',
-    'App_Farmacia',
+    'App_AuthUsers',
+    'App_CartPromos',
+    'App_ProductProvider',
+    'App_SellsSubs',
     'bootstrap5',
     'django_bootstrap_icons',
     'crispy_forms',
@@ -82,6 +89,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,7 +99,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 
 ]
 
@@ -179,7 +186,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'App_Farmacia.Usuario'
+AUTH_USER_MODEL = 'App_AuthUsers.Usuario'
 
 LOGIN_REDIRECT_URL = 'index'
 
@@ -204,19 +211,23 @@ REST_FRAMEWORK = {
     ),
 }
 
+# CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST')
+
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
     "http://0.0.0.0:4200",
-    "http://127.0.0.1:8001"
+    "http://127.0.0.1:4200",
 ]
 
+PHARMACY_MODEL = 'App_ProductProvider.Farmacia'
 
-PHARMACY_MODEL = 'App_ProductProvider.models.Farmacia'
+PRODUCT_MODEL = 'App_ProductProvider.Producto'
 
-PRODUCT_MODEL = 'App_ProductProvider.models.Producto'
+REVIEW_MODEL = 'App_SellsSubs.Votacion'
 
-REVIEW_MODEL = 'App_SellsClients.models.Votacion'
+CLIENT_MODEL = 'App_AuthUsers.Cliente'
 
-CLIENT_MODEL = 'App_AuthUsers.models.Cliente'
+EMPLOYEE_MODEL = 'App_AuthUsers.Empleado'
 
-EMPLOYEE_MODEL = 'App_AuthUsers.models.Empleado'
+CART_MODEL = 'App_CartPromos.CarritoCompra'
