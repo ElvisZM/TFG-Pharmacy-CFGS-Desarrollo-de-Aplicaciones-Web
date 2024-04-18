@@ -53,7 +53,7 @@ class registrar_usuario(generics.CreateAPIView):
                     gerente.save()
                     
                 elif(rol == Usuario.ADMINISTRADOR):
-                    grupo = Group.objects.get(name='Clientes') 
+                    grupo = Group.objects.get(name='Administrador') 
                     grupo.user_set.add(user)
                     cliente = Administrador.objects.create( usuario = user, direccion_admin = serializers.data.get("domicilio"), telefono_admin = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
                     cliente.save()

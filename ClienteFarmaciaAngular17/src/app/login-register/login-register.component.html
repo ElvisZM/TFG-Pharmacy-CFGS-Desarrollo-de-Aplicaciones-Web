@@ -30,8 +30,11 @@
           <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_email')!.touched && FormRegister.get('register_email')!.hasError('required')">
             <h6>Necesita rellenar este campo.</h6>
           </div>
-          <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_email')!.touched && FormRegister.get('register_email')!.hasError('email')">
+          <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_email')!.touched && FormRegister.get('register_email')!.hasError('invalidFormatEmail')">
             <h6>Correo electrónico no válido.</h6>
+          </div>
+          <div class="validaciones alert alert-danger" *ngIf="invalidEmail">
+            <h6>{{ errorMessageEmail }}</h6>
           </div>
         </div>
       </div>
@@ -45,6 +48,12 @@
           </div>
           <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_phone')!.touched && FormRegister.get('register_phone')!.hasError('required')">
             <h6>Necesita rellenar este campo.</h6>
+          </div>
+          <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_phone')!.touched && FormRegister.get('register_phone')!.hasError('invalidFormatPhone')">
+            <h6>Introduzca un teléfono válido.</h6>
+          </div>
+          <div class="validaciones alert alert-danger" *ngIf="invalidPhone">
+            <h6>{{ errorMessagePhone }}</h6>
           </div>
         </div>
 
@@ -79,6 +88,9 @@
         <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_username')!.touched && FormRegister.get('register_username')!.hasError('required')">
           <h6>Necesita rellenar este campo.</h6>
         </div>
+        <div class="validaciones alert alert-danger" *ngIf="invalidUser">
+          <h6>{{ errorMessageUser }}</h6>
+        </div>
       </div>
 
 
@@ -106,45 +118,57 @@
       </div>
 
 
-      <button type="submit" name="register">Registrarse</button>
+      <button type="submit" name="register" [disabled]="!FormRegister.valid">Registrarse</button>
       <div class="d-block mb-5">
         <p>Al hacer clic en 'Registrarse' estás aceptando el <a routerLink="#" routerLinkActive="active"><b>Términos de uso</b></a> y <a routerLink="#" routerLinkActive="active"><b>Política de Privacidad</b></a> de P.Sur Pharmacy.</p>
         <p ><a routerLink="/" routerLinkActive="active"><i class="fa-solid fa-arrow-left fa-sm"></i> Volver</a></p>
       </div>
     </form>
   </div>
-    <div class="form-container sign-in">
-        <form method="post">
-            <input type="hidden" name="login" value="login">
+  <div class="form-container sign-in">
+    <form (ngSubmit)="login()" >
+      <input type="hidden" name="login" value="login">
 
-            <h1>Inicia Sesión</h1>
-            <div class="social-icons">
-                <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
-            <span class="mb-3">o usa tu usuario y clave</span>
-            
-            <input type="text" name="username" id="usuario" placeholder="Usuario" >
-            
-            <input type="password" name="password" id="password" placeholder="Contraseña" >
-            <a href="#">¿Olvidaste tu contraseña?</a>
-            <button type="submit" name="login" (click)="login()">Acceder</button>
-        </form>
-    </div>
-    <div class="toggle-container">
-        <div class="toggle">
-            <div class="toggle-panel toggle-left">
-                <h1>¡Nos complace verte de nuevo!</h1>
-                <p>Inicia sesión para disfrutar de todas nuestra funciones</p>
-                <button class="hidden" id="login">Sign In</button>
-            </div>
-            <div class="toggle-panel toggle-right">
-                <h1>¡Bienvenido, es un placer conocerte!</h1>
-                <p>Introduce tus datos y empieza a disfrutar de todas nuestras funciones</p>
-                <button class="hidden" id="register">Sign Up</button>
-            </div>
-        </div>
-    </div>
+      <h1>Inicia Sesión</h1>
+      <div class="social-icons">
+          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+      <span class="mb-3">o usa tu usuario y clave</span>
+      
+      <input type="text" name="username" id="username" placeholder="Usuario" [(ngModel)]="login_username"/>
+
+      <div class="position-relative" *ngIf="!passwordVisibility">
+        <input type="password" name="password" id="password" placeholder="Contraseña" [(ngModel)]="login_password"/>
+        <i class="eye fa-solid fa-eye" (click)="showLoginPassword()"></i>
+      </div>
+        
+      <div class="position-relative" *ngIf="passwordVisibility">
+      <input type="text" name="password" id="password" placeholder="Contraseña" [(ngModel)]="login_password"/>
+      <i class="eye fa-solid fa-eye-slash" (click)="showLoginPassword()"></i>
+      </div>
+      
+      <div class="validaciones alert alert-danger" *ngIf="invalidLogin">
+        <h6>{{ errorCredentials }}</h6>
+      </div>
+      <a href="#">¿Olvidaste tu contraseña?</a>
+      <button type="submit" name="login" >Acceder</button>
+    </form>
+  </div>
+  <div class="toggle-container">
+      <div class="toggle">
+          <div class="toggle-panel toggle-left">
+              <h1>¡Nos complace verte de nuevo!</h1>
+              <p>Inicia sesión para disfrutar de todas nuestra funciones</p>
+              <button class="hidden" id="login">Sign In</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+              <h1>¡Bienvenido, es un placer conocerte!</h1>
+              <p>Introduce tus datos y empieza a disfrutar de todas nuestras funciones</p>
+              <button class="hidden" id="register">Sign Up</button>
+          </div>
+      </div>
+  </div>
 </div>

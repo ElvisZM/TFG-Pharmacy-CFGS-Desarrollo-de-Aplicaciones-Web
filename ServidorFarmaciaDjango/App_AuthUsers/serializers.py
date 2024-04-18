@@ -25,8 +25,14 @@ class UsuarioSerializerRegistro(serializers.Serializer):
         usuario = Usuario.objects.filter(username=username).first()
         
         if(not usuario is None):
-            raise serializers.ValidationError('Ya existe un usuario con ese nombre.')
+            raise serializers.ValidationError('Usuario existente.')
         return username
+    
+    def validate_email(self, email):
+        email = Usuario.objects.filter(email=email).first()
+        if(not email is None):
+            raise serializers.ValidationError('Email ya en uso.')
+        return email
     
     def validate_telefono(self, telefono):
         administradorTelefono = Administrador.objects.filter(telefono_admin=telefono).first()    
@@ -35,7 +41,7 @@ class UsuarioSerializerRegistro(serializers.Serializer):
         clienteTelefono = Cliente.objects.filter(telefono_cli=telefono).first()    
 
         if (str(telefono)[0] not in ('6','7','9') or len(str(telefono)) != 9) or (not(administradorTelefono is None or gerenteTelefono is None or empleadoTelefono is None or clienteTelefono is None)):
-            raise serializers.ValidationError('El teléfono introducido no es válido o ya existe en un usuario.')
+            raise serializers.ValidationError('Teléfono inválido o en uso.')
 
         return telefono
         

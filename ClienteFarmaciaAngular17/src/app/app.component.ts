@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatosService } from './servicios/datos.service';
 import { AuthService } from './servicios/auth.service';
@@ -8,11 +8,27 @@ import { AuthService } from './servicios/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, DoCheck {
   palabraBusqueda: string = '';
-  token = this.authService.getTokenCookie()
+  token: boolean = false; 
 
   constructor(private datosService: DatosService, private router: Router, private authService: AuthService) { }
+
+  ngOnInit(){
+    if (this.authService.getTokenCookie()){
+      this.token = true;
+    }else{
+      this.token = false;
+    }
+  }
+
+  ngDoCheck(){
+    if (this.authService.getTokenCookie()){
+      this.token = true;
+    }else{
+      this.token = false;
+    }
+  }
 
   buscar(){
     this.datosService.setPalabraBuscada(this.palabraBusqueda);
@@ -21,6 +37,7 @@ export class AppComponent {
 
   logoutAccount(){
     this.authService.logout();
+    this.token = false;
   }
 
 }

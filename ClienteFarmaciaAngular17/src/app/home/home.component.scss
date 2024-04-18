@@ -61,6 +61,58 @@
 }
 
 
+.banner2{
+  width: 90%;
+  margin: auto;
+  background-color: green;
+}
+
+.writeEffect{
+  display: inline-block;
+  vertical-align: bottom;
+  animation: write-animation 5s steps(10) infinite alternate;
+}
+
+.writeEffect span{
+  float:left;
+  overflow: hidden;
+  animation: hideWord 8s linear infinite;
+}
+
+.writeEffect span:nth-child(1){
+  animation-delay: -0s;
+}
+
+
+.writeEffect span:nth-child(2){
+  animation-delay: -1s;
+}
+
+
+.writeEffect span:nth-child(3){
+  animation-delay: -0s;
+}
+
+
+.writeEffect span:nth-child(4){
+  animation-delay: -0s;
+}
+
+@keyframes write-animation{
+  from { width: 100%;}
+  to { width: 0;}
+}
+
+@keyframes hideWord{
+  0%, 16.6%, 33.33%, 100%{
+    width: 0;
+  }
+  16.66%, 33.3%{
+    width: auto;
+  }
+}
+
+
 .carrusel{
   width: 90%;
   height: auto;
