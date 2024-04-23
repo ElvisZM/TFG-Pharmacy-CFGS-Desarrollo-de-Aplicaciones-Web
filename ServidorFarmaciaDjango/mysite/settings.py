@@ -27,26 +27,36 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 SECRET_KEY = 'django-insecure-tv40!e_$!sndqjn2mt*9s430q=z$a=*5$8c7rqlz8t89aj*(l_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['127.0.0.1','.pythonanywhere.com','0.0.0.0','localhost']
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS_DEV")
 
 
 # Application definition
 
-INSTALLED_APPS = [
+#Aplicaciones de Django preinstaladas
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_seed',
-    'debug_toolbar',
+]
+
+#Nuestros microservicios que se creen irán aqui
+PROJECT_APPS = [
     'App_AuthUsers',
     'App_CartPromos',
     'App_ProductProvider',
     'App_SellsSubs',
+]
+
+#Nuestros paquetes de requirements.txt irán aqui
+THIRD_PARTY_APPS = [
+    'corsheaders',
+    'django_seed',
+    'debug_toolbar',
     'bootstrap5',
     'django_bootstrap_icons',
     'crispy_forms',
@@ -61,9 +71,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-    'corsheaders',
 ]
+
+#Lo que nos pide Django para funcionar es INSTALLED APPS, será el conjunto de las 3 anteriores
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
+
 
 SITE_ID = 1
 
@@ -73,6 +86,10 @@ SOCIALACCOUNT_PROVIDERS = {
             'profile',
             'email',
         ],
+        # 'APP': {
+        #     'client_id': env['CLIENT_ID'],
+        #     'secret': env['CLIENT_SECRET'],
+        # },
         'AUTH_PARAMS': {
             'access_type': 'online',
         },
@@ -211,7 +228,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-# CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST')
+#Los sitios que pueden hacer peticiones a nuestra API
+CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST_DEV')
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -231,3 +249,22 @@ CLIENT_MODEL = 'App_AuthUsers.Cliente'
 EMPLOYEE_MODEL = 'App_AuthUsers.Empleado'
 
 CART_MODEL = 'App_CartPromos.CarritoCompra'
+
+#Para imprimir en mi consola los correos electrónicos que se enviarían 
+EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+if not DEBUG:
+    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS_DEPLOY')
+    CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST_DEPLOY')
+
+    
+    DATABASES = {
+        "default": env.db("DATABASE_URL"),
+    }
+    #Para evitar llamadas duplicadas a nuestra base de datos
+    DATABASES['default']["ATOMIC_REQUESTS"] = True

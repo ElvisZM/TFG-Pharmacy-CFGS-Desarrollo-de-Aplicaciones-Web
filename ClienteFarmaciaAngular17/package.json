@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@abacritt/angularx-social-login": "^2.2.0",
     "@angular/animations": "^17.0.0",
     "@angular/common": "^17.0.0",
     "@angular/compiler": "^17.0.0",
@@ -22,6 +23,7 @@
     "@popperjs/core": "^2.11.8",
     "angular": "^1.8.3",
     "bootstrap": "^5.3.3",
+    "google-auth-library": "^9.8.0",
     "gsap": "^3.12.5",
     "jquery": "^3.7.1",
     "ngx-bootstrap": "^12.0.0",

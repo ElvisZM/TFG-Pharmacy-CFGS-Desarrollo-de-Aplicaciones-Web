@@ -12,7 +12,9 @@ export class AppComponent implements OnInit, DoCheck {
   palabraBusqueda: string = '';
   token: boolean = false; 
 
-  constructor(private datosService: DatosService, private router: Router, private authService: AuthService) { }
+  googleUser: any;
+
+  constructor(private datosService: DatosService, private router: Router, private authService: AuthService, ) { }
 
   ngOnInit(){
     if (this.authService.getTokenCookie()){
@@ -20,6 +22,11 @@ export class AppComponent implements OnInit, DoCheck {
     }else{
       this.token = false;
     }
+
+    this.googleUserInfo();
+    // console.log(this.googleUser)
+    // console.log(this.googleUser.email)
+
   }
 
   ngDoCheck(){
@@ -38,6 +45,12 @@ export class AppComponent implements OnInit, DoCheck {
   logoutAccount(){
     this.authService.logout();
     this.token = false;
+  }
+
+  googleUserInfo(){
+    if (this.authService.getGoogleUserCookie()){
+      this.googleUser= JSON.parse(this.authService.getGoogleUserCookie());
+    }
   }
 
 }

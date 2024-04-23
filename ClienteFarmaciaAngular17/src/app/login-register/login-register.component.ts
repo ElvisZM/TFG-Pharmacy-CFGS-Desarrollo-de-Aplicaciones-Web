@@ -1,3 +1,4 @@
+declare var google: any;
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
@@ -9,7 +10,6 @@ import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { AuthService } from '../servicios/auth.service';
 
 
-
 @Component({
   selector: 'app-login-register',
   standalone: true,
@@ -17,7 +17,7 @@ import { AuthService } from '../servicios/auth.service';
   templateUrl: './login-register.component.html',
   styleUrl: './login-register.component.scss'
 })
-export class LoginRegisterComponent implements OnInit, DoCheck{
+export class LoginRegisterComponent implements OnInit{
 
   public FormRegister! : FormGroup;
 
@@ -66,9 +66,21 @@ export class LoginRegisterComponent implements OnInit, DoCheck{
 
   ngOnInit(): void {
     accessObj.loginStyle();
-  }
+    google.accounts.id.initialize({
+      client_id: '924952635176-rom3np6k4kh95qmttp6iglh5lm550s13.apps.googleusercontent.com',
+      callback: (resp: any) => {
+        this.handleLogin(resp);        
+      
+      }
+    });
 
-  ngDoCheck(): void {
+    google.accounts.id.renderButton(document.getElementById('google-btn'), {
+      theme: 'filled-blue',
+      size: 'large',
+      shape: 'rectangle',
+      width: 350
+    })
+
   }
 
   formValidator(formGroup: FormGroup){
@@ -169,6 +181,22 @@ export class LoginRegisterComponent implements OnInit, DoCheck{
     }else{
       this.passwordVisibility=false;
     }
+  }
+
+  private decodeToken(token: string){
+    return JSON.parse(atob(token.split(".")[1]));
+  }
+
+  handleLogin(response: any){
+    if (response){
+      const payLoad = this.decodeToken(response.credential);
+      console.log(payLoad);
+      this.authService.setGoogleUserCookie(payLoad);
+      console.log(payLoad.jti);
+      this.authService.setTokenCookie(payLoad.jti);
+      this.router.navigate(['/']);
+    }
+
   }
 
 }

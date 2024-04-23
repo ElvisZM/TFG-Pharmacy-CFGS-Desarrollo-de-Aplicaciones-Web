@@ -55,3 +55,32 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = '__all__'
+        
+        
+
+class UsuarioSerializerRegistroGoogle(serializers.Serializer):
+    
+    username = serializers.CharField()
+    first_name = serializers.CharField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+    email = serializers.EmailField()
+    rol = serializers.IntegerField()
+    domicilio = serializers.CharField(required=False, allow_blank=True)
+    telefono = serializers.CharField(required=False, allow_blank=True)
+    birthday_date = serializers.DateField()
+    
+    def validate_username(self, username):
+        usuario = Usuario.objects.filter(username=username).first()
+        
+        if(not usuario is None):
+            raise serializers.ValidationError('Usuario existente.')
+        return username
+    
+    def validate_email(self, email):
+        email = Usuario.objects.filter(email=email).first()
+        if(not email is None):
+            raise serializers.ValidationError('Email ya en uso.')
+        return email
+    
+

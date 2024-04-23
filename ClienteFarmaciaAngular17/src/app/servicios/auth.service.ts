@@ -1,3 +1,4 @@
+declare var google: any;
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -25,6 +26,14 @@ export class AuthService {
     return this.cookies.get("token");
   }
 
+  setGoogleUserCookie(googleUser:any){
+    this.cookies.set("googleUser", JSON.stringify(googleUser))
+  }
+
+  getGoogleUserCookie(){
+    return this.cookies.get("googleUser")
+  }
+
 
   getUserLogged(): Observable<any> {
     const token = this.getTokenCookie();
@@ -43,6 +52,8 @@ export class AuthService {
 
   logout() {
     this.cookies.delete("token");
+    this.cookies.delete("googleUser");
+    google.accounts.id.disableAutoSelect();
   }
 
 }

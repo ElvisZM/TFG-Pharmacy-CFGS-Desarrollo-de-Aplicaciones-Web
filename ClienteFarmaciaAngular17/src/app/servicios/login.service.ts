@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
+
 export class LoginService {
   private token_url = 'http://127.0.0.1:8000/oauth2/token/';
 

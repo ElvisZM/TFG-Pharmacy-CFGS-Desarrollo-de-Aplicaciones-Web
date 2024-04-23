@@ -31,7 +31,7 @@ import { PoliticacookiesComponent } from './politicacookies/politicacookies.comp
     NosotrosComponent,
     PoliticacookiesComponent,
   ],
-  providers: [],
+  providers: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
