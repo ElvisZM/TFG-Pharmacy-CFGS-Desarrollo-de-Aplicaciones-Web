@@ -127,7 +127,7 @@ export class LoginRegisterComponent implements OnInit{
         password1: myForm.register_password1,
         password2: myForm.register_password2,
         domicilio: myForm.register_adress,
-        rol: 2
+        rol: 1
 
       }
       this.registerService.registerUser(registerData).subscribe(
@@ -195,6 +195,7 @@ export class LoginRegisterComponent implements OnInit{
       console.log(payLoad.jti);
       this.authService.setTokenCookie(payLoad.jti);
       this.router.navigate(['/']);
+      
     }
 
   }

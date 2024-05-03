@@ -4,35 +4,52 @@
     margin: auto;
     
 }
+// .card{
+//     border-radius: 5em;
+//     text-align: center;
+//     text-transform: uppercase;
+//     img{
+//         height: 20rem;
+//         border: 1px solid green;
+//         border-radius: 2em;
+//     }
+//     background: linear-gradient(to top, #262b4f 50%, transparent 50%);
+//     color: white;
+//     h4, h3{
+//         font-weight: bold;
+//     }
+//     padding: 0.5%;
+
+// }
+
 .card{
     border-radius: 5em;
-    text-align: center;
-    text-transform: uppercase;
-    img{
-        height: 20rem;
-        border: 1px solid green;
-        border-radius: 2em;
-    }
-    background: linear-gradient(to top, #262b4f 50%, transparent 50%);
     color: white;
-    h4, h3{
-        font-weight: bold;
-    }
-    padding: 0.5%;
-
+    background: linear-gradient(to top, #262b4f 40%, transparent 50%);
+    width: 20em;
+    margin: auto;
+    border: rgb(246,245,243) 1px solid;
+    text-align: center;
 }
 
+img{
+    height: 15em;
+    mix-blend-mode: multiply;
+    text-align: center;
+    margin-left: 1.8em;
+    margin-bottom: 1em;
+}
 
 //ANIMACION CARRITO
 
 .cart-button{
     position: relative;
     padding: 10px;
-    width: 200px;
-    height: 60px;
+    width: 8em;
+    height: 3.5em;
     border: 0;
     border-radius: 3rem;
-    background-color: white;
+    background-color: lightblue;
     outline: none;
     cursor: pointer;
     transition: .3s ease-in-out;
@@ -41,11 +58,7 @@
 }
 
 .cart-button:hover{
-    background-color: rgb(255, 160, 122, 0.2);
-    background-color: lightcoral;
-    span{
-        color: white;
-    }
+    background-color: lightgreen;
 }
 
 .cart-button:active{
@@ -56,7 +69,7 @@
     position: absolute;
     z-index: 2;
     top: 50%;
-    left: -11.5%;
+    left: -13.5%;
     font-size: 2em;
     transform: translate(-50%,-50%);
     color: #262b4f;
@@ -117,7 +130,7 @@
         left: 50%;
     }
     100%{
-        left: 111.5%;
+        left: 113.5%;
     }
 }
 
@@ -162,7 +175,7 @@
 
 
 .favorite-button {
-    --background-default: white;
+    --background-default: lightblue;
     --text-color-default: #262b4f;
     --star-color-default: #62677C;
     --star-face-color-default: #1F2128;
@@ -284,8 +297,7 @@
 }
 
 .favorite-button:hover{
-    --background-default: lightcoral;
-    --text-color-default: white;
+    --background-default: lightgreen;
 
 }
 
@@ -293,7 +305,7 @@
 
 
 .botones{
-    width: 87%;
-    margin-left: 7%;
-    justify-content: space-between;
+    margin: auto;
+    margin-bottom: 1em;
+    justify-content: space-evenly;
 }

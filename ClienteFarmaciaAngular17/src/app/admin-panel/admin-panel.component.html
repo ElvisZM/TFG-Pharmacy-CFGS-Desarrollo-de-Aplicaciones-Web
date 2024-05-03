@@ -1,0 +1,24 @@
+
+<button (click)="saveDataInCSV('simpleData', arrayWithSimpleData)">
+    Save simple data array
+  </button>
+  <br /><br />
+
+<div>Export simple data</div>
+<input
+  #fileUploadSimple
+  [accept]="'.csv'"
+  type="file"
+  class="file-input"
+  (change)="importDataFromCSV($event)"
+  hidden="true"
+/>
+<button (click)="fileUploadSimple.click()">Import from csv</button>
+<br /><br />
+
+<div>data from csv</div>
+<div >@for (item of importedData; track item){
+    {{ item.nombre_prod }}
+    {{ item.precio }}
+    {{ item.stock }}
+}</div>

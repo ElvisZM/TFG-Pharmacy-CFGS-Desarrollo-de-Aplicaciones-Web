@@ -45,6 +45,9 @@ export class AppComponent implements OnInit, DoCheck {
   logoutAccount(){
     this.authService.logout();
     this.token = false;
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   }
 
   googleUserInfo(){

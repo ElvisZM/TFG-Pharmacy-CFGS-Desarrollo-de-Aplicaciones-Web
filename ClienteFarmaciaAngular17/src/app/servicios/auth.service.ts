@@ -1,7 +1,7 @@
 declare var google: any;
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -36,6 +36,7 @@ export class AuthService {
 
 
   getUserLogged(): Observable<any> {
+
     const token = this.getTokenCookie();
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token
@@ -55,5 +56,24 @@ export class AuthService {
     this.cookies.delete("googleUser");
     google.accounts.id.disableAutoSelect();
   }
+
+  getHeaders(): Observable <any> {
+    let headers: any = {}
+    if (this.getGoogleUserCookie().length > 0) {
+      headers = {
+        'Authorization': `Bearer ${this.getGoogleUserCookie()}`,
+        'Content-Type': 'application/json'
+      }
+      return headers;
+    }else if(this.getTokenCookie().length > 0) {
+      headers = {
+        'Authorization': `Bearer ${this.getTokenCookie()}`,
+        'Content-Type': 'application/json'
+      };
+      return headers;
+    }
+    return headers;
+    }
+
 
 }

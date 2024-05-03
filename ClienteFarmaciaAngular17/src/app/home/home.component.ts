@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit{
   usernameTitleAnimated(){
     this.titles = [', hoy y siempre.', ', cada paso del camino.']
     if (this.checkUsernameGoogle()!= undefined){
-      this.titles = [`, ${this.username}`,', hoy y siempre.', ', cada paso del camino.']
+      this.titles = [`, ${this.username}.`,', hoy y siempre.', ', cada paso del camino.']
     }
     this.typedText$ = this.typewriterService
     .getTypewriterEffect(this.titles)

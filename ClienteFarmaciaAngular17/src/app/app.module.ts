@@ -12,6 +12,7 @@ import { TopVentasComponent } from './top-ventas/top-ventas.component';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { NosotrosComponent } from './nosotros/nosotros.component';
 import { PoliticacookiesComponent } from './politicacookies/politicacookies.component';
+import { CsvproductosService } from './servicios/csvproductos.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { PoliticacookiesComponent } from './politicacookies/politicacookies.comp
     NosotrosComponent,
     PoliticacookiesComponent,
   ],
-  providers: [ ],
+  providers: [ CsvproductosService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
