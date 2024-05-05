@@ -15,7 +15,7 @@ import { AuthService } from '../servicios/auth.service';
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, DoCheck{
   
   private typewriterService = inject(TypewriterService);
   
@@ -28,26 +28,23 @@ export class HomeComponent implements OnInit{
 
   ngOnInit(): void {  
     this.usernameTitleAnimated();
+    console.log(this.authService.getUserRol())
+  }
+
+  ngDoCheck(): void {
   }
 
   usernameTitleAnimated(){
     this.titles = [', hoy y siempre.', ', cada paso del camino.']
-    if (this.checkUsernameGoogle()!= undefined){
-      this.titles = [`, ${this.username}.`,', hoy y siempre.', ', cada paso del camino.']
+    if (this.authService.getTokenCookie()){
+      const user_name = this.authService.getNamePicture().name;
+      this.titles = [`, ${user_name}.`,', hoy y siempre.', ', cada paso del camino.']
     }
     this.typedText$ = this.typewriterService
     .getTypewriterEffect(this.titles)
     .pipe(map((text) => text));
     
   }
-  checkUsernameGoogle():string | undefined {  
-    if(this.authService.getGoogleUserCookie().length > 0){
-      this.username = JSON.parse(this.authService.getGoogleUserCookie()).given_name;
-      return this.username;
-    }
-    return undefined;
-  }
-
 
 }
 

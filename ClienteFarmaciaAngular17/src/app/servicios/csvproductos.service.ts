@@ -79,20 +79,13 @@ export class CsvproductosService {
     return dataArray;
   }
 
-  saveDataBackend(data: Array<any>): Observable<any> {
-    let headers: any = {};
-    headers = this.authService.getHeaders();
-    if (headers) {
-      return this.http.post<any>(this.urlSaveDataBackend, data, headers)
-        .pipe(
-          catchError(error => {
-            console.log(error);
-            throw error;
-          })
-        )
-    }else{
-      console.log('No tiene permisos')
-      return new Observable<any>()
-    }
+  saveDataBackend(data: any): Observable<any> {
+    return this.http.post<any>(this.urlSaveDataBackend, data, this.authService.getHeadersApiRequest())
+      .pipe(
+        catchError(error => {
+          console.log(error);
+          throw error;
+        })
+      )
   }
 }

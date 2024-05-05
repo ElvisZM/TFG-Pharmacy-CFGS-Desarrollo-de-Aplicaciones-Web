@@ -146,7 +146,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'app_farmacia',
+        'NAME': 'bbdd_farmacia_prueba',
         'USER': 'admin',
         'PASSWORD': 'admin',
         'HOST': 'localhost', 
@@ -250,6 +250,8 @@ EMPLOYEE_MODEL = 'App_AuthUsers.Empleado'
 
 CART_MODEL = 'App_CartPromos.CarritoCompra'
 
+PRODUCTO_SERIALIZER = 'App_ProductProvider'
+
 #Para imprimir en mi consola los correos electrónicos que se enviarían 
 EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'
 
@@ -264,7 +266,14 @@ if not DEBUG:
 
     
     DATABASES = {
-        "default": env.db("DATABASE_URL"),
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'bbdd_farmacia_prueba',
+            'USER': 'admin',
+            'PASSWORD': 'admin',
+            'HOST': 'localhost', 
+            'PORT': '3306',  
+        }
     }
     #Para evitar llamadas duplicadas a nuestra base de datos
     DATABASES['default']["ATOMIC_REQUESTS"] = True

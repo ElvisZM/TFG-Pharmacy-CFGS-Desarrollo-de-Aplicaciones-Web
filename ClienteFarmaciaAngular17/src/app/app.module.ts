@@ -13,6 +13,14 @@ import { LoginRegisterComponent } from './login-register/login-register.componen
 import { NosotrosComponent } from './nosotros/nosotros.component';
 import { PoliticacookiesComponent } from './politicacookies/politicacookies.component';
 import { CsvproductosService } from './servicios/csvproductos.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MessagesComponent } from './messages/messages.component';
+import { UserslistComponent } from './userslist/userslist.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { SettingsComponent } from './settings/settings.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { TablesComponent } from './tables/tables.component';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +39,13 @@ import { CsvproductosService } from './servicios/csvproductos.service';
     LoginRegisterComponent,
     NosotrosComponent,
     PoliticacookiesComponent,
+    DashboardComponent,
+    MessagesComponent,
+    UserslistComponent,
+    TransactionsComponent,
+    SettingsComponent,
+    CalendarComponent,
+    TablesComponent,
   ],
   providers: [ CsvproductosService ],
   bootstrap: [AppComponent]

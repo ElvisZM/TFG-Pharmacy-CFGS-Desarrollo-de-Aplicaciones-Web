@@ -36,8 +36,10 @@
                   </form>
               </li>
   
-              <li class="apartado-cuenta"><a href="#"><div class="letras-animacion d-flex"><i class="me-2 fa-regular fa-user"></i><h5> Cuenta</h5></div> </a>
-                  <ul *ngIf="!token"> 
+              <li class="apartado-cuenta" *ngIf="!token"><a href="#"><div class="letras-animacion d-flex">
+                
+                <i class="me-2 fa-regular fa-user"></i><h5>Cuenta</h5></div> </a>
+                  <ul > 
                       <li class="apartado-cuenta-interior" ><h5>¿Todavía no conoces nuestras ventajas?</h5></li>
                       <span class="nav_image">
                       </span>
@@ -52,15 +54,32 @@
                           </div>
                       </li>
                   </ul>
+              </li>
+              <li class="apartado-cuenta-logeado" *ngIf="token">
+                <a href="#">
+                    <div class="letras-animacion d-flex" *ngIf="picture">
+                        <img class="profile-picture" [src]="picture" alt="Profile Picture" ><h5>{{name}}</h5>
+                    </div>
+
+                    <div class="letras-animacion d-flex" *ngIf="!picture">
+                        <img class="profile-picture" src="../../assets/imagenes/usuario-noimg.webp" alt="Profile Picture" >
+                        <h5>{{name}}</h5>
+                    </div>
+                </a>
                 
-                  <ul *ngIf="token">
+                  <ul class="ul-cuenta-interior">
                       <li class="apartado-cuenta-interior">
-                          <div class="google-facebook">
-                              <button>Mi carrito <i class="fa-solid fa-cart-shopping"></i></button>
+                          <div class="google-facebook" *ngIf="rol!=='1'">
+                              <button>Mi carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
                           </div>
                       </li>
+                      <li class="apartado-cuenta-interior" *ngIf="rol==='1'">
+                        <div class="google-facebook">
+                            <button (click)="adminPanel()">Panel de Control <i class="fa-solid fa-desktop ms-2"></i></button>
+                        </div>
+                    </li>
                       <li class="apartado-cuenta-interior">
-                        <button (click)="logoutAccount()">Desconectarse <i class="fa-solid fa-right-from-bracket"></i></button>
+                        <button (click)="logoutAccount()">Desconectarse <i class="fa-solid fa-right-from-bracket ms-2"></i></button>
                       </li>
                   </ul>
               </li>

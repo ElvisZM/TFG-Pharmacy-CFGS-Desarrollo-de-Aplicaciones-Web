@@ -101,6 +101,7 @@ h6{
     }
 }
 
+
 //APARTADO INTERIOR, SEGUNDO LI//
 
 .apartados:hover ul{
@@ -191,7 +192,7 @@ h6{
 //LOGIN//
 
 
-.apartado-cuenta{
+.apartado-cuenta, .apartado-cuenta-logeado{
     position: relative;
     text-transform: uppercase;
     border-radius: 2em;
@@ -221,11 +222,25 @@ h6{
     text-align: center;
 }
 
-.apartado-cuenta > ul > li{
+
+.apartado-cuenta-logeado > ul {
+    display:none;
+    list-style: none;
+    background-color: #262b4f;
+    width: auto;
+    border-radius: 1em;
+    position: absolute;
+    top: 4em;
+    right: 0;
+    overflow: visible;
+    text-align: center;
+}
+
+.apartado-cuenta > ul > li, .apartado-cuenta-logeado > ul > li{
     padding: 0.5em;
 }
 
-.apartado-cuenta:hover, .apartado-cuenta:hover i{
+.apartado-cuenta:hover, .apartado-cuenta:hover i, .apartado-cuenta-logeado:hover, .apartado-cuenta-logeado:hover i{
     background-color: #262b4f;
     color: white;
     .letras-animacion >h5{
@@ -234,9 +249,19 @@ h6{
     transform: scale(1.2,1.2);
 }
 
+.profile-picture{
+    border-radius: 4em;
+    height: 3em;
+    margin-right: 0.5em;
+}
+
+.letras-animacion > h5{
+    align-self: center;
+}
+
 //APARTADO INTERIOR CUENTA, SEGUNDO LI//
 
-.apartado-cuenta:hover ul{
+.apartado-cuenta:hover ul, .apartado-cuenta-logeado:hover ul{
     display: block;
 }
 

@@ -4,7 +4,7 @@ from .forms import *
 import base64
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
-
+from App_ProductProvider.serializers import *
 
 
 
@@ -82,5 +82,45 @@ class UsuarioSerializerRegistroGoogle(serializers.Serializer):
         if(not email is None):
             raise serializers.ValidationError('Email ya en uso.')
         return email
-    
 
+
+class AdministradorSerializer(serializers.ModelSerializer):
+    
+    usuario = UsuarioSerializer()
+    
+    class Meta:
+        model = Administrador
+        fields = '__all__'
+        
+        
+class ClienteSerializer(serializers.ModelSerializer):
+    
+    #Para relaciones ManyToOne u OneToOne
+    usuario = UsuarioSerializer()
+    
+    #Para relaciones ManyToMany
+    productos_favoritos = ProductoSerializer(read_only=True, many=True)
+    votacion_prod = ProductoSerializer(read_only=True, many=True)
+    
+    class Meta:
+        model = Cliente
+        fields = ['id', 'picture_cli', 'direccion_cli', 'telefono_cli', 'birthday_date', 'productos_favoritos', 'votacion_prod']
+        
+        
+class EmpleadoSerializer(serializers.ModelSerializer):
+    
+    usuario = UsuarioSerializer()
+    farm_id = FarmaciaSerializer()
+    
+    class Meta:
+        model = Empleado
+        fields = '__all__'
+        
+        
+class GerenteSerializer(serializers.ModelSerializer):
+    
+    usuario = UsuarioSerializer()
+    
+    class Meta:
+        model = Gerente
+        fields = '__all__'

@@ -65,12 +65,37 @@ class registrar_usuario(generics.CreateAPIView):
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
 def obtener_usuario_token(request,token):
     
     ModeloToken = AccessToken.objects.get(token=token)
     usuario = Usuario.objects.get(id=ModeloToken.user_id)
-    serializer = UsuarioSerializer(usuario)
-    return Response(serializer.data)
+    usuario_serializer = UsuarioSerializer(usuario)
+    data_user = usuario_serializer.data
+    if data_user['rol'] == 1:
+        admin_data = Administrador.objects.all()
+        admin_data = admin_data.get(usuario_id=data_user['id'])
+        administrador_serializer = AdministradorSerializer(admin_data)
+        response_data = {"usuario": data_user, "administrador":administrador_serializer.data}
+        return Response (response_data)
+    
+    elif data_user['rol'] == 2:
+        cliente_serializer = ClienteSerializer(usuario_serializer)
+        response_data = {"usuario": data_user, "cliente":cliente_serializer.data}
+        return Response(response_data)
+    
+    elif data_user['rol'] == 3:
+        empleado_serializer = EmpleadoSerializer(usuario_serializer)
+        response_data = {"usuario": data_user, "empleado":empleado_serializer.data}
+        return Response(response_data)
+    
+    elif data_user['rol'] == 4:
+        gerente_serializer = GerenteSerializer(usuario_serializer)
+        response_data = {"usuario": data_user, "gerente":gerente_serializer.data}
+        return Response(response_data)
+    
+    else:
+        return Response('Invalid')  
 
 
 class registrar_usuario_google(generics.CreateAPIView):

@@ -119,6 +119,7 @@ export class LoginRegisterComponent implements OnInit{
     if (this.FormRegister.valid){
       const myForm = this.FormRegister.value;
       const registerData = {
+        picture: null,
         first_name: myForm.register_name,
         email: myForm.register_email,
         username: myForm.register_username,
@@ -139,6 +140,7 @@ export class LoginRegisterComponent implements OnInit{
           this.loginService.loginToken(loginData).subscribe(
             response => {
               this.authService.setTokenCookie(response.access_token);
+              this.authService.setNamePicture(registerData['first_name'])
               this.router.navigate(['/']);
             },error => {
               console.log(error);
@@ -166,8 +168,13 @@ export class LoginRegisterComponent implements OnInit{
   login() {
     const user = {username:this.login_username,password:this.login_password}
     this.loginService.loginToken(user).subscribe((data)=>{
+      console.log(data)
       this.authService.setTokenCookie(data.access_token);
+      this.authService.getUserInfo();
       this.router.navigate(['/']);
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     }, error => {
       this.errorCredentials = 'Credenciales incorrectas. Por favor, inténtelo de nuevo.';
       this.invalidLogin = true;
@@ -190,9 +197,8 @@ export class LoginRegisterComponent implements OnInit{
   handleLogin(response: any){
     if (response){
       const payLoad = this.decodeToken(response.credential);
-      console.log(payLoad);
-      this.authService.setGoogleUserCookie(payLoad);
-      console.log(payLoad.jti);
+      // this.authService.setGoogleUserCookie(payLoad);
+      this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
       this.authService.setTokenCookie(payLoad.jti);
       this.router.navigate(['/']);
       

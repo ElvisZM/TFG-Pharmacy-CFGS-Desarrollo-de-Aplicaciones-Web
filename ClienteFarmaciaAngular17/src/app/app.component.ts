@@ -11,6 +11,9 @@ import { AuthService } from './servicios/auth.service';
 export class AppComponent implements OnInit, DoCheck {
   palabraBusqueda: string = '';
   token: boolean = false; 
+  name: string = '';
+  picture: string = '';
+  rol: string = '';
 
   googleUser: any;
 
@@ -19,19 +22,20 @@ export class AppComponent implements OnInit, DoCheck {
   ngOnInit(){
     if (this.authService.getTokenCookie()){
       this.token = true;
+      this.name = this.authService.getNamePicture().name;
+      this.picture = this.authService.getNamePicture().picture;
+      this.rol = this.authService.getUserRol();
     }else{
       this.token = false;
     }
-
-    this.googleUserInfo();
-    // console.log(this.googleUser)
-    // console.log(this.googleUser.email)
-
   }
 
   ngDoCheck(){
     if (this.authService.getTokenCookie()){
       this.token = true;
+      this.name = this.authService.getNamePicture().name;
+      this.picture = this.authService.getNamePicture().picture;
+      this.rol = this.authService.getUserRol();
     }else{
       this.token = false;
     }
@@ -45,15 +49,11 @@ export class AppComponent implements OnInit, DoCheck {
   logoutAccount(){
     this.authService.logout();
     this.token = false;
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+    
   }
 
-  googleUserInfo(){
-    if (this.authService.getGoogleUserCookie()){
-      this.googleUser= JSON.parse(this.authService.getGoogleUserCookie());
-    }
+  adminPanel(){
+    this.router.navigate(['/admin/panel']);
   }
 
 }
