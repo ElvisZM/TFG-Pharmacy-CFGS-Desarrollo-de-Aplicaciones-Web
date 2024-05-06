@@ -10,7 +10,6 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SettingsComponent } from './settings/settings.component';
-import { CalendarComponent } from './calendar/calendar.component';
 import { TablesComponent } from './tables/tables.component';
 
 const routes: Routes = [
@@ -24,7 +23,6 @@ const routes: Routes = [
   { path: 'admin/panel/users/list', component: UserslistComponent},
   { path: 'admin/panel/transactions', component: TransactionsComponent},
   { path: 'admin/panel/settings', component: SettingsComponent},
-  { path: 'admin/panel/calendar', component: CalendarComponent},
   { path: 'admin/panel/tables', component: TablesComponent},
 ];
 

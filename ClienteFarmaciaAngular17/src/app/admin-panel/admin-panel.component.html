@@ -166,7 +166,6 @@
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#users"><i class="fa-solid fa-user-group"></i> Users List</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#transactions"><i class="fa-solid fa-credit-card"></i> Transactions</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#settings"><i class="fa-solid fa-gear"></i> Settings</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#calendar"><i class="fa-solid fa-calendar"></i> Calendar</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tables"><i class="fa-solid fa-table"></i> Tables</a></li>
       </ul>
     </nav>
@@ -188,9 +187,6 @@
       <div id="settings" class="tab-pane fade">
         <app-settings></app-settings>
       </div>
-      <div id="calendar" class="tab-pane fade">
-        <app-calendar></app-calendar>
-      </div>
       <div id="tables" class="tab-pane fade">
         <app-tables></app-tables>
       </div>
@@ -200,26 +196,3 @@
 
 
 
-<button (click)="saveDataInCSV('simpleData', arrayWithSimpleData)">
-    Save simple data array
-  </button>
-  <br /><br />
-
-<div>Export simple data</div>
-<input
-  #fileUploadSimple
-  [accept]="'.csv'"
-  type="file"
-  class="file-input"
-  (change)="importDataFromCSV($event)"
-  hidden="true"
-/>
-<button (click)="fileUploadSimple.click()">Import from csv</button>
-<br /><br />
-
-<div>data from csv</div>
-<div >@for (item of importedData; track item){
-    {{ item.nombre_prod }}
-    {{ item.precio }}
-    {{ item.stock }}
-}</div>

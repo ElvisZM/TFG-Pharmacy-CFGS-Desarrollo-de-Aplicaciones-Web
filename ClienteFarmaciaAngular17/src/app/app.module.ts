@@ -18,7 +18,6 @@ import { MessagesComponent } from './messages/messages.component';
 import { UserslistComponent } from './userslist/userslist.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { SettingsComponent } from './settings/settings.component';
-import { CalendarComponent } from './calendar/calendar.component';
 import { TablesComponent } from './tables/tables.component';
 
 
@@ -44,7 +43,6 @@ import { TablesComponent } from './tables/tables.component';
     UserslistComponent,
     TransactionsComponent,
     SettingsComponent,
-    CalendarComponent,
     TablesComponent,
   ],
   providers: [ CsvproductosService ],

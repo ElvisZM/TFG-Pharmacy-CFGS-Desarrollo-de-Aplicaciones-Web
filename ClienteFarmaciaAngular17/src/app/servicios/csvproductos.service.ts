@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs';
 import { AuthService } from './auth.service';
-
+import * as Papa from 'papaparse';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -53,39 +54,50 @@ export class CsvproductosService {
   }
 
   public importDataFromCSV(csvText: string): Array<any> {
-    const propertyNames = csvText.slice(0, csvText.indexOf('\n')).split(',');
-    const dataRows = csvText.slice(csvText.indexOf('\n') + 1).split('\n');
+    const parsedData = Papa.parse(csvText, { header: true });
+    return parsedData.data;
+    // const propertyNames = csvText.slice(0, csvText.indexOf('\n')).split(',');
+    // const dataRows = csvText.slice(csvText.indexOf('\n') + 1).split('\n');
 
-    let dataArray: any[] = [];
-    dataRows.forEach((row) => {
-      let values = row.split(',');
+    // let dataArray: any[] = [];
+    // dataRows.forEach((row) => {
+    //   let values = row.split(',');
 
-      let obj: any = new Object();
+    //   let obj: any = new Object();
 
-      for (let index = 0; index < propertyNames.length; index++) {
-        const propertyName: string = propertyNames[index];
+    //   for (let index = 0; index < propertyNames.length; index++) {
+    //     const propertyName: string = propertyNames[index];
 
-        let val: any = values[index];
-        if (val === '') {
-          val = null;
-        }
+    //     let val: any = values[index];
+    //     if (val === '') {
+    //       val = null;
+    //     }
 
-        obj[propertyName] = val;
-      }
+    //     obj[propertyName] = val;
+    //   }
 
-      dataArray.push(obj);
-    });
+    //   dataArray.push(obj);
+    // });
 
-    return dataArray;
+    // return dataArray;
   }
 
   saveDataBackend(data: any): Observable<any> {
     return this.http.post<any>(this.urlSaveDataBackend, data, this.authService.getHeadersApiRequest())
-      .pipe(
+    .pipe(
+      map(response => {
+        const server_response = response
+        if (server_response.toString() === 'Producto CREADO'){;
+          console.log(response);
+          console.log("HOLA")
+        }else{
+          console.log(response);
+        }
+      }),
         catchError(error => {
-          console.log(error);
           throw error;
         })
-      )
-  }
+      );
+  }     
+
 }

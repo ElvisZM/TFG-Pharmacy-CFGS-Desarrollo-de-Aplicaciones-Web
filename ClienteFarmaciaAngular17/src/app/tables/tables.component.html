@@ -1,1 +1,173 @@
-<p>tables works!</p>
+<div class="py-4">
+    <div class="dropdown">
+        <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Select table
+        </button>
+        <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+            <a class="dropdown-item d-flex align-items-center" href="#">
+                
+                Product
+            </a>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+                Provider
+            </a>
+            <div role="separator" class="dropdown-divider my-1"></div>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+
+                Upgrade to Pro
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="py-4">
+
+    <div class="d-flex justify-content-between w-100 flex-wrap">
+        <div class="mb-3 mb-lg-0">
+            <h1 class="h4">PRODUCTS</h1>
+            <p class="mb-0">Tablas informativas sobre su farmacia.</p>
+        </div>
+        <div >
+            <form action="#" class="busqueda" class="d-flex" role="search" method="GET">
+                <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search">
+                <button class="btn btn-light btn-outline-dark" type="submit">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+                Actions
+            </button>
+            <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                
+                <a class="dropdown-item d-flex align-items-center" href="#" >
+                    
+                    New Product
+                </a>
+
+                <input
+                #fileUploadSimple
+                [accept]="'.csv'"
+                type="file"
+                class="file-input"
+                (change)="importDataFromCSV($event)"
+                hidden="true"
+                />
+
+
+                <button class="dropdown-item d-flex align-items-center" (click)="fileUploadSimple.click()">
+                    Upload CSV
+                </button>
+            
+                <div role="separator" class="dropdown-divider my-1"></div>
+                <button class="dropdown-item d-flex align-items-center" (click)="saveDataInCSV('simpleData', arrayWithSimpleData)">
+                    
+                    Export data
+                </button>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+
+<div class="card border-0 shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0 rounded">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="border-0 rounded-start">ID</th>
+                        <th class="border-0">Picture</th>
+                        <th class="border-0">Name</th>
+                        <th class="border-0">Description</th>
+                        <th class="border-0">Price</th>
+                        <th class="border-0">Stock</th>
+                        <th class="border-0">Pharmacy</th>
+                        <th class="border-0 rounded-end">Provider</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+
+                    <!-- Item -->
+                    <tr *ngFor="let item of myProductsList;">
+                        <td><a href="#" class="text-primary fw-bold">{{ item.id }}</a> </td>
+                        <td>
+                            
+                            <a href="#" class="d-flex align-items-center" *ngIf="!item.imagen_prod">
+                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/Simvastatina20mg.jpg">
+                            </a>
+
+                            <a href="#" class="d-flex align-items-center" *ngIf="item.imagen_prod">
+                                <img class="me-2 image image-small rounded-circle" alt="Image existe"  [src]="item.imagen_prod">
+                            </a>
+                        </td>
+
+                        <td>
+                            <h2>{{ item.nombre_prod }}</h2>
+                        </td>
+                        <td>
+                           {{ item.descripcion }}
+                        </td>
+                        <td>
+                           {{ item.precio }}
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="fw-bold">{{ item.stock }}</span>
+                                <div class="progress-wrapper">
+                                    <progress class="progress mb-1" [value]="item.stock" [max]="100" [class]="getProgressBarColor(item.stock, 100)"></progress>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-success">
+                            <div class="d-flex align-items-center">
+                                                         
+                                <span class="fw-bold">{{ item.farmacia_id.nombre_farm }}</span>
+                            </div>
+                        </td>
+                        <td class="text-success">
+                            <div class="d-flex align-items-center">
+                                                         
+                                <span class="fw-bold">{{ item.proveedor_id[0].nombre_prov }}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0">
+                <li class="page-item">
+                    <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>25</b> entries</div>
+    </div>
+    
