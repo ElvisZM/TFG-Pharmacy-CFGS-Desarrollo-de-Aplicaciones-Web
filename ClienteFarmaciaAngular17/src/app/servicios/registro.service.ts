@@ -23,6 +23,15 @@ export class RegistroService {
       );
   }
 
+  registerGoogleDataToServer(dataGoogle: any): Observable<any>{
+    return this.http.post<any>(this.apiUrlRegistro+'/google', dataGoogle)
+      .pipe(
+        catchError(error => {
+          throw error;
+        })
+      );
+  }
+
   // registerUserGoogle(dataSignUp: any): Observable<any>{
   //   return this.http.post<any>(this.apiUrlRegistroGoogle, dataSignUp)
   //     .pipe(

@@ -35,18 +35,27 @@ def registrar_producto_csv(request):
             for item in csv_data[:-1]:
         
                 producto_serializers = CsvProductoSerializerCreate(data=item)
-                if producto_serializers.is_valid():
-                    try:
-                        producto_serializers.save()
-                    except serializers.ValidationError as error:
-                        return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-                    except Exception as error:
-                        print(error)
-                        return Response(error.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                else:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    if producto_serializers.is_valid():
+                        try:
+                            producto_serializers.save()
+                        except serializers.ValidationError as error:
+                            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+                        except Exception as error:
+                            print(error)
+                            return Response(error.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                except serializers.ValidationError as error:
+                    return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+                
+                except Exception as err:
+                    return Response(err, status=status.HTTP_400_BAD_REQUEST)
+                
+            if (producto_serializers.errors):
+                if(len(producto_serializers.errors) ==1 and producto_serializers.errors['nombre_prod']):
+                    return Response('Uno o más productos ya existen en esa farmacia', status=status.HTTP_400_BAD_REQUEST)
 
-            return Response('Producto CREADO', status=status.HTTP_200_OK)
+            else:
+                return Response('Producto CREADO', status=status.HTTP_200_OK)
 
         else:
             return Response('Se esperaba una lista de objetos JSON', status=status.HTTP_400_BAD_REQUEST)
@@ -54,7 +63,23 @@ def registrar_producto_csv(request):
         return Response('Sin permisos para esta operación', status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-def producto_list(request):
+def productos_list(request):
     productos = Producto.objects.all()
     serializer = ProductoSerializer(productos, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def proveedores_list(request):
+    proveedores = Proveedor.objects.all()
+    serializer = ProveedorSerializer(proveedores, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def suministro_productos_list(request):
+    suministro = SuministroProducto.objects.all()
+    serializer = SuministroProductoSerializer(suministro, many=True)
     return Response(serializer.data)

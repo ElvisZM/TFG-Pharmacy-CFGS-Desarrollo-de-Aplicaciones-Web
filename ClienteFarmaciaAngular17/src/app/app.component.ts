@@ -17,6 +17,10 @@ export class AppComponent implements OnInit, DoCheck {
 
   googleUser: any;
 
+  imageUrl!: string;
+  imageLoaded: boolean = false;
+  imageError: boolean = false;
+
   constructor(private datosService: DatosService, private router: Router, private authService: AuthService, ) { }
 
   ngOnInit(){
@@ -28,6 +32,8 @@ export class AppComponent implements OnInit, DoCheck {
     }else{
       this.token = false;
     }
+    this.loadImage();
+
   }
 
   ngDoCheck(){
@@ -54,6 +60,22 @@ export class AppComponent implements OnInit, DoCheck {
 
   adminPanel(){
     this.router.navigate(['/admin/panel']);
+  }
+
+
+  loadImage() {
+    this.imageUrl = '../assets/imagenes/404.jpg'; // Aquí debes asignar la URL proporcionada por el usuario
+
+    const img = new Image();
+    img.src = this.imageUrl;
+
+    img.onload = () => {
+      this.imageLoaded = true;
+    };
+
+    img.onerror = () => {
+      this.imageError = true;
+    };
   }
 
 }

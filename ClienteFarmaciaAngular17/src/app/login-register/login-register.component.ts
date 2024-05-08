@@ -8,6 +8,8 @@ import { LoginService } from '../servicios/login.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { AuthService } from '../servicios/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 
 @Component({
@@ -47,7 +49,7 @@ export class LoginRegisterComponent implements OnInit{
 
   passwordVisibility: boolean = false;
 
-  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService) {
+  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService, private _snackBar:MatSnackBar) {
     
     this.FormRegister = this.fb.group({
       register_name:['', Validators.required],
@@ -174,7 +176,7 @@ export class LoginRegisterComponent implements OnInit{
       this.router.navigate(['/']);
       setTimeout(() => {
         window.location.reload();
-      }, 200);
+      }, 400);
     }, error => {
       this.errorCredentials = 'Credenciales incorrectas. Por favor, inténtelo de nuevo.';
       this.invalidLogin = true;
@@ -197,13 +199,36 @@ export class LoginRegisterComponent implements OnInit{
   handleLogin(response: any){
     if (response){
       const payLoad = this.decodeToken(response.credential);
-      // this.authService.setGoogleUserCookie(payLoad);
-      this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
-      this.authService.setTokenCookie(payLoad.jti);
-      this.router.navigate(['/']);
-      
+      const dataToSave = {
+        first_name: payLoad.given_name,
+        last_name: payLoad.family_name,
+        email: payLoad.email,
+        profile_pic: payLoad.picture,
+        rol: 2
+      }
+      this.registerService.registerGoogleDataToServer(dataToSave).subscribe(
+        response => {
+          console.log(response);
+          this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
+          this.authService.setTokenCookie(payLoad.jti);
+          this.router.navigate(['/']);
+          const mensaje = 'Sesion iniciada con exito'
+          this.mostrarMensaje(mensaje)
+          
+        },error =>{
+          console.log(error);            
+        }
+      )
     }
-
   }
+
+  mostrarMensaje(mensaje: string) {
+    this._snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000, // Duración en milisegundos
+      verticalPosition: 'top', // Posición vertical
+    });
+  }
+
+
 
 }

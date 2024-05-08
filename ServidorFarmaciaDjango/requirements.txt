@@ -19,3 +19,4 @@ django-cors-headers~=4.3.1
 Pillow
 mysqlclient==2.1.0
 mysql-connector-python~=8.0.0
+numpy==1.26.4

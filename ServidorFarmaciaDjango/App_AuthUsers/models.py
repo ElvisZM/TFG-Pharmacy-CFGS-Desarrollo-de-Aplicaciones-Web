@@ -35,6 +35,7 @@ class Gerente(models.Model):
     telefono_ger = models.IntegerField(null=True, blank=True)
     salario_ger = models.FloatField(default=2100.0)
     birthday_date = models.DateField(null=True, blank=True)
+    cif_farm = models.CharField(max_length=8)
     farmacia_id = models.OneToOneField(Farmacia, on_delete=models.CASCADE, null=True)
 
 
@@ -44,7 +45,8 @@ class Empleado(models.Model):
     direccion_emp = models.CharField(max_length=200)
     telefono_emp = models.IntegerField(null=True, blank=True)
     birthday_date = models.DateField(null=True, blank=True)
-    salario = models.FloatField(default=1024.0)
+    salario_emp = models.FloatField(default=1024.0)
+    cif_farm = models.CharField(max_length=8)
     farmacia_id = models.ForeignKey(Farmacia, on_delete=models.CASCADE, null=True, blank=True) 
 
 

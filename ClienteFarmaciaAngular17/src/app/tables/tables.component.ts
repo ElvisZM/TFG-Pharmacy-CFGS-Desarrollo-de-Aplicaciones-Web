@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CsvproductosService } from '../servicios/csvproductos.service';
 import { DatosService } from '../servicios/datos.service';
+import { AdminPanelComponent } from '../admin-panel/admin-panel.component';
 
 @Component({
   selector: 'app-tables',
@@ -15,8 +16,10 @@ export class TablesComponent implements OnInit {
   public importedData: Array<any> = [];
 
   myProductsList: Array<any> = [];
+  CreatingProductMessage: string = '';
+  createProduct: boolean = false;
 
-  constructor(private _csvService: CsvproductosService, private datosService: DatosService ){}
+  constructor(private _csvService: CsvproductosService, public datosService: DatosService, private adminPanel: AdminPanelComponent){}
 
   ngOnInit() {
     this.productsList();
@@ -27,9 +30,21 @@ export class TablesComponent implements OnInit {
     let fileContent = await this.getTextFromFile(event);
     this.importedData = this._csvService.importDataFromCSV(fileContent);
     this._csvService.saveDataBackend(this.importedData).subscribe(response => {
-      console.log(response);
+      if (response) {
+        localStorage.setItem('activeTab', 'tables')
+        window.location.reload();
+      };
     }, error => {
-      console.log(error);
+      if (error.error === 'Uno o más productos ya existen en esa farmacia'){
+
+        localStorage.setItem('errorTab', 'tables');
+        localStorage.setItem('errorProd', '1')
+        window.location.reload();
+      }else{
+        localStorage.setItem('errorTab', 'tables');
+        localStorage.setItem('errorProd', '2')
+        window.location.reload();
+      };
     })
   }
 
@@ -41,19 +56,6 @@ export class TablesComponent implements OnInit {
   }
 
 
-  // all property has a string data type
-  arrayWithSimpleData: Array<any> = [
-    { name: 'Eve', email: 'eve22@mail.com', city: 'San Francisco' },
-    { name: 'John', email: 'john123@mail.com', city: 'London' },
-    { name: 'Nick', email: 'super0nick@mail.com', city: 'Madrid' },
-  ];
-
-  // complex class all properties has different data type
-  dataWithConstructor: Array<any> = [
-    { id: '1', amount: 100, wallet: 'sarah wallet', fees: 5, errors: false },
-    { id: '2', amount: 245, wallet: 'alex wallet', fees: 3, errors: true },
-    { id: '3', amount: 78, wallet: 'kate wallet', fees: 4, errors: true },
-  ];
 
   public saveDataInCSV(name: string, data: Array<any>): void {
     let csvContent = this._csvService.saveDataInCSV(data);
@@ -80,11 +82,11 @@ export class TablesComponent implements OnInit {
   getProgressBarColor(stock: number, maxStock: number): string {
     const percentage = (stock / maxStock) * 100;
     if (percentage <= 25) {
-        return 'progress-red'; // Cambiar al color que desees para el stock bajo
+        return 'progress-red'; 
     } else if (percentage <= 50) {
-        return 'progress-orange'; // Cambiar al color que desees para el stock medio
+        return 'progress-orange'; 
     } else {
-        return 'progress-green'; // Cambiar al color que desees para el stock alto
+        return 'progress-green'; 
     }
 }
 

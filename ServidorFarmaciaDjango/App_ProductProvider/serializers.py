@@ -26,7 +26,7 @@ class ProductoSerializer(serializers.ModelSerializer):
     proveedor_id = ProveedorSerializer(read_only=True, many=True)
     
     class Meta:
-        fields = ('id', 'imagen_prod', 'nombre_prod', 'descripcion', 'precio', 'stock','farmacia_id', 'proveedor_id')
+        fields = ('cn_prod', 'imagen_prod', 'nombre_prod', 'descripcion', 'precio', 'stock', 'cif_farm', 'farmacia_id', 'proveedor_id')
         model = Producto
         
    
@@ -39,17 +39,6 @@ class SuministroProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = SuministroProducto
         fields = '__all__'
-
-
-class ProductoSerializer(serializers.ModelSerializer):
-    
-    farmacia_id = FarmaciaSerializer()
-    
-    proveedor_id = ProveedorSerializer(read_only=True, many=True)
-    
-    class Meta:
-        model = Producto
-        fields = ('id','imagen_prod','nombre_prod','descripcion','precio','stock','farmacia_id','proveedor_id')
 
 
 class ProductoSerializerCreate(serializers.Serializer):
@@ -154,12 +143,14 @@ class ProductoSerializerCreate(serializers.Serializer):
 class CsvProductoSerializerCreate(serializers.Serializer):
     
     #Campos de Producto
+    cn_prod = serializers.IntegerField()
     nombre_prod = serializers.CharField()
     descripcion = serializers.CharField()
     precio = serializers.DecimalField(max_digits=5, decimal_places=2)
-
+    cif_farm = serializers.CharField()
     
     #Campos de Proveedor
+    cif_prov = serializers.CharField()
     nombre_prov = serializers.CharField()
     direccion_prov = serializers.CharField()
     telefono_prov = serializers.IntegerField()
@@ -169,13 +160,19 @@ class CsvProductoSerializerCreate(serializers.Serializer):
     cantidad = serializers.IntegerField()
     costo_ud = serializers.DecimalField(max_digits=5, decimal_places=2)
         
+    def validate_cn_prod(self, cn_prod):
+        if (cn_prod is None) or (cn_prod < 0):
+            raise serializers.ValidationError('Codigo Nacional inválido.')
+        return cn_prod
         
     def validate_nombre_prod(self,nombre):
-        productoNombre = Producto.objects.filter(nombre_prod=nombre, farmacia_id= self.initial_data['farmacia_id']).first()
-        farmaciaIntroducida = Farmacia.objects.filter(id=self.initial_data['farmacia_id']).first()
-        if(not productoNombre is None):
+        productoExists = Producto.objects.filter(cn_prod=self.initial_data['cn_prod'], cif_farm= self.initial_data['cif_farm']).first()
+        
+        farmaciaIntroducida = Farmacia.objects.filter(cif_farm=self.initial_data['cif_farm']).first()
+        
+        if(not productoExists is None):
                 
-            if(not self.instance is None and productoNombre.id == self.instance.id):
+            if(not self.instance is None and productoExists.id == self.instance.id):
                 pass
             else:
                 raise serializers.ValidationError('El producto ya existe en esta farmacia')
@@ -200,6 +197,18 @@ class CsvProductoSerializerCreate(serializers.Serializer):
             raise serializers.ValidationError('El precio debe ser un número positivo')
     
         return precio
+    
+    
+    def validate_cif_prov(self, cif_prov):
+        if (cif_prov is None) or (len(cif_prov)<0):
+            raise serializers.ValidationError('Codigo de Identificacion Fiscal inválido.')
+        return cif_prov
+    
+    def validate_nombre_prov(self, nombre_prov):
+        if (nombre_prov is None) or (len(nombre_prov)<5):
+            raise serializers.ValidationError('Nombre de proveedor inválido.')
+        
+        return nombre_prov
     
     def validate_direccion_prov(self,direccion):
         if len(direccion) < 10:
@@ -242,34 +251,28 @@ class CsvProductoSerializerCreate(serializers.Serializer):
 
     
     def create(self, validated_data):
-        lista_campos = ['farmacia_id', 'nombre_prov']
-        for campo in lista_campos:
-            if(campo not in self.initial_data):
-                raise serializers.ValidationError(
-                    {campo: ['No hay datos para este campo']}
-                    )
 
-        proveedor = self.initial_data['nombre_prov']
-     
-        proveedor_existe = Proveedor.objects.filter(nombre_prov=proveedor).first()
+        proveedor_existe = Proveedor.objects.filter(cif_prov= validated_data['cif_prov']).first()
         if (proveedor_existe is None):        
-            modeloProveedor = Proveedor.objects.create(nombre_prov=proveedor, direccion_prov = validated_data['direccion_prov'], telefono_prov = validated_data['telefono_prov'])
+            modeloProveedor = Proveedor.objects.create(cif_prov=validated_data['cif_prov'], nombre_prov=validated_data['nombre_prov'], direccion_prov = validated_data['direccion_prov'], telefono_prov = validated_data['telefono_prov'])
         else:
-            modeloProveedor = Proveedor.objects.get(nombre_prov=proveedor)
+            modeloProveedor = Proveedor.objects.get(cif_prov=validated_data['cif_prov'])
         
         
-        farmaciaProducto = Farmacia.objects.get(id=self.initial_data['farmacia_id'])
+        farmaciaProducto = Farmacia.objects.get(cif_farm=validated_data['cif_farm'])
         
         producto = Producto.objects.create(
+            cn_prod = validated_data['cn_prod'],
             nombre_prod = validated_data['nombre_prod'],
             descripcion = validated_data['descripcion'],
             precio = validated_data['precio'],
             stock = validated_data['cantidad'],
+            cif_farm = validated_data['cif_farm'],
             farmacia_id = farmaciaProducto
             )
         
         
-        SuministroProducto.objects.create(fecha_pedido=validated_data['fecha_pedido'], cantidad=validated_data['cantidad'], costo_ud=validated_data['costo_ud'], producto_id=producto, proveedor_id = modeloProveedor, )
+        SuministroProducto.objects.create(fecha_pedido=validated_data['fecha_pedido'], cantidad=validated_data['cantidad'], costo_ud=validated_data['costo_ud'], cn_prod = validated_data['cn_prod'], cif_prov = validated_data['cif_prov'], producto_id=producto, proveedor_id = modeloProveedor, )
         
         return producto
     

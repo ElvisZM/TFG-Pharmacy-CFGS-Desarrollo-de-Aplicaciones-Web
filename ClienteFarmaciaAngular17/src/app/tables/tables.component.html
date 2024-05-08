@@ -59,17 +59,24 @@
 
 
                 <button class="dropdown-item d-flex align-items-center" (click)="fileUploadSimple.click()">
-                    Upload CSV
+                    Add Products (.csv) 
                 </button>
             
                 <div role="separator" class="dropdown-divider my-1"></div>
-                <button class="dropdown-item d-flex align-items-center" (click)="saveDataInCSV('simpleData', arrayWithSimpleData)">
+                <button class="dropdown-item d-flex align-items-center" (click)="saveDataInCSV('ProductsData', myProductsList)">
                     
-                    Export data
+                    Export Products Data (.csv)
                 </button>
             </div>
         </div>
         
+    </div>
+
+    <div class="validaciones alert alert-danger" *ngIf="datosService.errorCreateProductMessage">
+        <h6>{{ datosService.errorProductMessage }}</h6>
+    </div>
+    <div class="validaciones alert alert-danger" *ngIf="datosService.createProductMessage">
+        <h6>{{ datosService.successProductMessage }}</h6>
     </div>
     
 </div>
@@ -81,13 +88,15 @@
             <table class="table table-centered table-nowrap mb-0 rounded">
                 <thead class="thead-light">
                     <tr>
-                        <th class="border-0 rounded-start">ID</th>
+                        <th class="border-0 rounded-start">CN Product</th>
                         <th class="border-0">Picture</th>
                         <th class="border-0">Name</th>
                         <th class="border-0">Description</th>
                         <th class="border-0">Price</th>
                         <th class="border-0">Stock</th>
+                        <th class="border-0">CIF Pharmacy</th>
                         <th class="border-0">Pharmacy</th>
+                        <th class="border-0">CIF Provider</th>
                         <th class="border-0 rounded-end">Provider</th>
                     </tr>
                 </thead>
@@ -95,7 +104,7 @@
 
                     <!-- Item -->
                     <tr *ngFor="let item of myProductsList;">
-                        <td><a href="#" class="text-primary fw-bold">{{ item.id }}</a> </td>
+                        <td><a href="#" class="text-primary fw-bold">{{ item.cn_prod }}</a> </td>
                         <td>
                             
                             <a href="#" class="d-flex align-items-center" *ngIf="!item.imagen_prod">
@@ -127,7 +136,19 @@
                         <td class="text-success">
                             <div class="d-flex align-items-center">
                                                          
+                                <span class="fw-bold">{{ item.cif_farm }}</span>
+                            </div>
+                        </td>
+                        <td class="text-success">
+                            <div class="d-flex align-items-center">
+                                                         
                                 <span class="fw-bold">{{ item.farmacia_id.nombre_farm }}</span>
+                            </div>
+                        </td>
+                        <td class="text-success">
+                            <div class="d-flex align-items-center">
+                                                         
+                                <span class="fw-bold">{{ item.proveedor_id[0].cif_prov }}</span>
                             </div>
                         </td>
                         <td class="text-success">

@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TablesComponent } from './tables/tables.component';
+import { NotfoundpageComponent } from './notfoundpage/notfoundpage.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'admin/panel/transactions', component: TransactionsComponent},
   { path: 'admin/panel/settings', component: SettingsComponent},
   { path: 'admin/panel/tables', component: TablesComponent},
+  { path: '**', component: NotfoundpageComponent}
 ];
 
 @NgModule({

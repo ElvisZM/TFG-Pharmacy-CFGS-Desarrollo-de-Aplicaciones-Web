@@ -4,6 +4,7 @@ from django.conf import settings
 
 
 class Farmacia(models.Model):
+    cif_farm = models.CharField(max_length=8)
     nombre_farm = models.CharField(max_length=200)
     direccion_farm = models.CharField(max_length=200)
     telefono_farm = models.IntegerField(null=True, blank=True)
@@ -12,6 +13,7 @@ class Farmacia(models.Model):
         return self.nombre_farm
     
 class Proveedor(models.Model):
+    cif_prov = models.CharField(max_length=8)
     nombre_prov = models.CharField(max_length=200)
     direccion_prov = models.CharField(max_length=200)
     telefono_prov = models.IntegerField(null=True, blank=True)
@@ -20,11 +22,13 @@ class Proveedor(models.Model):
         return self.nombre_prov
 
 class Producto(models.Model):
+    cn_prod = models.IntegerField()
     imagen_prod = models.ImageField(upload_to='productos/', null=True, blank=True)
     nombre_prod = models.CharField(max_length=200)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=5, decimal_places=2)
     stock = models.IntegerField()
+    cif_farm = models.CharField(max_length=8)
     farmacia_id = models.ForeignKey(Farmacia, on_delete=models.CASCADE)
     proveedor_id = models.ManyToManyField(Proveedor, through='SuministroProducto')
     
@@ -36,6 +40,7 @@ class Prospecto(models.Model):
     composicion = models.TextField()
     modo_de_uso = models.TextField()
     fecha_vencimiento = models.DateField()
+    cn_prod = models.CharField(max_length=10)
     producto_id = models.OneToOneField(Producto, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -46,6 +51,8 @@ class SuministroProducto(models.Model):
     fecha_pedido = models.DateField(null=True, blank=True)
     cantidad = models.IntegerField(null=True, blank=True)
     costo_ud = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    cn_prod = models.IntegerField()
+    cif_prov = models.CharField(max_length=8)
     producto_id = models.ForeignKey(Producto, on_delete=models.CASCADE)
     proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
 

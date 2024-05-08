@@ -80,7 +80,7 @@ export class AuthService {
     this.router.navigate(['/']);
     setTimeout(() => {
       window.location.reload();
-    },200);
+    },400);
     google.accounts.id.disableAutoSelect();
   }
 

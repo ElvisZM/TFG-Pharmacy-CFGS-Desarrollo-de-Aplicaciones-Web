@@ -146,7 +146,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bbdd_farmacia_prueba',
+        'NAME': 'bbdd_farmacia_tfg',
         'USER': 'admin',
         'PASSWORD': 'admin',
         'HOST': 'localhost', 
@@ -268,7 +268,7 @@ if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bbdd_farmacia_prueba',
+            'NAME': 'bbdd_farmacia_tfg',
             'USER': 'admin',
             'PASSWORD': 'admin',
             'HOST': 'localhost', 

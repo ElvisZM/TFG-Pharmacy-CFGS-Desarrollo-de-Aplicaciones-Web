@@ -14,6 +14,13 @@ export class DatosService {
 
   apiURL: string = 'http://127.0.0.1:8000/service/';
 
+
+  successProductMessage: string = '';
+  createProductMessage: boolean = false;
+
+  errorProductMessage: string = '';
+  errorCreateProductMessage: boolean = false;
+
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   // getPopularMovies() {
@@ -98,4 +105,7 @@ export class DatosService {
     const headers = this.authService.getHeadersUserInfo()
     return this.http.get<any>(this.apiURL+'product/provider/productos/list', headers)
   }
+
+  // getProviderList():
+
 }

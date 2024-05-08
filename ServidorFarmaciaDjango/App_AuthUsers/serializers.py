@@ -29,8 +29,8 @@ class UsuarioSerializerRegistro(serializers.Serializer):
         return username
     
     def validate_email(self, email):
-        email = Usuario.objects.filter(email=email).first()
-        if(not email is None):
+        email_existe = Usuario.objects.filter(email=email).first()
+        if (not email_existe is None):
             raise serializers.ValidationError('Email ya en uso.')
         return email
     
@@ -62,8 +62,9 @@ class UsuarioSerializerRegistroGoogle(serializers.Serializer):
     
     username = serializers.CharField()
     first_name = serializers.CharField()
-    password1 = serializers.CharField()
-    password2 = serializers.CharField()
+    last_name = serializers.CharField()
+    password1 = serializers.CharField(required=False, allow_blank=True)
+    password2 = serializers.CharField(required=False, allow_blank=True)
     email = serializers.EmailField()
     rol = serializers.IntegerField()
     domicilio = serializers.CharField(required=False, allow_blank=True)
@@ -77,11 +78,7 @@ class UsuarioSerializerRegistroGoogle(serializers.Serializer):
             raise serializers.ValidationError('Usuario existente.')
         return username
     
-    def validate_email(self, email):
-        email = Usuario.objects.filter(email=email).first()
-        if(not email is None):
-            raise serializers.ValidationError('Email ya en uso.')
-        return email
+
 
 
 class AdministradorSerializer(serializers.ModelSerializer):
