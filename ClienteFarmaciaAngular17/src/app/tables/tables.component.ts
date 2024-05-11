@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CsvproductosService } from '../servicios/csvproductos.service';
 import { DatosService } from '../servicios/datos.service';
 import { AdminPanelComponent } from '../admin-panel/admin-panel.component';
+import { Router } from '@angular/router';
+import { CrudproductService } from '../servicios/crudproduct.service';
 
 @Component({
   selector: 'app-tables',
@@ -11,22 +13,28 @@ import { AdminPanelComponent } from '../admin-panel/admin-panel.component';
   templateUrl: './tables.component.html',
   styleUrl: './tables.component.scss'
 })
-export class TablesComponent implements OnInit {
+export class TablesComponent implements OnInit, DoCheck {
 
-  public importedData: Array<any> = [];
+  importedData: Array<any> = [];
 
   myProductsList: Array<any> = [];
   CreatingProductMessage: string = '';
-  createProduct: boolean = false;
 
-  constructor(private _csvService: CsvproductosService, public datosService: DatosService, private adminPanel: AdminPanelComponent){}
+  url: string = 'http://localhost:8000';
+  
+
+  constructor(private _csvService: CsvproductosService, public datosService: DatosService, private adminPanel: AdminPanelComponent, private crudProduct : CrudproductService, private router: Router){}
 
   ngOnInit() {
     this.productsList();
   }
 
+  ngDoCheck(){
+  }
+// ************************************PRODUCTOS*********************************************
 
-  public async importDataFromCSV(event: any) {
+
+  async importDataFromCSV(event: any) {
     let fileContent = await this.getTextFromFile(event);
     this.importedData = this._csvService.importDataFromCSV(fileContent);
     this._csvService.saveDataBackend(this.importedData).subscribe(response => {
@@ -35,7 +43,7 @@ export class TablesComponent implements OnInit {
         window.location.reload();
       };
     }, error => {
-      if (error.error === 'Uno o más productos ya existen en esa farmacia'){
+      if (error.error === 'Uno o más productos ya existen en esa farmacia o la farmacia no existe.'){
 
         localStorage.setItem('errorTab', 'tables');
         localStorage.setItem('errorProd', '1')
@@ -48,13 +56,12 @@ export class TablesComponent implements OnInit {
     })
   }
 
-  private async getTextFromFile(event: any) {
+  async getTextFromFile(event: any) {
     const file: File = event.target.files[0];
     let fileContent = await file.text();
 
     return fileContent;
   }
-
 
 
   public saveDataInCSV(name: string, data: Array<any>): void {
@@ -71,12 +78,10 @@ export class TablesComponent implements OnInit {
     this.datosService.getProductsList().subscribe(
       response => {
         this.myProductsList = response;
-        console.log(this.myProductsList);
     },
     error => {
       console.log(error);
-    }
-  )
+    })
   }
 
   getProgressBarColor(stock: number, maxStock: number): string {
@@ -88,6 +93,11 @@ export class TablesComponent implements OnInit {
     } else {
         return 'progress-green'; 
     }
-}
+  }
+
+  createProduct(){
+    this.router.navigate(['/admin/panel/create/product']);
+  }
+
 
 }

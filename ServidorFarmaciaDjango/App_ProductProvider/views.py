@@ -9,7 +9,7 @@ from .forms import *
 
 @api_view(['POST'])
 def producto_create(request):
-    if(request.user.has_perm('App_Farmacia.add_producto')):
+    if(request.user.has_perm('App_ProductProvider.add_producto')):
         producto_serializers = ProductoSerializerCreate(data=request.data)
         if producto_serializers.is_valid():
             try:
@@ -52,13 +52,13 @@ def registrar_producto_csv(request):
                 
             if (producto_serializers.errors):
                 if(len(producto_serializers.errors) ==1 and producto_serializers.errors['nombre_prod']):
-                    return Response('Uno o más productos ya existen en esa farmacia', status=status.HTTP_400_BAD_REQUEST)
+                    return Response('Uno o más productos ya existen en esa farmacia o la farmacia no existe.', status=status.HTTP_400_BAD_REQUEST)
 
             else:
                 return Response('Producto CREADO', status=status.HTTP_200_OK)
 
         else:
-            return Response('Se esperaba una lista de objetos JSON', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Se esperaba una lista de objetos JSON', status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
     else:
         return Response('Sin permisos para esta operación', status=status.HTTP_401_UNAUTHORIZED)
 
@@ -69,6 +69,12 @@ def productos_list(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def farmacias_list(request):
+    farmacias = Farmacia.objects.all()
+    serializer = FarmaciaSerializer(farmacias, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 def proveedores_list(request):
@@ -77,9 +83,31 @@ def proveedores_list(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def categorias_list(request):
+    categorias = Categoria.objects.all()
+    serializer = CategoriaProductoSerializer(categorias, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 def suministro_productos_list(request):
     suministro = SuministroProducto.objects.all()
     serializer = SuministroProductoSerializer(suministro, many=True)
     return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def producto_buscar(request):
+    formulario = BusquedaProductoForm(request.query_params)
+    if (formulario.is_valid()):
+        texto = formulario.data.get('textoBusqueda')
+        productos = Producto.objects.select_related('farmacia_prod').prefetch_related('prov_sum_prod')
+        productos = productos.filter(Q(nombre_prod__contains=texto) | Q(descripcion__contains=texto)).all()
+        serializer = ProductoSerializer(productos, many=True)
+        return Response(serializer.data)
+    else:
+        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

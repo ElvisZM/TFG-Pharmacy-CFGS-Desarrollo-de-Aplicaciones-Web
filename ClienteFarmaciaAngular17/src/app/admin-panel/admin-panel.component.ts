@@ -8,6 +8,7 @@ import { MessagesComponent } from '../messages/messages.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { TablesComponent } from '../tables/tables.component';
 import { DatosService } from '../servicios/datos.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin-panel',
@@ -18,7 +19,7 @@ import { DatosService } from '../servicios/datos.service';
 })
 export class AdminPanelComponent implements OnInit {
 
-  constructor(private _csvService: CsvproductosService, private authService: AuthService, private datosService: DatosService) {}
+  constructor(private _csvService: CsvproductosService, private authService: AuthService, private datosService: DatosService, private titleService: Title) {}
 
   ngOnInit(): void {
     const activeTab = localStorage.getItem('activeTab');
@@ -39,6 +40,8 @@ export class AdminPanelComponent implements OnInit {
         this.datosService.errorCreateProductMessage = false;
       }, 5000);
     }
+    this.titleService.setTitle('Sitio Administrativo | Panel de Administrador');
+
   }
 
   
@@ -78,7 +81,7 @@ export class AdminPanelComponent implements OnInit {
     navDefault!.setAttribute('class', 'nav-link')
     navActiva!.setAttribute('class', 'nav-link active')
     if(errorNum === '1'){
-      this.datosService.errorProductMessage = 'CSV Error: Uno o más productos ya existen en esa farmacia'
+      this.datosService.errorProductMessage = 'CSV Error: Uno o más productos ya existen en esa farmacia o la farmacia no existe.'
       this.datosService.errorCreateProductMessage = true
     }else{
       this.datosService.errorProductMessage = 'File Error: El archivo no es válido'

@@ -8,7 +8,6 @@ import { LoginService } from '../servicios/login.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { AuthService } from '../servicios/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -49,7 +48,7 @@ export class LoginRegisterComponent implements OnInit{
 
   passwordVisibility: boolean = false;
 
-  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService, private _snackBar:MatSnackBar) {
+  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService) {
     
     this.FormRegister = this.fb.group({
       register_name:['', Validators.required],
@@ -143,6 +142,7 @@ export class LoginRegisterComponent implements OnInit{
             response => {
               this.authService.setTokenCookie(response.access_token);
               this.authService.setNamePicture(registerData['first_name'])
+              this.authService.setUserRol(registerData['rol'].toString())
               this.router.navigate(['/']);
             },error => {
               console.log(error);
@@ -208,12 +208,11 @@ export class LoginRegisterComponent implements OnInit{
       }
       this.registerService.registerGoogleDataToServer(dataToSave).subscribe(
         response => {
-          console.log(response);
           this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
           this.authService.setTokenCookie(payLoad.jti);
+          this.authService.setUserRol('2')
           this.router.navigate(['/']);
           const mensaje = 'Sesion iniciada con exito'
-          this.mostrarMensaje(mensaje)
           
         },error =>{
           console.log(error);            
@@ -222,12 +221,6 @@ export class LoginRegisterComponent implements OnInit{
     }
   }
 
-  mostrarMensaje(mensaje: string) {
-    this._snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000, // Duración en milisegundos
-      verticalPosition: 'top', // Posición vertical
-    });
-  }
 
 
 

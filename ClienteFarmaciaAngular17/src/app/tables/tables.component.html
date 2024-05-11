@@ -1,7 +1,6 @@
 <div class="py-4">
     <div class="dropdown">
-        <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+        <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">    
             Select table
         </button>
         <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
@@ -22,53 +21,57 @@
 </div>
 
 
-<div class="py-4">
+<div class="">
 
     <div class="d-flex justify-content-between w-100 flex-wrap">
         <div class="mb-3 mb-lg-0">
-            <h1 class="h4">PRODUCTS</h1>
-            <p class="mb-0">Tablas informativas sobre su farmacia.</p>
+            <div class="d-flex align-items-center">
+                <h1 class="h4 pt-3">PRODUCTOS</h1>
+                <div class="dropdown d-flex align-items-center ms-3">
+                
+                    <button class="btn btn-secondary align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        
+                        Actions
+                    </button>
+                    <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                        
+                        <button class="dropdown-item d-flex align-items-center" (click)="createProduct()" >
+                            
+                            New Product
+                        </button>
+        
+                        <input
+                        #fileUploadSimple
+                        [accept]="'.csv'"
+                        type="file"
+                        class="file-input"
+                        (change)="importDataFromCSV($event)"
+                        hidden="true"
+                        />
+        
+        
+                        <button class="dropdown-item d-flex align-items-center" (click)="fileUploadSimple.click()">
+                            Add Products (.csv) 
+                        </button>
+                    
+                        <div role="separator" class="dropdown-divider my-1"></div>
+                        <button class="dropdown-item d-flex align-items-center" (click)="saveDataInCSV('ProductsData', myProductsList)">
+                            
+                            Export Products Data (.csv)
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Tablas informativas sobre su farmacia.</p>
         </div>
-        <div >
-            <form action="#" class="busqueda" class="d-flex" role="search" method="GET">
-                <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search">
-                <button class="btn btn-light btn-outline-dark" type="submit">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
+        <div>
+            <form action="#" class="busqueda" role="search" method="GET">
+                <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busqueda de productos en la tabla"  aria-label="Search">
+                <button class="btn btn-secondary" type="submit">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
 
-        <div class="dropdown">
-            <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                
-                Actions
-            </button>
-            <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                
-                <a class="dropdown-item d-flex align-items-center" href="#" >
-                    
-                    New Product
-                </a>
-
-                <input
-                #fileUploadSimple
-                [accept]="'.csv'"
-                type="file"
-                class="file-input"
-                (change)="importDataFromCSV($event)"
-                hidden="true"
-                />
-
-
-                <button class="dropdown-item d-flex align-items-center" (click)="fileUploadSimple.click()">
-                    Add Products (.csv) 
-                </button>
-            
-                <div role="separator" class="dropdown-divider my-1"></div>
-                <button class="dropdown-item d-flex align-items-center" (click)="saveDataInCSV('ProductsData', myProductsList)">
-                    
-                    Export Products Data (.csv)
-                </button>
-            </div>
-        </div>
+        
         
     </div>
 
@@ -108,11 +111,11 @@
                         <td>
                             
                             <a href="#" class="d-flex align-items-center" *ngIf="!item.imagen_prod">
-                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/Simvastatina20mg.jpg">
+                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/NoProductImageAvailable.png">
                             </a>
 
                             <a href="#" class="d-flex align-items-center" *ngIf="item.imagen_prod">
-                                <img class="me-2 image image-small rounded-circle" alt="Image existe"  [src]="item.imagen_prod">
+                                <img class="me-2 image image-small rounded-circle" alt="Image existe"  [src]="url + item.imagen_prod">
                             </a>
                         </td>
 

@@ -13,3 +13,12 @@ img{
 .progress-green::-webkit-progress-value {
     background-color: green !important;
 }
+
+.busqueda{
+    display: flex;
+    margin-right: 1em;
+    margin-top: 1em;
+    button{
+        width: 10em;
+    }
+}

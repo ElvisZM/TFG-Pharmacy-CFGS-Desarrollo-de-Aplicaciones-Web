@@ -11,6 +11,14 @@ class Farmacia(models.Model):
     
     def __str__(self):
         return self.nombre_farm
+   
+
+class Categoria(models.Model):
+    nombre_cat = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.nombre_cat
+       
     
 class Proveedor(models.Model):
     cif_prov = models.CharField(max_length=8)
@@ -29,7 +37,8 @@ class Producto(models.Model):
     precio = models.DecimalField(max_digits=5, decimal_places=2)
     stock = models.IntegerField()
     cif_farm = models.CharField(max_length=8)
-    farmacia_id = models.ForeignKey(Farmacia, on_delete=models.CASCADE)
+    categoria_id = models.ForeignKey(Categoria, on_delete=models.CASCADE, db_column='categoria_id')
+    farmacia_id = models.ForeignKey(Farmacia, on_delete=models.CASCADE, db_column='farmacia_id')
     proveedor_id = models.ManyToManyField(Proveedor, through='SuministroProducto')
     
     def __str__(self):
@@ -55,4 +64,3 @@ class SuministroProducto(models.Model):
     cif_prov = models.CharField(max_length=8)
     producto_id = models.ForeignKey(Producto, on_delete=models.CASCADE)
     proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-

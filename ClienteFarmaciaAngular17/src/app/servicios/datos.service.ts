@@ -106,6 +106,20 @@ export class DatosService {
     return this.http.get<any>(this.apiURL+'product/provider/productos/list', headers)
   }
 
-  // getProviderList():
+  getPharmaciesList(): Observable<any> {
+    const headers = this.authService.getHeadersUserInfo()
+    return this.http.get<any>(this.apiURL+'product/provider/farmacias/list', headers)
+  }
+
+  getProvidersList(): Observable<any> {
+    const headers = this.authService.getHeadersUserInfo()
+    return this.http.get<any>(this.apiURL+'product/provider/proveedores/list', headers)
+  }
+
+  getCategoriesList(): Observable<any> {
+    const headers = this.authService.getHeadersUserInfo()
+    return this.http.get<any>(this.apiURL+'product/provider/categorias/list', headers)
+  }
+
 
 }

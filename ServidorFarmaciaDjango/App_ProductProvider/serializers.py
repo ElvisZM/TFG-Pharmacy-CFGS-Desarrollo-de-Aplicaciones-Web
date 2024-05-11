@@ -17,16 +17,25 @@ class ProveedorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CategoriaProductoSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Categoria
+        fields = '__all__'
+
+
 class ProductoSerializer(serializers.ModelSerializer):
     
     #Para relaciones ManyToOne o OneToOne
     farmacia_id = FarmaciaSerializer()
+    categoria_id = CategoriaProductoSerializer()
     
     #Para relaciones ManyToMany
     proveedor_id = ProveedorSerializer(read_only=True, many=True)
     
+    
     class Meta:
-        fields = ('cn_prod', 'imagen_prod', 'nombre_prod', 'descripcion', 'precio', 'stock', 'cif_farm', 'farmacia_id', 'proveedor_id')
+        fields = ('cn_prod', 'imagen_prod', 'nombre_prod', 'descripcion', 'precio', 'stock', 'cif_farm', 'categoria_id', 'farmacia_id', 'proveedor_id')
         model = Producto
         
    
@@ -41,24 +50,42 @@ class SuministroProductoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProductoSerializerCreate(serializers.Serializer):
-    
-    farmacia_id = FarmaciaSerializer()
-    
-    proveedor_id = ProveedorSerializer()
+
+
+class ProductoSerializerCreate(serializers.ModelSerializer):
     
     class Meta:
         model = Producto
-        fields = ['nombre_prod', 'descripcion', 'precio', 'stock', 'farmacia_id', 'proveedor_id']
+        fields = ['cn_prod', 'nombre_prod', 'descripcion', 'precio', 'stock', 'cif_farm', 'categoria_id']
         
         
-    def validate_nombre_prod(self,nombre):
-        productoNombre = Producto.objects.filter(nombre_prod=nombre, farmacia_prod= self.initial_data['farmacia_id']).first()
-        if(not productoNombre is None):
-            if(not self.instance is None and productoNombre.id == self.instance.id):
+    def validate_cn_prod(self, cn_prod):
+        
+        if(cn_prod is None or cn_prod < 0):
+            raise serializers.ValidationError('El código nacional no es válido.')
+        
+        modeloFarmacia = Farmacia.objects.filter(cif_farm=self.initial_data['cif_farm']).first()
+        if(modeloFarmacia is None):
+            raise serializers.ValidationError('La farmacia no existe')
+
+        modeloProveedor = Proveedor.objects.filter(cif_prov=self.initial_data['cif_prov']).first()        
+        if(modeloProveedor is None):
+            raise serializers.ValidationError('El proveedor no existe')
+
+        modeloProducto = Producto.objects.filter(cn_prod=cn_prod, farmacia_id=modeloFarmacia, proveedor_id = modeloProveedor).first()
+        
+        if(not modeloProducto is None):
+            if(not self.instance is None and modeloProducto.id == self.instance.id):
                 pass
             else:
-                raise serializers.ValidationError('El producto ya existe en esta farmacia')
+                raise serializers.ValidationError('El producto ya existe en esta farmacia')    
+        
+        return cn_prod
+    
+    def validate_nombre_prod(self,nombre):
+        
+        if(nombre is None):
+            raise serializers.ValidationError('El producto no tiene nombre.')
         return nombre
     
     def validate_descripcion(self,descripcion):
@@ -67,50 +94,77 @@ class ProductoSerializerCreate(serializers.Serializer):
         return descripcion
     
     def validate_precio(self,precio):
-        if type(precio) != float:
-            raise serializers.ValidationError('El precio introducido no es válido')
+        try:
+            precio = float(precio)
+        except ValueError:
+            raise serializers.ValidationError('El precio no es un número válido')
+    
+        if precio < 0:
+            raise serializers.ValidationError('El precio debe ser un número positivo')
+    
         return precio
     
-    def validate_stock(self, stock):
+    def validate_stock(self,stock):
         if type(stock) != int or stock < 0:
-            raise serializers.ValidationError('El stock introducido no es válido')
+            raise serializers.ValidationError('La cantidad introducida no es válida.')
         return stock
+
     
     def create(self, validated_data):
-        if('proveedor_id' not in self.initial_data):
-            raise serializers.ValidationError(
-                {'proveedor_id': ['No ha seleccionado proveedores']}
-                )
 
-        proveedores = self.initial_data['proveedor_id']
-        imagen_prod = base64.b64encode(self.initial_data['imagen_prod'])
-        contenido_archivo = ContentFile(imagen_prod)
+        modeloFarmacia = Farmacia.objects.filter(cif_farm=self.initial_data['cif_farm']).first()
         
-        archivo = InMemoryUploadedFile(
-            contenido_archivo,
-            None,
-            validated_data['nombre_prod'],
-            self.initial_data['formato_imagen'],
-            contenido_archivo.size,
-            None
-        )
+        modeloCategoria = Categoria.objects.filter(id=self.initial_data['categoria_id']).first()
         
-        producto = Producto.objects.create(
+        modeloProveedor = Proveedor.objects.filter(cif_prov=self.initial_data['cif_prov']).first()
+        
+        if (modeloFarmacia is None or modeloCategoria is None or modeloProveedor is None):
+            raise serializers.ValidationError('La farmacia, la categoria o el proveedor no existen')
+        
+        elif (self.initial_data['imagen_prod'] is None):
+            
+            modeloProducto = Producto.objects.create(
+            cn_prod = validated_data['cn_prod'],
+            imagen_prod = self.initial_data['imagen_prod'],
             nombre_prod = validated_data['nombre_prod'],
             descripcion = validated_data['descripcion'],
             precio = validated_data['precio'],
             stock = validated_data['stock'],
-            farmacia_id = validated_data['farmacia_id'],
-            imagen_prod = validated_data['imagen_prod'],
+            cif_farm = validated_data['cif_farm'],
+            categoria_id = modeloCategoria,
+            farmacia_id = modeloFarmacia,
             )
-        fecha_actual = date.today()
+        else:
+            
+            format, img_str = self.initial_data['imagen_prod'].split(';base64,')
+            
+            ext = format.split('/')[-1] 
+
+            archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
         
-        for proveedor in proveedores:
-            modeloProveedor = Proveedor.objects.get(id=proveedor)
-            SuministroProducto.objects.create(fecha=fecha_actual, cantidad=validated_data['stock'], costo_ud=(round(validated_data['precio']/1.30)), proveedor_id = modeloProveedor, producto_id=producto)
+            modeloProducto = Producto.objects.create(
+            cn_prod = validated_data['cn_prod'],
+            imagen_prod = archivo,
+            nombre_prod = validated_data['nombre_prod'],
+            descripcion = validated_data['descripcion'],
+            precio = validated_data['precio'],
+            stock = validated_data['stock'],
+            cif_farm = validated_data['cif_farm'],
+            categoria_id = modeloCategoria,
+            farmacia_id = modeloFarmacia,
+            )
         
-        return producto
-    
+        fecha_hoy = date.today()
+        
+        #La farmacia compra al proveedor un 40% más barato que el precio de venta al público
+        precio_compra_proveedor = validated_data['precio']*0.6
+        
+        SuministroProducto.objects.create(fecha_pedido=fecha_hoy, cantidad=validated_data['stock'], costo_ud=precio_compra_proveedor, cn_prod = validated_data['cn_prod'], cif_prov = self.initial_data['cif_prov'], producto_id=modeloProducto, proveedor_id = modeloProveedor)
+        
+        return modeloProducto
+
+
+        
     def update(self, instance, validated_data):
         
         fecha_actual = date.today()
@@ -148,6 +202,7 @@ class CsvProductoSerializerCreate(serializers.Serializer):
     descripcion = serializers.CharField()
     precio = serializers.DecimalField(max_digits=5, decimal_places=2)
     cif_farm = serializers.CharField()
+    nombre_cat = serializers.CharField()
     
     #Campos de Proveedor
     cif_prov = serializers.CharField()
@@ -258,23 +313,30 @@ class CsvProductoSerializerCreate(serializers.Serializer):
         else:
             modeloProveedor = Proveedor.objects.get(cif_prov=validated_data['cif_prov'])
         
+        categoria_existe = Categoria.objects.filter(nombre_cat=validated_data['nombre_cat']).first()
+        
+        if categoria_existe is None:
+            modeloCategoria = Categoria.objects.create(nombre_cat=validated_data['nombre_cat'])
+        else:
+            modeloCategoria = Categoria.objects.get(nombre_cat=validated_data['nombre_cat'])
         
         farmaciaProducto = Farmacia.objects.get(cif_farm=validated_data['cif_farm'])
         
-        producto = Producto.objects.create(
+        modeloProducto = Producto.objects.create(
             cn_prod = validated_data['cn_prod'],
             nombre_prod = validated_data['nombre_prod'],
             descripcion = validated_data['descripcion'],
             precio = validated_data['precio'],
             stock = validated_data['cantidad'],
             cif_farm = validated_data['cif_farm'],
-            farmacia_id = farmaciaProducto
+            categoria_id = modeloCategoria,
+            farmacia_id = farmaciaProducto,
             )
         
         
-        SuministroProducto.objects.create(fecha_pedido=validated_data['fecha_pedido'], cantidad=validated_data['cantidad'], costo_ud=validated_data['costo_ud'], cn_prod = validated_data['cn_prod'], cif_prov = validated_data['cif_prov'], producto_id=producto, proveedor_id = modeloProveedor, )
+        SuministroProducto.objects.create(fecha_pedido=validated_data['fecha_pedido'], cantidad=validated_data['cantidad'], costo_ud=validated_data['costo_ud'], cn_prod = validated_data['cn_prod'], cif_prov = validated_data['cif_prov'], producto_id=modeloProducto, proveedor_id = modeloProveedor, )
         
-        return producto
+        return modeloProducto
     
     def update(self, instance, validated_data):
         
