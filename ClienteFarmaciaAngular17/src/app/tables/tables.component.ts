@@ -78,6 +78,7 @@ export class TablesComponent implements OnInit, DoCheck {
     this.datosService.getProductsList().subscribe(
       response => {
         this.myProductsList = response;
+        console.log(this.myProductsList)
     },
     error => {
       console.log(error);
@@ -99,5 +100,8 @@ export class TablesComponent implements OnInit, DoCheck {
     this.router.navigate(['/admin/panel/create/product']);
   }
 
+  updateProduct(product: number){
+    this.router.navigate([`/admin/panel/update/product`, product]);
+  }
 
 }

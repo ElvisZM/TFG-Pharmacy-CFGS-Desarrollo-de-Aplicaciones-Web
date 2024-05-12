@@ -1,0 +1,152 @@
+<div *ngIf="product">   
+    <form class="custom-form container" [formGroup]="FormUpdateProduct" (ngSubmit)="update()">
+
+        <div class="row w-auto">
+            <div class="col-12 col-xl-12">
+                <div class="card card-body border-0 shadow mb-4">
+                    <h2 class="h5 mb-4 fw-bold text-center">UPDATE PRODUCT</h2>
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="card card-body border-0 shadow mb-4">
+                                    <h2 class="h5 mb-4 fw-bold">Select product photo</h2>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <img class="rounded avatar" src="../assets/imagenes/NoProductImageAvailable.png" alt="change avatar" *ngIf="!pic_existe && !api_imagen_existe">
+
+                                            <img class="rounded avatar" [src]="picture_url" alt="new_product_image" *ngIf="pic_existe && !api_imagen_existe">
+
+                                            <img class="rounded avatar" [src]="url + product.imagen_prod" alt="api_product image" *ngIf="api_imagen_existe && !pic_existe">
+
+                                        </div>
+                                        <div class="file-field">
+                                            <div class="d-flex justify-content-xl-center ms-xl-3">
+                                                <div>
+                                                    
+                                                    <input type="file" (change)="onFileSelected($event)" formControlName="update_picture">
+                                                    <div class="d-md-block mt-3">
+                                                        <div class="text-gray small fw-bold ">JPG, GIF or PNG. Max size of 800K</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>  
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label class="fw-bold" for="prod_name">Nombre del Producto</label>
+                                    <input class="form-control" id="prod_name" type="text" placeholder="Introduzca el nombre del producto" formControlName="update_prod_name" required >
+                                </div>
+
+                                <div class="validaciones alert alert-danger" *ngIf="FormUpdateProduct.get('update_prod_name')!.touched && FormUpdateProduct.get('update_prod_name')!.hasError('required')">
+                                    <h6>Necesita rellenar este campo.</h6>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label class="fw-bold" for="cn">Codigo Nacional</label>
+                                    <input class="form-control" id="cn" type="number" placeholder="Introduzca el Codigo Nacional del Producto" formControlName="update_cn_prod" required>
+                                </div>
+
+                                <div class="validaciones alert alert-danger" *ngIf="FormUpdateProduct.get('update_cn_prod')!.touched && FormUpdateProduct.get('update_cn_prod')!.hasError('required')">
+                                    <h6>Necesita rellenar este campo.</h6>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="row align-items-center">
+
+                            <div class="col-md-6 mb-3">
+                                <div>
+                                    <label class="fw-bold" for="description">Descripcion</label>
+                                    <input class="form-control" id="description" type="text" placeholder="Describa el producto brevemente" formControlName="update_descripcion" required >
+                                </div>
+
+                                <div class="validaciones alert alert-danger" *ngIf="FormUpdateProduct.get('update_descripcion')!.touched && FormUpdateProduct.get('update_descripcion')!.hasError('required')">
+                                    <h6>Necesita rellenar este campo.</h6>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold" for="category">Categoria</label>
+                                <select class="form-select mb-0" formControlName="update_categoria_id" id="category" [(ngModel)]="selectedCategoryOption">
+                                    <option disabled >Seleccione una categoria</option>
+                                    <option *ngFor="let categoria of categories" [selected]="categoria === product.categoria_id" >{{ categoria.nombre_cat }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold" for="pharmacy">Farmacia</label>
+                                <select class="form-select mb-0" id="pharmacy" formControlName="update_farmacia_id" [(ngModel)]="selectedPharmacyOption">
+                                    <option disabled >Seleccione una farmacia</option>
+                                    <option *ngFor="let pharma of pharmacies" [selected]="pharma === product.farmacia_id" >{{pharma.nombre_farm}}</option>
+                                </select>
+                            </div>
+
+                            
+
+
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold" for="provider">Proveedor</label>
+                                <select class="form-select mb-0" id="provider" formControlName="update_proveedor_id" [(ngModel)]="selectedProviderOption">
+                                    <option disabled >Seleccione un proveedor</option>
+                                    <option *ngFor="let provider of providers" [selected]="provider === product.provider_id" >{{provider.nombre_prov}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group fw-bold">
+                                    <label for="stock">Stock</label>
+                                    <input class="form-control" id="stock" type="number" placeholder="Cantidad del producto" formControlName="update_stock" required>
+                                </div>
+
+                                <div class="validaciones alert alert-danger" *ngIf="FormUpdateProduct.get('update_stock')!.touched && FormUpdateProduct.get('update_stock')!.hasError('required')">
+                                    <h6>Necesita rellenar este campo.</h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group fw-bold">
+                                    <label for="price">Precio</label>
+                                    <input class="form-control" id="price" type="number" placeholder="00.00 €" formControlName="update_precio" required>
+                                </div>
+
+                                <div class="validaciones alert alert-danger" *ngIf="FormUpdateProduct.get('update_precio')!.touched && FormUpdateProduct.get('update_precio')!.hasError('required')">
+                                    <h6>Necesita rellenar este campo.</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="validaciones alert alert-danger" *ngIf="campoFormVacio">
+                            <h6>{{ formVacioError }}</h6>
+                        </div>
+
+                        <div class="mt-3 d-flex justify-content-between">
+                            <button name="back" (click)="backToAdmin()">Back</button>
+                            <button type="submit" name="update" [disabled]="campoFormVacio">Update Product</button>
+                        </div>
+                        
+                </div>
+                
+            </div>
+        </div>
+    </form>
+</div> 

@@ -3,15 +3,15 @@ img{
     height: 10em;
 }
 .progress-orange::-webkit-progress-value {
-    background-color: orange !important;
+    background-color: yellow ;
 }
 
 .progress-red::-webkit-progress-value {
-    background-color: red !important;
+    background-color: rgba(236, 35, 35, 0.795) !important;
 }
 
 .progress-green::-webkit-progress-value {
-    background-color: green !important;
+    background-color:  lightgreen !important;
 }
 
 .busqueda{

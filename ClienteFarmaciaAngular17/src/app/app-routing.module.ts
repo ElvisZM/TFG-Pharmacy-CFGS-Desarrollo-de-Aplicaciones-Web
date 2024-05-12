@@ -8,6 +8,7 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 import { NotfoundpageComponent } from './notfoundpage/notfoundpage.component';
 import { FormproductComponent } from './formproduct/formproduct.component';
+import { FormproductupdateComponent } from './formproductupdate/formproductupdate.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'politica/cookies', component: PoliticacookiesComponent },
   { path: 'admin/panel', component: AdminPanelComponent},
   { path: 'admin/panel/create/product', component: FormproductComponent},
+  { path: 'admin/panel/update/product/:cn_prod', component: FormproductupdateComponent},
+
   { path: '**', component: NotfoundpageComponent}
 ];
 

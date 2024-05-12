@@ -169,19 +169,59 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
         
         fecha_actual = date.today()
         
-        proveedores = self.initial_data['proveedor_id']
-        if len(proveedores) < 1:
-            raise serializers.ValidationError(
-                {'proveedor_id': 'Debe seleccionar al menos un proveedor'}
-            )
-            
-        instance.nombre_prod = validated_data['nombre_prod']
-        instance.descripcion = validated_data['descripcion']
-        instance.precio = validated_data['precio']
-        instance.stock = validated_data['stock']
-        instance.farmacia_id = validated_data['farmacia_id']
-        instance.save()
+        modeloFarmacia = Farmacia.objects.filter(cif_farm=self.initial_data['cif_farm']).first()
         
+        modeloCategoria = Categoria.objects.filter(id=self.initial_data['categoria_id']).first()
+        
+        modeloProveedor = Proveedor.objects.filter(cif_prov=self.initial_data['cif_prov']).first()
+        
+        if (modeloFarmacia is None or modeloCategoria is None or modeloProveedor is None):
+            raise serializers.ValidationError('La farmacia, la categoria o el proveedor no existen')
+        
+        
+        elif (self.initial_data['imagen_prod'] is None):
+        
+        
+            
+            instance.cn_prod = validated_data['cn_prod']
+            instance.imagen_prod = validated_data['imagen_prod']
+            instance.nombre_prod = validated_data['nombre_prod']
+            instance.descripcion = validated_data['descripcion']
+            instance.precio = validated_data['precio']
+            instance.stock = validated_data['stock']
+            instance.cif_farm = validated_data['cif_farm'],
+            instance.categoria_id = modeloCategoria
+            instance.farmacia_id = modeloFarmacia
+            instance.save()
+            
+        
+        
+        
+        else:
+            
+            format, img_str = self.initial_data['imagen_prod'].split(';base64,')
+            
+            ext = format.split('/')[-1] 
+
+            archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
+                
+            format, img_str = self.initial_data['imagen_prod'].split(';base64,')
+            
+            ext = format.split('/')[-1] 
+
+            archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
+            
+            instance.cn_prod = validated_data['cn_prod']
+            instance.imagen_prod = validated_data['imagen_prod']
+            instance.nombre_prod = validated_data['nombre_prod']
+            instance.descripcion = validated_data['descripcion']
+            instance.precio = validated_data['precio']
+            instance.stock = validated_data['stock']
+            instance.cif_farm = validated_data['cif_farm'],
+            instance.categoria_id = modeloCategoria
+            instance.farmacia_id = modeloFarmacia
+            instance.save()
+            
         instance.proveedor_id.clear()
         for proveedor in proveedores:
             modeloProveedor = Proveedor.objects.get(id=proveedor)

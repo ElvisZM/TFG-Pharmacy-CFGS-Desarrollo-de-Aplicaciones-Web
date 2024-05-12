@@ -90,12 +90,12 @@
         <div class="table-responsive">
             <table class="table table-centered table-nowrap mb-0 rounded">
                 <thead class="thead-light">
-                    <tr>
+                    <tr class="text-center">
                         <th class="border-0 rounded-start">CN Product</th>
                         <th class="border-0">Picture</th>
                         <th class="border-0">Name</th>
                         <th class="border-0">Description</th>
-                        <th class="border-0">Price</th>
+                        <th class="border-0">Price €</th>
                         <th class="border-0">Stock</th>
                         <th class="border-0">CIF Pharmacy</th>
                         <th class="border-0">Pharmacy</th>
@@ -107,10 +107,10 @@
 
                     <!-- Item -->
                     <tr *ngFor="let item of myProductsList;">
-                        <td><a href="#" class="text-primary fw-bold">{{ item.cn_prod }}</a> </td>
+                        <td><a class="text-primary fw-bold" (click)="updateProduct(item.cn_prod)" style="cursor: pointer;">{{ item.cn_prod }} </a> </td>
                         <td>
                             
-                            <a href="#" class="d-flex align-items-center" *ngIf="!item.imagen_prod">
+                            <a class="d-flex align-items-center" *ngIf="!item.imagen_prod" (click)="updateProduct(item.cn_prod)" style="cursor: pointer;" >
                                 <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/NoProductImageAvailable.png">
                             </a>
 
@@ -122,10 +122,10 @@
                         <td>
                             <h2>{{ item.nombre_prod }}</h2>
                         </td>
-                        <td>
+                        <td style="text-align: justify;">
                            {{ item.descripcion }}
                         </td>
-                        <td>
+                        <td class="fw-bold">
                            {{ item.precio }}
                         </td>
                         <td>

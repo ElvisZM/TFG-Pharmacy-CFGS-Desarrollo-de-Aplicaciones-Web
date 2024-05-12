@@ -21,6 +21,8 @@ export class DatosService {
   errorProductMessage: string = '';
   errorCreateProductMessage: boolean = false;
 
+  productCN!: number;
+
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   // getPopularMovies() {
@@ -121,5 +123,9 @@ export class DatosService {
     return this.http.get<any>(this.apiURL+'product/provider/categorias/list', headers)
   }
 
+  getProduct(cn_prod: number ): Observable<any> {
+    const headers = this.authService.getHeadersUserInfo()
+    return this.http.get<any>(this.apiURL+'product/provider/producto/'+cn_prod, headers)
+  }
 
 }

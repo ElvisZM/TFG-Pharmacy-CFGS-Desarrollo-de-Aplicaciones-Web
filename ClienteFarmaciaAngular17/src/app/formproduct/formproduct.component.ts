@@ -5,7 +5,6 @@ import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CrudproductService } from '../servicios/crudproduct.service';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { empty } from 'rxjs';
 import { DatosService } from '../servicios/datos.service';
 
 
@@ -194,14 +193,14 @@ export class FormproductComponent implements OnInit, DoCheck{
 
       const registerData = {
         cn_prod: myForm.register_cn_prod,
-        picture: myForm.register_picture,
-        prod_name: myForm.register_prod_name,
+        imagen_prod: myForm.register_picture,
+        nombre_prod: myForm.register_prod_name,
         descripcion: myForm.register_descripcion,
         precio: myForm.register_precio,
         stock: myForm.register_stock,
         categoria_id: myForm.register_categoria_id,
-        farmacia_id: myForm.register_farmacia_id,
-        proveedor_id: myForm.register_proveedor_id,
+        cif_farm: myForm.register_farmacia_id,
+        cif_prov: myForm.register_proveedor_id,
       };
       console.log('Fuera de reader.onload');
       console.log(myForm);
@@ -212,6 +211,10 @@ export class FormproductComponent implements OnInit, DoCheck{
     }
   }
     
+  backToAdmin(){
+    this.router.navigate(['/admin/panel']);
+  }
+
 }
 
 

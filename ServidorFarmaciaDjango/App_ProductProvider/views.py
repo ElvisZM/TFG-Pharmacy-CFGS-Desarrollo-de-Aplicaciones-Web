@@ -110,4 +110,27 @@ def producto_buscar(request):
     else:
         return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def producto_editar(request, codigo_nacional_prod):
+    if(request.user.has_perm("App_ProductProvider.change_producto")):
+        producto = Producto.objects.get(cn_prod=codigo_nacional_prod)
+        productoCreateSerializer = ProductoSerializerCreate(instance=producto, data=request.data)
+        if productoCreateSerializer.is_valid():
+            try:
+                productoCreateSerializer.save()
+                return Response("Producto EDITADO")
+            except serializers.ValidationError as error:
+                return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        else:
+            return Response(productoCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response("Sin permisos para esta operación", status=status.HTTP_401_UNAUTHORIZED)
 
+
+@api_view(['GET'])
+def producto_obtener(request, cn_prod):
+    producto = Producto.objects.get(cn_prod=cn_prod)
+    serializer = ProductoSerializer(producto)
+    return Response(serializer.data)

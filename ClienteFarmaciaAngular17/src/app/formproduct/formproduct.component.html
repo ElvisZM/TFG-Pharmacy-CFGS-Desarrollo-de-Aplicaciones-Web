@@ -75,6 +75,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="fw-bold" for="category">Categoria</label>
                             <select class="form-select mb-0" formControlName="register_categoria_id" id="category" [(ngModel)]="selectedCategoryOption">
+                                <option disabled selected>Seleccione una categoria</option>
                                 <option *ngFor="let categoria of categories" [value]="categoria.id" >{{categoria.nombre_cat}}</option>
                             </select>
                             
@@ -89,6 +90,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="fw-bold" for="pharmacy">Farmacia</label>
                             <select class="form-select mb-0" id="pharmacy" formControlName="register_farmacia_id" [(ngModel)]="selectedPharmacyOption">
+                                <option disabled selected>Seleccione una farmacia</option>
                                 <option *ngFor="let pharma of pharmacies" [value]="pharma.cif_farm" >{{pharma.nombre_farm}}</option>
                             </select>
                         </div>
@@ -99,6 +101,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="fw-bold" for="provider">Proveedor</label>
                             <select class="form-select mb-0" id="provider" formControlName="register_proveedor_id" [(ngModel)]="selectedProviderOption">
+                                <option disabled selected>Seleccione un proveedor</option>
                                 <option *ngFor="let provider of providers" [value]="provider.cif_prov" >{{provider.nombre_prov}}</option>
                             </select>
                         </div>
@@ -130,7 +133,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-3 d-flex justify-content-between">
+                        <button name="back" (click)="backToAdmin()">Back</button>
                         <button type="submit" name="register" [disabled]="campoFormVacio">Create Product</button>
                     </div>
                     
