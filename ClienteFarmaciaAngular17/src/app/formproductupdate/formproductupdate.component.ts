@@ -29,8 +29,8 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   update_precio: string="";
   update_stock: string="";
   update_categoria_id!: FormControl;
-  update_farmacia_id: string="";
-  update_proveedor_id: string="";
+  update_farmacia_cif!: FormControl;
+  update_proveedor_cif!: FormControl;
 
   selectedCategoryOption!: string;
   selectedPharmacyOption!: string;
@@ -44,27 +44,19 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   api_imagen_existe: boolean = false;
 
   campoFormVacio: boolean = false;
-  formVacioError: string = '';
+  formVacioError: string = 'Por favor, rellene todos los campos.';
 
   categories: any[] = [];
   pharmacies: any[] = [];
   providers: any[] = [];
 
 
-
+  formulario_original: Array<any> = []
+  iguales: boolean = false;
+  formIgualError: string = 'No se han realizado cambios.';
 
   constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) {
-    this.FormUpdateProduct = this.fb.group({
-      update_cn_prod:['', Validators.required],
-      update_picture:['', Validators.required],
-      update_prod_name:['', Validators.required],
-      update_descripcion:['', Validators.required],
-      update_precio:['', Validators.required],
-      update_stock:['', Validators.required],
-      update_categoria_id:[''],
-      update_farmacia_id:[''],
-      update_proveedor_id:[''],
-    });
+    
 
 
   }
@@ -73,15 +65,32 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   
     this.titleService.setTitle('Sitio Administrativo | Modificar producto');
 
-
     this.route.paramMap.subscribe(params => {
       const cn_prod = +params.get('cn_prod')!;
       this.datosService.getProduct(cn_prod).subscribe(
         response => {
           this.product = response
-          console.log('Product')
-          console.log(this.product)
-          this.fillForm();
+
+          if(this.product.imagen_prod){
+            this.api_imagen_url = this.url + this.product.imagen_pro
+            this.api_imagen_existe = true;
+          }
+
+          this.FormUpdateProduct = this.fb.group({
+            update_cn_prod:[this.product.cn_prod, Validators.required],
+            update_picture:[''],
+            update_prod_name:[this.product.nombre_prod, Validators.required],
+            update_descripcion:[this.product.descripcion, Validators.required],
+            update_precio:[this.product.precio, Validators.required],
+            update_stock:[this.product.stock, Validators.required],
+            update_categoria_id:[this.product.categoria_id.id],
+            update_farmacia_cif:[this.product.farmacia_id.cif_farm],
+            update_proveedor_cif:[this.product.proveedor_id[0].cif_prov],
+          });
+
+          this.formulario_original = { ...this.FormUpdateProduct.value }
+
+
 
       }, error =>{
         console.error('Error: ' + error)
@@ -108,6 +117,9 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   }
 
   ngDoCheck(){
+    if(this.FormUpdateProduct){
+      this.emptyFieldsFunction();
+    }
   }
 
 
@@ -123,20 +135,19 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
         this.api_imagen_existe = false;
       };
     }
+    return file;
   }
 
 
   emptyFieldsFunction(){
     let emptyField = false;
 
-    this.FormUpdateProduct.get('update_categoria_id')?.setValue(this.selectedCategoryOption)
-    this.FormUpdateProduct.get('update_farmacia_id')?.setValue(this.selectedPharmacyOption)
-    this.FormUpdateProduct.get('update_proveedor_id')?.setValue(this.selectedProviderOption)
-
     if(this.FormUpdateProduct.get('update_categoria_id')?.value === undefined ||
-       this.FormUpdateProduct.get('update_farmacia_id')?.value === undefined || 
-       this.FormUpdateProduct.get('update_proveedor_id')?.value === undefined) {
-        
+       this.FormUpdateProduct.get('update_categoria_id')?.value === "" ||
+       this.FormUpdateProduct.get('update_farmacia_cif')?.value === undefined || 
+       this.FormUpdateProduct.get('update_farmacia_cif')?.value === "" || 
+       this.FormUpdateProduct.get('update_proveedor_cif')?.value === undefined || 
+       this.FormUpdateProduct.get('update_proveedor_cif')?.value === "" ) {
         emptyField=true;
     }
 
@@ -151,83 +162,106 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   }
 
   update() {
-    const myForm = this.FormUpdateProduct;
+    const myForm = this.FormUpdateProduct.value;
     const product_pic = this.picture_copy
-    // myForm.update_categoria_id = this.selectedCategoryOption;
-    console.log(myForm)
-    console.log(this.selectedCategoryOption)
-    return
-    // if (this.campoFormVacio === true){
-    //   this.formVacioError = 'Por favor, rellene todos los campos.';
-    //   return;
-    // }
 
-    // // Verificar si product_pic es un archivo
-    // if (product_pic instanceof File) {
-    //   const reader = new FileReader();
-    //   reader.readAsDataURL(product_pic);
-    //   reader.onload = () => {
-    //     const base64Image = reader.result; 
+    if (typeof myForm.update_categoria_id === 'string'){
+      this.datosService.helperGetCategoryIdbyName(myForm.update_categoria_id).subscribe(data => {
+        myForm.update_categoria_id = data.id;
+      })
+    }
 
-    //     myForm.update_picture = base64Image;
-  
-    //     const UpdateData = {
-    //       cn_prod: myForm.update_cn_prod,
-    //       imagen_prod: myForm.update_picture,
-    //       nombre_prod: myForm.update_prod_name,
-    //       descripcion: myForm.update_descripcion,
-    //       precio: myForm.update_precio,
-    //       stock: myForm.update_stock,
-    //       categoria_id: myForm.update_categoria_id,
-    //       cif_farm: myForm.update_farmacia_id,
-    //       cif_prov: myForm.update_proveedor_id,
-    //     };
+    if (!myForm.update_proveedor_cif.startsWith('PV')){
+      this.datosService.helperGetCifProviderbyName(myForm.update_proveedor_cif).subscribe(data => {
+        myForm.update_proveedor_cif = data.cif_prov;
+      })  
+    }   
 
-    //     this.crudProduct.saveProduct(UpdateData).subscribe(
-    //     response => {
-    //       localStorage.setItem('activeTab', 'tables');
-    //       this.router.navigate(['/admin/panel']);
-    //     }, error=>{
-    //       console.log(error)
-    //     })
-    //     // Aquí puedes llamar a tu método para guardar el producto si es necesario
-    //     // this.saveProduct(registerData);
-    //   };
-    // } else {
+    if (!myForm.update_farmacia_cif.startsWith('PH')){
+      this.datosService.helperGetCifPharmacybyName(myForm.update_farmacia_cif).subscribe(data => {
+        myForm.update_farmacia_cif = data.cif_farm;
+      })
+    }
 
-    //   const UpdateData = {
-    //     cn_prod: myForm.update_cn_prod,
-    //     imagen_prod: myForm.update_picture,
-    //     nombre_prod: myForm.update_prod_name,
-    //     descripcion: myForm.update_descripcion,
-    //     precio: myForm.update_precio,
-    //     stock: myForm.update_stock,
-    //     categoria_id: myForm.update_categoria_id,
-    //     cif_farm: myForm.update_farmacia_id,
-    //     cif_prov: myForm.update_proveedor_id,
-    //   };
-    //   console.log('Fuera de reader.onload');
-    //   console.log(myForm);
-    //   console.log(UpdateData);
-  
-      // Aquí puedes llamar a tu método para guardar el producto si es necesario
-      // this.saveProduct(registerData);
-    // }
+    if (product_pic instanceof File) {
+      const reader = new FileReader();
+      reader.readAsDataURL(product_pic);
+      reader.onload = () => {
+        const base64Image = reader.result; 
+
+        myForm.update_picture = base64Image;
+
+        const updateData = {
+          cn_prod: myForm.update_cn_prod,
+          imagen_prod: myForm.update_picture,
+          nombre_prod: myForm.update_prod_name,
+          descripcion: myForm.update_descripcion,
+          precio: myForm.update_precio,
+          stock: myForm.update_stock,
+          categoria_id: myForm.update_categoria_id,
+          cif_farm: myForm.update_farmacia_cif,
+          cif_prov: myForm.update_proveedor_cif,
+        };
+      }
+
+    }else{
+
+      const updateData = {
+        cn_prod: myForm.update_cn_prod,
+        imagen_prod: myForm.update_picture,
+        nombre_prod: myForm.update_prod_name,
+        descripcion: myForm.update_descripcion,
+        precio: myForm.update_precio,
+        stock: myForm.update_stock,
+        categoria_id: myForm.update_categoria_id,
+        cif_farm: myForm.update_farmacia_cif,
+        cif_prov: myForm.update_proveedor_cif,
+      };
+
+      if (!this.comprobarFormIgual(this.formulario_original, updateData)){
+          console.log('Los datos han cambiado')
+        // this.crudProduct.updateProduct(updateData, updateData.cn_prod).subscribe(
+        //   response => {
+        //     console.log(response)
+        //   }, error=>{
+        //     console.log(error)
+        //   }
+        // )
+      }
+ 
+      
+
+    }
+    
   }
 
-  fillForm(){
-    this.FormUpdateProduct.get('update_cn_prod')?.setValue(this.product.cn_prod);
-    if(this.product.imagen_prod){
-      this.api_imagen_url = this.url + this.product.imagen_pro
-      this.api_imagen_existe = true;
+  comprobarFormIgual(original_form: Object, updated_form: Object){
+    let datos_original = Object.values(original_form)
+    let datos_actualizados = Object.values(updated_form)
+
+    for (let i = 0; i < datos_original.length; i++) {
+      if (datos_original[i] !== datos_actualizados[i]) {
+          this.iguales = false;
+          break;
+      }else{
+        this.iguales = true;
+      }
     }
-    this.FormUpdateProduct.get('update_prod_name')?.setValue(this.product.nombre_prod);
-    this.FormUpdateProduct.get('update_descripcion')?.setValue(this.product.descripcion);
-    this.FormUpdateProduct.get('update_precio')?.setValue(this.product.precio);
-    this.FormUpdateProduct.get('update_stock')?.setValue(this.product.stock);
-    this.FormUpdateProduct.get('update_categoria_id')?.setValue(this.product.categoria_id.id);
-    this.FormUpdateProduct.get('update_farmacia_id')?.setValue(this.product.cif_farm);
-    this.FormUpdateProduct.get('update_proveedor_id')?.setValue(this.product.proveedor_id.cif_prov);
+
+    if (this.iguales) {
+      datos_original.splice(0, datos_original.length)
+      datos_actualizados.splice(0, datos_actualizados.length)
+      setTimeout(() => {
+        this.iguales = false;
+      },2000)
+      return true
+      
+    } else {
+      return false
+      
+    }
+    datos_original.splice(0, datos_original.length)
+    datos_actualizados.splice(0, datos_actualizados.length)
   }
 
   backToAdmin(){

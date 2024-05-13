@@ -39,7 +39,6 @@ export class FormproductComponent implements OnInit, DoCheck{
   content_type: string = '';
 
   campoFormVacio: boolean = false;
-  formVacioError: string = '';
 
   categories: any[] = [];
   pharmacies: any[] = [];
@@ -49,7 +48,7 @@ export class FormproductComponent implements OnInit, DoCheck{
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) {
     this.FormCreateProduct = this.fb.group({
       register_cn_prod:['', Validators.required],
-      register_picture:['', Validators.required],
+      register_picture:[''],
       register_prod_name:['', Validators.required],
       register_descripcion:['', Validators.required],
       register_precio:['', Validators.required],
@@ -93,7 +92,6 @@ export class FormproductComponent implements OnInit, DoCheck{
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.content_type = file.type.split('/')[1];
         this.picture_url = reader.result as string;
         this.pic_existe = true;
       };
@@ -125,34 +123,6 @@ export class FormproductComponent implements OnInit, DoCheck{
   }
 
 
-  //   this.FormCreateProduct.get('register_categoria_id')?.setValue(this.selectedCategoryOption)
-  //   this.FormCreateProduct.get('register_farmacia_id')?.setValue(this.selectedPharmacyOption)
-  //   this.FormCreateProduct.get('register_proveedor_id')?.setValue(this.selectedProviderOption)
-
-  //   if(this.FormCreateProduct.get('register_categoria_id')?.value === undefined ||
-  //      this.FormCreateProduct.get('register_farmacia_id')?.value === undefined || 
-  //      this.FormCreateProduct.get('register_proveedor_id')?.value === undefined) {
-        
-  //       this.campoFormVacio = true;
-  //       return this.campoFormVacio;
-  //       console.log("3 vacios")
-  //   }else if(this.campoFormVacio === false){
-
-  //     Object.keys(this.FormCreateProduct.controls).forEach(control => {
-  //       if(control !== 'register_picture' && this.FormCreateProduct.get(control)?.value=== ''){
-  //         this.campoFormVacio = true;
-  //         this.formVacioError = `El campo ${control} no puede estar vacío`;
-  //         console.log(this.formVacioError)
-  //       }else{
-  //         this.campoFormVacio = false;
-  //       }
-  //     })
-  //     return this.campoFormVacio
-  //   }else{
-  //     this.campoFormVacio = false;
-  //     return this.campoFormVacio;
-  //   }
-  // }
   register() {
     const myForm = this.FormCreateProduct.value;
     const product_pic = this.picture_copy
@@ -176,7 +146,6 @@ export class FormproductComponent implements OnInit, DoCheck{
           categoria_id: myForm.register_categoria_id,
           cif_farm: myForm.register_farmacia_id,
           cif_prov: myForm.register_proveedor_id,
-          formato_imagen: this.content_type,
         };
 
         this.crudProduct.saveProduct(registerData).subscribe(

@@ -111,9 +111,9 @@ def producto_buscar(request):
         return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def producto_editar(request, codigo_nacional_prod):
+def producto_editar(request, cn_prod):
     if(request.user.has_perm("App_ProductProvider.change_producto")):
-        producto = Producto.objects.get(cn_prod=codigo_nacional_prod)
+        producto = Producto.objects.get(cn_prod=cn_prod)
         productoCreateSerializer = ProductoSerializerCreate(instance=producto, data=request.data)
         if productoCreateSerializer.is_valid():
             try:
@@ -133,4 +133,39 @@ def producto_editar(request, codigo_nacional_prod):
 def producto_obtener(request, cn_prod):
     producto = Producto.objects.get(cn_prod=cn_prod)
     serializer = ProductoSerializer(producto)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def categoria_obtener(request, id):
+    categoria = Categoria.objects.get(id=id)
+    serializer = CategoriaProductoSerializer(categoria)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def provider_obtener(request, cif_prov):
+    provider = Proveedor.objects.get(cif_prov=cif_prov)
+    serializer = ProveedorSerializer(provider)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def farmacia_obtener(request, cif_farm):
+    farmacia = Farmacia.objects.get(cif_farm=cif_farm)
+    serializer = FarmaciaSerializer(farmacia)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def helper_cif_prov(request, nombre_prov):
+    proveedor = Proveedor.objects.get(nombre_prov=nombre_prov)
+    serializer = ProveedorSerializer(proveedor)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def helper_id_cat(request, nombre_cat):
+    categoria = Categoria.objects.get(nombre_cat=nombre_cat)
+    serializer = ProveedorSerializer(categoria)
     return Response(serializer.data)

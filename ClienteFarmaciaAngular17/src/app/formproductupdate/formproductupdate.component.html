@@ -79,9 +79,9 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label class="fw-bold" for="category">Categoria</label>
-                                <select class="form-select mb-0" formControlName="update_categoria_id" id="category" [(ngModel)]="selectedCategoryOption">
+                                <select class="form-select mb-0" formControlName="update_categoria_id" id="category">
                                     <option disabled >Seleccione una categoria</option>
-                                    <option *ngFor="let categoria of categories" [selected]="categoria === product.categoria_id" >{{ categoria.nombre_cat }}</option>
+                                    <option *ngFor="let categoria of categories;" [selected]="categoria.id === product.categoria_id.id" >{{ categoria.nombre_cat }}</option>
                                 </select>
                             </div>
                         </div>
@@ -90,9 +90,9 @@
                         <div class="row align-items-center">
                             <div class="col-md-6 mb-3">
                                 <label class="fw-bold" for="pharmacy">Farmacia</label>
-                                <select class="form-select mb-0" id="pharmacy" formControlName="update_farmacia_id" [(ngModel)]="selectedPharmacyOption">
+                                <select class="form-select mb-0" id="pharmacy" formControlName="update_farmacia_cif">
                                     <option disabled >Seleccione una farmacia</option>
-                                    <option *ngFor="let pharma of pharmacies" [selected]="pharma === product.farmacia_id" >{{pharma.nombre_farm}}</option>
+                                    <option *ngFor="let pharma of pharmacies;" [selected]="pharma.id === product.farmacia_id.id" >{{pharma.nombre_farm}}</option>
                                 </select>
                             </div>
 
@@ -101,9 +101,9 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="fw-bold" for="provider">Proveedor</label>
-                                <select class="form-select mb-0" id="provider" formControlName="update_proveedor_id" [(ngModel)]="selectedProviderOption">
+                                <select class="form-select mb-0" id="provider" formControlName="update_proveedor_cif">
                                     <option disabled >Seleccione un proveedor</option>
-                                    <option *ngFor="let provider of providers" [selected]="provider === product.provider_id" >{{provider.nombre_prov}}</option>
+                                    <option *ngFor="let provider of providers; index as i" [selected]="product.proveedor_id && provider.id === product.proveedor_id[0]?.id" >{{provider.nombre_prov}}</option>
                                 </select>
                             </div>
                         </div>
@@ -133,6 +133,10 @@
                                     <h6>Necesita rellenar este campo.</h6>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="validaciones alert alert-danger" *ngIf="iguales">
+                            <h6>{{ formIgualError }}</h6>
                         </div>
 
                         <div class="validaciones alert alert-danger" *ngIf="campoFormVacio">

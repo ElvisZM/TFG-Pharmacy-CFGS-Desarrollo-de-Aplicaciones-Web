@@ -114,7 +114,7 @@
                                 <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/NoProductImageAvailable.png">
                             </a>
 
-                            <a href="#" class="d-flex align-items-center" *ngIf="item.imagen_prod">
+                            <a class="d-flex align-items-center" *ngIf="item.imagen_prod" (click)="updateProduct(item.cn_prod)" style="cursor: pointer;">
                                 <img class="me-2 image image-small rounded-circle" alt="Image existe"  [src]="url + item.imagen_prod">
                             </a>
                         </td>

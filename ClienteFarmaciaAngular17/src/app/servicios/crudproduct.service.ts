@@ -22,8 +22,8 @@ export class CrudproductService {
   }
 
 
-  updateProduct(formProductData: any){
-    return this.http.post(this.baseUrlProducts + 'modificar/producto/formulario', formProductData, this.authService.getHeadersApiRequest()).
+  updateProduct(formProductData: any, cn_prod: number){
+    return this.http.post(this.baseUrlProducts + 'modificar/producto/'+cn_prod, formProductData, this.authService.getHeadersApiRequest()).
     pipe(
       catchError(error => {
         throw error;
