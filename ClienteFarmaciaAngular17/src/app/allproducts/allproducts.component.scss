@@ -1,4 +1,14 @@
 
+div{
+    h1{
+        // background-color: white;
+        margin: auto;
+        width: 24%;
+        text-align: center;
+        border-radius: 5em;
+    }
+}
+
 .row{
     width: 90%;
     margin: auto;
@@ -6,8 +16,8 @@
 }
 
 .card{
-    border-radius: 1.5em;
-    color: #665B51;
+    border-radius: 5em;
+    color: white;
     background: linear-gradient(to top, rgb(136, 183, 199) 40%, transparent 50%);
     width: 20em;
     margin: auto;

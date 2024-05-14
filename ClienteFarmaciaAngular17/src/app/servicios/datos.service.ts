@@ -57,7 +57,7 @@ export class DatosService {
   }
 
   simpleSearchProduct(palabraBuscada: string): Observable<any> {
-    return this.http.get<any>(this.urlPath+'productos/buscador/query/simple', { params: { palabra: palabraBuscada } })
+    return this.http.get<any>(this.urlPath+'productos/buscador/query/simple', { params: { textoBusqueda: palabraBuscada } })
   }
 
   getProvider(cn_prod: number): Observable<any> {

@@ -1,0 +1,24 @@
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-4 mb-4" *ngFor="let producto of productos">
+            <div class="card h-100 mb-5">
+                <div class="card-body">
+                    <div>
+                        <div *ngIf="producto.imagen_prod">
+                            <img [src]="urlPath + producto.imagen_prod"
+                                class="card-img-top img-fluid mb-2" [alt]="producto.nombre_prod">
+                        </div>
+                        <div *ngIf="!producto.imagen_prod">
+                            <img class="card-img-top img-fluid mb-2" src="../../assets/imagenes/NoProductImageAvailable.png" alt="">
+                        </div>
+                        <button class="detalles"></button>
+                    </div>
+                    <h2 class="text-center">{{ producto.nombre_prod }}</h2>
+                    <p class="descripcion">{{ producto.descripcion.slice(0, 150) }}...</p>
+                    <p class="puntuacion">{{ producto.precio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

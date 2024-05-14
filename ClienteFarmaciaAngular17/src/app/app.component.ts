@@ -55,6 +55,10 @@ export class AppComponent implements OnInit, DoCheck {
     this.token = false; 
   }
 
+  products(){
+    this.router.navigate(['productos/lista/completa']);
+  }
+
   adminPanel(){
     this.router.navigate(['/admin/panel']);
   }
