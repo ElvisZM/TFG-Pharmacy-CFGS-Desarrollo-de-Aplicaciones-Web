@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, DoCheck, ViewEncapsulation } from '@angular/core';
 import { TopVentasComponent } from '../top-ventas/top-ventas.component';
 import { TypewriterService} from '../servicios/typewriter.service';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { Title, bootstrapApplication } from '@angular/platform-browser';
 import 'zone.js';
 import { isEmpty, map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -26,11 +26,13 @@ export class HomeComponent implements OnInit, DoCheck{
   typedText$!: any;
   titles!: Array<string>;
 
-  constructor(private authService: AuthService){ }
+  constructor(private authService: AuthService, private titleService: Title){ }
 
   ngOnInit(): void {  
     this.usernameTitleAnimated();
     this.authService.getUserRol()
+    this.titleService.setTitle('P.Sur Pharmacy | Farmacia online');
+
   }
 
   ngDoCheck(): void {

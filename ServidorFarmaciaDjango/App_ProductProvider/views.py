@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from .models import *
 from .serializers import *
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from .forms import *
+from rest_framework.permissions import AllowAny
+
 
 @api_view(['POST'])
 def producto_create(request):
@@ -63,6 +66,7 @@ def registrar_producto_csv(request):
         return Response('Sin permisos para esta operación', status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def productos_list(request):
     productos = Producto.objects.all()
     serializer = ProductoSerializer(productos, many=True)
@@ -97,19 +101,6 @@ def suministro_productos_list(request):
     return Response(serializer.data)
 
 
-
-@api_view(['GET'])
-def producto_buscar(request):
-    formulario = BusquedaProductoForm(request.query_params)
-    if (formulario.is_valid()):
-        texto = formulario.data.get('textoBusqueda')
-        productos = Producto.objects.select_related('farmacia_prod').prefetch_related('prov_sum_prod')
-        productos = productos.filter(Q(nombre_prod__contains=texto) | Q(descripcion__contains=texto)).all()
-        serializer = ProductoSerializer(productos, many=True)
-        return Response(serializer.data)
-    else:
-        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['PUT'])
 def producto_editar(request, cn_prod):
     if(request.user.has_perm("App_ProductProvider.change_producto")):
@@ -128,10 +119,22 @@ def producto_editar(request, cn_prod):
     else:
         return Response("Sin permisos para esta operación", status=status.HTTP_401_UNAUTHORIZED)
 
+@api_view(['DELETE'])
+def producto_eliminar(request, cn_prod, cif_farm):
+    if(request.user.has_perm("App_ProductProvider.delete_producto")):
+        producto = Producto.objects.get(cn_prod=cn_prod, cif_farm=cif_farm)
+        try:
+            producto.delete()
+            return Response("Producto ELIMINADO")
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response("Sin permisos para esta operación", status=status.HTTP_401_UNAUTHORIZED)
+
 
 @api_view(['GET'])
-def producto_obtener(request, cn_prod):
-    producto = Producto.objects.get(cn_prod=cn_prod)
+def producto_obtener(request, cn_prod, cif_farm):
+    producto = Producto.objects.get(cn_prod=cn_prod, cif_farm=cif_farm)
     serializer = ProductoSerializer(producto)
     return Response(serializer.data)
 
@@ -169,3 +172,29 @@ def helper_id_cat(request, nombre_cat):
     categoria = Categoria.objects.get(nombre_cat=nombre_cat)
     serializer = ProveedorSerializer(categoria)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def productos_buscador_simple(request):
+    formulario = BusquedaProductoForm(request.query_params)
+    if (formulario.is_valid()):
+        texto = formulario.data.get('textoBusqueda')
+        
+        texto = formulario.data.get('textoBusqueda').lower().strip()
+        productos = Producto.objects.all()
+
+        try:
+            numero_busqueda = int(texto)
+
+            productos = productos.filter(cn_prod=numero_busqueda)
+        except ValueError:
+
+            productos = productos.filter(Q(nombre_prod__icontains=texto)).all()
+        
+        serializer = ProductoSerializer(productos, many=True)
+        return Response(serializer.data)
+    else:
+        
+        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    

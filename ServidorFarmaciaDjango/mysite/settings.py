@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import secrets
 import environ
 import os
 from pathlib import Path
@@ -24,7 +25,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tv40!e_$!sndqjn2mt*9s430q=z$a=*5$8c7rqlz8t89aj*(l_'
+SECRET_KEY=env('SECRET_KEY')
+
+SECRET_KEY_TOKEN_FB = secrets.token_hex(32)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
@@ -71,6 +74,7 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 #Lo que nos pide Django para funcionar es INSTALLED APPS, será el conjunto de las 3 anteriores
@@ -86,14 +90,32 @@ SOCIALACCOUNT_PROVIDERS = {
             'profile',
             'email',
         ],
-        # 'APP': {
-        #     'client_id': env['CLIENT_ID'],
-        #     'secret': env['CLIENT_SECRET'],
-        # },
         'AUTH_PARAMS': {
             'access_type': 'online',
         },
         'OAUTH_PKCE_ENABLED': True,
+    },
+    'facebook': {
+        'METHOD': 'oauth2',  # Set to 'js_sdk' to use the Facebook connect SDK
+        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
+        'SCOPE': ['email', 'public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'name',
+            'name_format',
+            'picture',
+            'short_name'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': 'path.to.callable',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v13.0',
+        'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
     }
 }
 
@@ -234,8 +256,11 @@ CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST_DEV')
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "https://localhost:4200",
     "http://0.0.0.0:4200",
+    "https://0.0.0.0:4200",
     "http://127.0.0.1:4200",
+    "https://127.0.0.1:4200",
 ]
 
 PHARMACY_MODEL = 'App_ProductProvider.Farmacia'

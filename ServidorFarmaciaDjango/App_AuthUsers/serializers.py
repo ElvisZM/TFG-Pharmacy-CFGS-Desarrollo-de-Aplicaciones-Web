@@ -121,3 +121,27 @@ class GerenteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gerente
         fields = '__all__'
+        
+        
+        
+
+class UsuarioSerializerRegistroFacebook(serializers.Serializer):
+    
+    username = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    password1 = serializers.CharField(required=False, allow_blank=True)
+    password2 = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.EmailField()
+    rol = serializers.IntegerField()
+    domicilio = serializers.CharField(required=False, allow_blank=True)
+    telefono = serializers.CharField(required=False, allow_blank=True)
+    birthday_date = serializers.DateField()
+    
+    def validate_username(self, username):
+        usuario = Usuario.objects.filter(username=username).first()
+        
+        if(not usuario is None):
+            raise serializers.ValidationError('Usuario existente.')
+        return username
+    

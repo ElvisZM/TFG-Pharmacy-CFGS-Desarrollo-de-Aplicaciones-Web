@@ -1,8 +1,5 @@
 <div class="container-menu">
-    <!-- <div class="text-end me-4 ">
-        <h6>Fecha Inicio: </h6>
-    </div> -->
-  
+
     <div class="header">
       <div class="logo">
           <a routerLink="/" routerLinkActive="active"><img class="imagen-logo" src="../assets/imagenes/Logo.jpg" alt="logotipo web"/></a>
@@ -42,7 +39,7 @@
               </li>    
               <li>
                   <div class="busqueda" (submit)="buscar()">
-                    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search" [(ngModel)]="palabraBusqueda" (keyup.enter)="buscar()">
+                    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search" [(ngModel)]="palabraBusqueda" (keyup.enter)="buscar()" (input)="actualizarPalabra()">
                     <button class="btn btn-light btn-outline-dark" type="button" (click)="buscar()">Buscar <i class="fa-solid fa-magnifying-glass" ></i></button>
                   </div>
               </li>

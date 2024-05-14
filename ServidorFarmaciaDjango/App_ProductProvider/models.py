@@ -11,14 +11,12 @@ class Farmacia(models.Model):
     
     def __str__(self):
         return self.nombre_farm
-   
 
 class Categoria(models.Model):
     nombre_cat = models.CharField(max_length=200)
     
     def __str__(self):
         return self.nombre_cat
-       
     
 class Proveedor(models.Model):
     cif_prov = models.CharField(max_length=8)
@@ -54,7 +52,6 @@ class Prospecto(models.Model):
 
     def __str__(self):
         return self.producto.nombre_prod
-    
 
 class SuministroProducto(models.Model):
     fecha_pedido = models.DateField(null=True, blank=True)

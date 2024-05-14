@@ -16,29 +16,51 @@ export class BuscadorSimpleComponent implements OnInit {
 
   productos: Array<any> = [];
 
+  textoInfo: string = 'Estos son los productos que hemos encontrado para ti con: '
+  mostrarMensaje: boolean = false;
+  mostrarImagen: boolean = false;
   public urlPath = environment.apiImageUrl
 
   constructor(private datosService: DatosService) { }
 
   ngOnInit(): void {
       this.palabraBuscada = this.datosService.getPalabraBuscada();
-      this.datosService.simpleSearchProduct(this.palabraBuscada).subscribe(
-        response => {
-          console.log(response)
-          this.productos = response
-        }
-      )
-      console.log(this.palabraBuscada)
+      this.searchProducts();
   }
 
   ngDoCheck(){
     if (this.palabraBuscada != this.datosService.getPalabraBuscada()){
       this.palabraBuscada = this.datosService.getPalabraBuscada();
-      this.datosService.simpleSearchProduct(this.palabraBuscada)
-      console.log(this.palabraBuscada)
-
+      this.searchProducts();
     }
-
   }
 
+  searchProducts() {
+    if (this.palabraBuscada) {
+      this.datosService.simpleSearchProduct(this.palabraBuscada).subscribe(
+        response => {
+          this.productos = response;
+          if (this.productos.length > 0){
+            this.mostrarMensaje = true;
+            this.mostrarImagen = false;
+          }else{
+            this.mostrarMensaje = false
+            this.mostrarImagen = true
+          }
+          
+        }
+      );
+    } else {
+      this.datosService.getProductsList().subscribe(
+        response => {
+          this.productos = response;
+          if (this.productos.length > 0){
+            this.mostrarMensaje = false;
+            this.mostrarImagen = false
+          }else{
+            this.mostrarImagen = true
+          }
+        })
+    }
+  }
 }

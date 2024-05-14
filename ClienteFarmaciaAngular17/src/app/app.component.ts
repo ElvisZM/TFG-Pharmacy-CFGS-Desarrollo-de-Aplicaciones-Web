@@ -63,6 +63,9 @@ export class AppComponent implements OnInit, DoCheck {
     this.router.navigate(['/admin/panel']);
   }
 
+  actualizarPalabra(){
+    this.datosService.setPalabraBuscada(this.palabraBusqueda);
+  }
 
 }
 

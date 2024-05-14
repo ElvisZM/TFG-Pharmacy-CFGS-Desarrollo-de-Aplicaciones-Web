@@ -9,6 +9,7 @@ import { LoginService } from '../servicios/login.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { AuthService } from '../servicios/auth.service';
+import { Title } from '@angular/platform-browser';
 
 
 
@@ -49,7 +50,7 @@ export class LoginRegisterComponent implements OnInit{
 
   passwordVisibility: boolean = false;
 
-  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService) {
+  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService, private titleService: Title) {
     
     this.FormRegister = this.fb.group({
       register_name:['', Validators.required],
@@ -82,6 +83,8 @@ export class LoginRegisterComponent implements OnInit{
       shape: 'rectangle',
       width: 350
     })
+
+    this.titleService.setTitle('Login | Register');
 
   }
 
@@ -130,7 +133,7 @@ export class LoginRegisterComponent implements OnInit{
         password1: myForm.register_password1,
         password2: myForm.register_password2,
         domicilio: myForm.register_adress,
-        rol: 1
+        rol: 2
 
       }
       this.registerService.registerUser(registerData).subscribe(

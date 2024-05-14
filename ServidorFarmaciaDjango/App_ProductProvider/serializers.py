@@ -72,7 +72,7 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
         if(modeloProveedor is None):
             raise serializers.ValidationError('El proveedor no existe')
 
-        modeloProducto = Producto.objects.filter(cn_prod=cn_prod, farmacia_id=modeloFarmacia, proveedor_id = modeloProveedor).first()
+        modeloProducto = Producto.objects.filter(cn_prod=cn_prod, farmacia_id=modeloFarmacia).first()
         
         if(not modeloProducto is None):
             if(not self.instance is None and modeloProducto.id == self.instance.id):
@@ -167,14 +167,13 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
         
     def update(self, instance, validated_data):
         
-        fecha_actual = date.today()
-        
         modeloFarmacia = Farmacia.objects.filter(cif_farm=self.initial_data['cif_farm']).first()
         
         modeloCategoria = Categoria.objects.filter(id=self.initial_data['categoria_id']).first()
         
         modeloProveedor = Proveedor.objects.filter(cif_prov=self.initial_data['cif_prov']).first()
-        
+
+
         if (modeloFarmacia is None or modeloCategoria is None or modeloProveedor is None):
             raise serializers.ValidationError('La farmacia, la categoria o el proveedor no existen')
         
@@ -195,8 +194,6 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
             instance.save()
             
         
-        
-        
         else:
             
             format, img_str = self.initial_data['imagen_prod'].split(';base64,')
@@ -205,27 +202,36 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
 
             archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
                 
-            format, img_str = self.initial_data['imagen_prod'].split(';base64,')
-            
-            ext = format.split('/')[-1] 
-
-            archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
-            
             instance.cn_prod = validated_data['cn_prod']
-            instance.imagen_prod = validated_data['imagen_prod']
+            instance.imagen_prod = archivo
             instance.nombre_prod = validated_data['nombre_prod']
             instance.descripcion = validated_data['descripcion']
             instance.precio = validated_data['precio']
             instance.stock = validated_data['stock']
-            instance.cif_farm = validated_data['cif_farm'],
+            instance.cif_farm = validated_data['cif_farm']
             instance.categoria_id = modeloCategoria
             instance.farmacia_id = modeloFarmacia
             instance.save()
             
-        instance.proveedor_id.clear()
-        for proveedor in proveedores:
-            modeloProveedor = Proveedor.objects.get(id=proveedor)
-            SuministroProducto.objects.create(fecha=fecha_actual, cantidad = validated_data['stock'], costo_ud=(round(validated_data['precio']/1.30)), proveedor_id = modeloProveedor, producto_id = instance)
+        
+        precio_compra_proveedor = validated_data['precio'] * 0.6
+            
+        modeloFarmacia = Farmacia.objects.filter(cif_farm = validated_data['cif_farm']).first()
+        
+        # modeloProveedor = Proveedor.objects.filter(cif_prov = self.initial_data['cif_prov']).first()
+            
+        modeloProducto = Producto.objects.filter(cn_prod=validated_data['cn_prod'], cif_farm=validated_data['cif_farm']).first()
+            
+        SuministroProducto.objects.filter(producto_id=instance, cantidad=instance.stock).update(fecha_pedido=date.today(),
+        cantidad=validated_data['stock'],
+        costo_ud=precio_compra_proveedor,
+        cn_prod=validated_data['cn_prod'],
+        cif_prov=self.initial_data['cif_prov'],
+        producto_id=instance,
+        proveedor_id=modeloProveedor)
+
+        
+        
             
         return instance
     
