@@ -56,6 +56,10 @@ export class DatosService {
     return this.http.get<any>(this.urlPath+'producto/'+cn_prod+'/'+cif_farm, headers)
   }
 
+  simpleSearchProduct(palabraBuscada: string): Observable<any> {
+    return this.http.get<any>(this.urlPath+'productos/buscador/query/simple', { params: { palabra: palabraBuscada } })
+  }
+
   getProvider(cn_prod: number): Observable<any> {
     const headers = this.authService.getHeadersUserInfo()
     return this.http.get<any>(this.urlPath+'proveedor/'+cn_prod, headers)

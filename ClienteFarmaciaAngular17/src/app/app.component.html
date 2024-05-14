@@ -41,10 +41,10 @@
               <li class="apartados"><a href="#"><div class="letras-animacion d-flex"><h5 class="me-2">Productos</h5><i class="pildora fa-solid fa-pills"></i></div></a>
               </li>    
               <li>
-                  <form action="#" class="busqueda" role="search" method="GET">
-                    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search">
-                    <button class="btn btn-light btn-outline-dark" type="submit">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
-                  </form>
+                  <div class="busqueda" (submit)="buscar()">
+                    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search" [(ngModel)]="palabraBusqueda" (keyup.enter)="buscar()">
+                    <button class="btn btn-light btn-outline-dark" type="button" (click)="buscar()">Buscar <i class="fa-solid fa-magnifying-glass" ></i></button>
+                  </div>
               </li>
   
               <li class="apartado-cuenta" *ngIf="!token"><a href="#"><div class="letras-animacion d-flex">

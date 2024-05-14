@@ -9,6 +9,7 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { NotfoundpageComponent } from './notfoundpage/notfoundpage.component';
 import { FormproductComponent } from './formproduct/formproduct.component';
 import { FormproductupdateComponent } from './formproductupdate/formproductupdate.component';
+import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'admin/panel', component: AdminPanelComponent},
   { path: 'admin/panel/create/product', component: FormproductComponent},
   { path: 'admin/panel/update/product/:cn_prod/:cif_farm', component: FormproductupdateComponent},
+  { path: 'productos/buscador/query/:palabra', component: BuscadorSimpleComponent},
 
   { path: '**', component: NotfoundpageComponent}
 ];

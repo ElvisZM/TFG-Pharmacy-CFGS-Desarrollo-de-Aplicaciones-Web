@@ -20,6 +20,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TablesComponent } from './tables/tables.component';
 import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
+import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } fro
     SettingsComponent,
     TablesComponent,
     SocialLoginModule,
+    BuscadorSimpleComponent,
   ],
   providers: [ CsvproductosService],
   bootstrap: [AppComponent]

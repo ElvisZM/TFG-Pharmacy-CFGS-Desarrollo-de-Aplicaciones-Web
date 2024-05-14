@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, DoCheck {
 
   buscar(){
     this.datosService.setPalabraBuscada(this.palabraBusqueda);
-    this.router.navigate(['/buscador/query', this.palabraBusqueda]);
+    this.router.navigate(['/productos/buscador/query', this.palabraBusqueda]);
   }
 
   logoutAccount(){
