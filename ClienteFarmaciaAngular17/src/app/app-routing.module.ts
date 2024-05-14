@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'politica/cookies', component: PoliticacookiesComponent },
   { path: 'admin/panel', component: AdminPanelComponent},
   { path: 'admin/panel/create/product', component: FormproductComponent},
-  { path: 'admin/panel/update/product/:cn_prod', component: FormproductupdateComponent},
+  { path: 'admin/panel/update/product/:cn_prod/:cif_farm', component: FormproductupdateComponent},
 
   { path: '**', component: NotfoundpageComponent}
 ];

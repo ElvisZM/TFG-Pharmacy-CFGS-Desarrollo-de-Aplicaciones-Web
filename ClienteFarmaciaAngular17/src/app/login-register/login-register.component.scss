@@ -136,6 +136,35 @@
 
 .social-icons{
     margin: 20px 0;
+    #google-btn {
+        border: 1px solid lightgrey;
+    }
+    #google-btn:hover{
+        border: 1px solid black;
+    }
+    .facebook{
+        height: 3.5em;
+        background-color: white;
+        color: black;
+        font-weight: bold;
+        border: 1px solid lightgrey;
+        width: 29.4em;
+        position: relative;
+        // margin-right: 5em;
+        h6{
+            padding-right: 2.3em;
+        }
+        i{
+            position: absolute;
+            right: 0.3em;
+            top: 0.3em;
+            color: blue;
+        }
+    }
+    .facebook:hover{
+        border: 1px solid black;
+        background-color: lightcyan;
+    }
 }
 
 .social-icons a{

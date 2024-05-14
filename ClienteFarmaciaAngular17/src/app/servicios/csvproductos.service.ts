@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs';
 import { AuthService } from './auth.service';
 import * as Papa from 'papaparse';
-import { map } from 'rxjs';
-import { parse } from 'json2csv';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +16,7 @@ export class CsvproductosService {
   email: string = '';
   city: string = '';
 
-  urlSaveDataBackend: string = 'http://127.0.0.1:8000/service/product/provider/registrar/producto/csv'
+  private urlPath = environment.apiUrlProductProviders
 
 
   constructor(private http:HttpClient, private authService: AuthService){}
@@ -81,43 +79,12 @@ export class CsvproductosService {
   importDataFromCSV(csvText: string): Array<any> {
     const parsedData = Papa.parse(csvText, { header: true });
     return parsedData.data;
-    // const propertyNames = csvText.slice(0, csvText.indexOf('\n')).split(',');
-    // const dataRows = csvText.slice(csvText.indexOf('\n') + 1).split('\n');
-
-    // let dataArray: any[] = [];
-    // dataRows.forEach((row) => {
-    //   let values = row.split(',');
-
-    //   let obj: any = new Object();
-
-    //   for (let index = 0; index < propertyNames.length; index++) {
-    //     const propertyName: string = propertyNames[index];
-
-    //     let val: any = values[index];
-    //     if (val === '') {
-    //       val = null;
-    //     }
-
-    //     obj[propertyName] = val;
-    //   }
-
-    //   dataArray.push(obj);
-    // });
-
-    // return dataArray;
+   
   }
 
   saveDataBackend(data: any): Observable<any> {
-    return this.http.post<any>(this.urlSaveDataBackend, data, this.authService.getHeadersApiRequest())
+    return this.http.post<any>(this.urlPath+ 'registrar/producto/csv', data, this.authService.getHeadersApiRequest())
     .pipe(
-      // map(response => {
-      //   const server_response = response
-      //   if (server_response.toString() === 'Producto CREADO'){;
-      //     setTimeout(() => {
-      //       window.location.reload();
-      //     }, 400);
-      //   }
-      // }),
         catchError(error => {
           throw error;
         })

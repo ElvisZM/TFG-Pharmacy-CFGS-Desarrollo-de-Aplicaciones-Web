@@ -4,28 +4,11 @@
     margin: auto;
     
 }
-// .card{
-//     border-radius: 5em;
-//     text-align: center;
-//     text-transform: uppercase;
-//     img{
-//         height: 20rem;
-//         border: 1px solid green;
-//         border-radius: 2em;
-//     }
-//     background: linear-gradient(to top, #262b4f 50%, transparent 50%);
-//     color: white;
-//     h4, h3{
-//         font-weight: bold;
-//     }
-//     padding: 0.5%;
-
-// }
 
 .card{
     border-radius: 5em;
     color: white;
-    background: linear-gradient(to top, #262b4f 40%, transparent 50%);
+    background: linear-gradient(to top, rgb(136, 183, 199) 40%, transparent 50%);
     width: 20em;
     margin: auto;
     border: rgb(246,245,243) 1px solid;
@@ -34,10 +17,12 @@
 
 img{
     height: 15em;
+    background-image: none;
     mix-blend-mode: multiply;
     text-align: center;
-    margin-left: 1.8em;
+    margin-left: 1em;
     margin-bottom: 1em;
+    border: none;
 }
 
 //ANIMACION CARRITO

@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class RegistroService {
-  private apiUrlRegistro = 'http://127.0.0.1:8000/service/auth/users/registrar/usuario';
-  // private apiUrlRegistroGoogle = 'http://127.0.0.1:8000/accounts/google/login/callback/';
 
+  private urlPath = environment.apiUrlAuthUsers;
 
   constructor(private http: HttpClient) { }
 
   registerUser(dataSignUp: any): Observable<any>{ 
-    return this.http.post<any>(this.apiUrlRegistro, dataSignUp)
+    return this.http.post<any>(this.urlPath+'registrar/usuario', dataSignUp)
       .pipe(
         catchError(error => {
           throw error;
@@ -24,7 +24,7 @@ export class RegistroService {
   }
 
   registerGoogleDataToServer(dataGoogle: any): Observable<any>{
-    return this.http.post<any>(this.apiUrlRegistro+'/google', dataGoogle)
+    return this.http.post<any>(this.urlPath+'registrar/usuario/google', dataGoogle)
       .pipe(
         catchError(error => {
           throw error;
@@ -32,12 +32,12 @@ export class RegistroService {
       );
   }
 
-  // registerUserGoogle(dataSignUp: any): Observable<any>{
-  //   return this.http.post<any>(this.apiUrlRegistroGoogle, dataSignUp)
-  //     .pipe(
-  //       catchError(error => {
-  //         throw error;
-  //       })
-  //     )
-  // }
+  registerFacebookDataToServer(dataFacebook: any): Observable<any>{
+    return this.http.post<any>(this.urlPath+'registrar/usuario/facebook', dataFacebook)
+      .pipe(
+        catchError(error => {
+          throw error;
+        })
+      );
+  }
 }

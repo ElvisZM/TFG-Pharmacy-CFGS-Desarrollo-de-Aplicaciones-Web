@@ -2,6 +2,7 @@ import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatosService } from './servicios/datos.service';
 import { AuthService } from './servicios/auth.service';
+import { FacebookLoginProvider} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit, DoCheck {
 
   googleUser: any;
 
-  constructor(private datosService: DatosService, private router: Router, private authService: AuthService, ) { }
+
+  constructor(private datosService: DatosService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(){
     if (this.authService.getTokenCookie()){
@@ -28,6 +30,7 @@ export class AppComponent implements OnInit, DoCheck {
     }else{
       this.token = false;
     }
+
 
   }
 

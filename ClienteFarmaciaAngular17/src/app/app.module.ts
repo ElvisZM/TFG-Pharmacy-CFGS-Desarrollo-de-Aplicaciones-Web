@@ -19,6 +19,7 @@ import { UserslistComponent } from './userslist/userslist.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TablesComponent } from './tables/tables.component';
+import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 
 
 @NgModule({
@@ -44,8 +45,9 @@ import { TablesComponent } from './tables/tables.component';
     TransactionsComponent,
     SettingsComponent,
     TablesComponent,
+    SocialLoginModule,
   ],
-  providers: [ CsvproductosService ],
+  providers: [ CsvproductosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

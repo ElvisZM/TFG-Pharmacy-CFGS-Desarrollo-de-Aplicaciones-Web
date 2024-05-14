@@ -44,6 +44,8 @@ export class FormproductComponent implements OnInit, DoCheck{
   pharmacies: any[] = [];
   providers: any[] = [];
 
+  errorFormulario: boolean = false;
+  formError: string = 'El producto ya existe.';
 
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) {
     this.FormCreateProduct = this.fb.group({
@@ -154,9 +156,9 @@ export class FormproductComponent implements OnInit, DoCheck{
           this.router.navigate(['/admin/panel']);
         }, error=>{
           console.log(error)
+          this.errorFormulario = true;
         })
-        // Aquí puedes llamar a tu método para guardar el producto si es necesario
-        // this.saveProduct(registerData);
+        
       };
     } else {
 
@@ -171,15 +173,20 @@ export class FormproductComponent implements OnInit, DoCheck{
         cif_farm: myForm.register_farmacia_id,
         cif_prov: myForm.register_proveedor_id,
       };
-      console.log('Fuera de reader.onload');
-      console.log(myForm);
-      console.log(registerData);
+      this.crudProduct.saveProduct(registerData).subscribe(
+        response => {
+          localStorage.setItem('activeTab', 'tables');
+          this.router.navigate(['/admin/panel']);
+        }, error=>{
+          console.log(error)
+          this.errorFormulario = true;
+        })
   
-      // Aquí puedes llamar a tu método para guardar el producto si es necesario
-      // this.saveProduct(registerData);
     }
   }
-    
+  
+
+
   backToAdmin(){
     this.router.navigate(['/admin/panel']);
   }

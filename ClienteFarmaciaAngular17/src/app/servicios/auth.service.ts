@@ -2,9 +2,9 @@ declare var google: any;
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 
 export class AuthService {
 
-  private apiUserInfoUrl = 'http://127.0.0.1:8000/service/auth/users/usuario/token/';
+  private urlPath = environment.apiUrlAuthUsers;
 
   constructor(private http: HttpClient, private cookies: CookieService, private router: Router) { }
 
@@ -47,31 +47,6 @@ export class AuthService {
     return this.cookies.get("user_rol")
   }
 
-  // setGoogleUserCookie(googleUser:any){
-  //   this.cookies.set("googleUser", JSON.stringify(googleUser))
-  // }
-
-  // getGoogleUserCookie(){
-  //   return this.cookies.get("googleUser")
-  // }
-
-
-  // getUserLogged(): Observable<any> {
-
-  //   const token = this.getTokenCookie();
-  //   const headers = new HttpHeaders({
-  //     'Authorization': 'Bearer ' + token
-  //   });
-
-  //   return this.http.get<any>(`${this.apiTokenUrl}`+`${token}`, {headers})
-  //   .pipe(
-  //     catchError(error => {
-  //       throw error;
-  //     })
-  //   );
-  // }
-
-
   logout() {
     this.cookies.delete("token");
     this.cookies.delete("name");
@@ -86,13 +61,7 @@ export class AuthService {
 
   getHeadersApiRequest() {
     let headers: any = {}
-    // if (this.getGoogleUserCookie().length > 0) {
-    //   return {
-    //     headers: new HttpHeaders({
-    //     'Authorization': `Bearer ${this.getGoogleUserCookie()}`,
-    //     'Content-Type': 'application/json'
-    //     })
-    //   }
+   
     if(this.getTokenCookie().length > 0) {
       return {
         headers : new HttpHeaders({
@@ -113,7 +82,7 @@ export class AuthService {
 
     getUserInfo(){
       const headers = this.getHeadersUserInfo();
-      return this.http.get<any>(this.apiUserInfoUrl+this.getTokenCookie(), headers).subscribe(
+      return this.http.get<any>(this.urlPath+'usuario/token/'+this.getTokenCookie(), headers).subscribe(
         response => {
           this.setNamePicture(response.usuario.first_name, response.profile_picture)
           const rol = response.usuario.rol.toString();
@@ -123,5 +92,27 @@ export class AuthService {
         }
       )
     }
+
+    getFacebookUserProfile(accessToken: string){
+      const fields = 'id,email,name,picture';
+      const url = `https://graph.facebook.com/me?fields=${fields}&access_token=${accessToken}`;
+      return this.http.get<any>(url);
+    }
+
+    exchangeFacebookToken(facebookToken: string) {
+      const body = { facebookToken };
+      const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+      return this.http.post(this.urlPath+'auth/facebook', body, { headers });
+    }
+
+    loginWithFacebook(accessToken: string): Observable<any> {
+      const headers = new HttpHeaders().set('Content-Type', 'application/json');
+      const body = { access_token: accessToken };
+      return this.http.post<any>(`${this.urlPath}login/facebook`, body, { headers });
+    }
+
+
+
 
 }

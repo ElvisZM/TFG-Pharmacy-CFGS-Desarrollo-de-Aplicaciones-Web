@@ -131,6 +131,11 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="validaciones alert alert-danger" *ngIf="errorFormulario">
+                        <h6>{{ formError }}</h6>
+                    </div>
+
                     <div class="mt-3 d-flex justify-content-between">
                         <button name="back" (click)="backToAdmin()">Back</button>
                         <button type="submit" name="register" [disabled]="campoFormVacio">Create Product</button>

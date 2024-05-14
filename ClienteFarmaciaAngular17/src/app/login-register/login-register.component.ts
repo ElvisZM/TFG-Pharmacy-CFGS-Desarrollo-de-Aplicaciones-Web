@@ -1,5 +1,6 @@
 declare var google: any;
-import { Component, DoCheck, OnInit } from '@angular/core';
+declare const FB: any;
+import { Component, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { RegistroService } from '../servicios/registro.service';
@@ -210,9 +211,8 @@ export class LoginRegisterComponent implements OnInit{
         response => {
           this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
           this.authService.setTokenCookie(payLoad.jti);
-          this.authService.setUserRol('2')
+          this.authService.setUserRol(dataToSave.rol.toString())
           this.router.navigate(['/']);
-          const mensaje = 'Sesion iniciada con exito'
           
         },error =>{
           console.log(error);            
@@ -222,6 +222,47 @@ export class LoginRegisterComponent implements OnInit{
   }
 
 
+  loginFB(){
+    this.invalidLogin = false;
+    FB.login((result:any) => {
+      this.invalidLogin = false;
+
+      if (result) {
+        const accessToken = result.authResponse.accessToken;
+
+        this.authService.getFacebookUserProfile(accessToken).subscribe(datos_response => {
+          const dataToSave = {
+            first_name: datos_response.name,
+            email: datos_response.email,
+            profile_pic: datos_response.picture.data.url,
+            rol: 2
+          }
+          this.registerService.registerFacebookDataToServer(dataToSave).subscribe(
+            response => {
+              // this.authService.exchangeFacebookToken(accessToken).subscribe(
+              //   response => {
+              //     console.log(response);
+              //   }, (error) => {
+              //     console.log(error);
+              //   }
+              // )
+              this.authService.setNamePicture(datos_response.name, datos_response.picture.data.url)
+              this.authService.setTokenCookie(accessToken);
+              this.authService.setUserRol(dataToSave.rol.toString())
+              this.router.navigate(['/']);
+              
+            },error =>{
+              console.log(error);            
+            }
+          )
+        }
+      );
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+        
+    }, {scope:'email'});
+  }
 
 
 }

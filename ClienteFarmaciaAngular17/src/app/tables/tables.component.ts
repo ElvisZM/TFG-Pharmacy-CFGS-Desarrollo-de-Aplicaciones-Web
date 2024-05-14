@@ -5,6 +5,7 @@ import { DatosService } from '../servicios/datos.service';
 import { AdminPanelComponent } from '../admin-panel/admin-panel.component';
 import { Router } from '@angular/router';
 import { CrudproductService } from '../servicios/crudproduct.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-tables',
@@ -20,7 +21,7 @@ export class TablesComponent implements OnInit, DoCheck {
   myProductsList: Array<any> = [];
   CreatingProductMessage: string = '';
 
-  url: string = 'http://localhost:8000';
+  public urlPicture = environment.apiImageUrl;
   
 
   constructor(private _csvService: CsvproductosService, public datosService: DatosService, private adminPanel: AdminPanelComponent, private crudProduct : CrudproductService, private router: Router){}
@@ -100,8 +101,8 @@ export class TablesComponent implements OnInit, DoCheck {
     this.router.navigate(['/admin/panel/create/product']);
   }
 
-  updateProduct(product: number){
-    this.router.navigate([`/admin/panel/update/product`, product]);
+  updateProduct(cn_prod: number, cif_farm: string){
+    this.router.navigate([`/admin/panel/update/product`, cn_prod, cif_farm]);
   }
 
 }

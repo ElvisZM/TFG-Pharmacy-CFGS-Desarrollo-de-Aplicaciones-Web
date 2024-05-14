@@ -55,11 +55,10 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   iguales: boolean = false;
   formIgualError: string = 'No se han realizado cambios.';
 
-  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) {
-    
+  falloServidor: boolean = false;
+  errorFalloServidor: string = 'Error en el servidor. Inténtelo más tarde.';
 
-
-  }
+  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) { }
 
   ngOnInit(): void {
   
@@ -67,7 +66,8 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
 
     this.route.paramMap.subscribe(params => {
       const cn_prod = +params.get('cn_prod')!;
-      this.datosService.getProduct(cn_prod).subscribe(
+      const cif_farm = params.get('cif_farm')!;
+      this.datosService.getProduct(cn_prod, cif_farm).subscribe(
         response => {
           this.product = response
 
@@ -202,6 +202,20 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
           cif_farm: myForm.update_farmacia_cif,
           cif_prov: myForm.update_proveedor_cif,
         };
+
+        this.crudProduct.updateProduct(updateData, updateData.cn_prod).subscribe(
+          response => {
+            console.log('datos actualizados')
+            localStorage.setItem('activeTab', 'tables');
+            this.router.navigate(['/admin/panel']);
+          }, error=>{
+            console.log(error)
+            setTimeout(() => {
+              this.falloServidor = false;
+            },2000);
+
+          }
+        )
       }
 
     }else{
@@ -219,14 +233,20 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
       };
 
       if (!this.comprobarFormIgual(this.formulario_original, updateData)){
-          console.log('Los datos han cambiado')
-        // this.crudProduct.updateProduct(updateData, updateData.cn_prod).subscribe(
-        //   response => {
-        //     console.log(response)
-        //   }, error=>{
-        //     console.log(error)
-        //   }
-        // )
+        console.log('Los datos han cambiado')
+        this.crudProduct.updateProduct(updateData, updateData.cn_prod).subscribe(
+          response => {
+            console.log('datos actualizados')
+            localStorage.setItem('activeTab', 'tables');
+            this.router.navigate(['/admin/panel']);
+          }, error=>{
+            console.log(error)
+            this.falloServidor = true;
+            setTimeout(() => {
+              this.falloServidor = false;
+            },2000);
+          }
+        )
       }
  
       
@@ -258,11 +278,34 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
       
     } else {
       return false
-      
     }
-    datos_original.splice(0, datos_original.length)
-    datos_actualizados.splice(0, datos_actualizados.length)
   }
+
+  delete(){
+    const cn_prod = this.product.cn_prod
+    const cif_farm = this.product.cif_farm
+
+    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar este producto?");
+
+    if(confirmDelete){
+  
+      this.crudProduct.deleteProduct(cn_prod, cif_farm).subscribe(
+        response => {
+          console.log('Producto eliminado')
+          localStorage.setItem('activeTab', 'tables');
+          this.router.navigate(['/admin/panel']);
+        }, error=>{
+          console.log(error)
+          this.falloServidor = true;
+          setTimeout(() => {
+            this.falloServidor = false;
+          },2000);
+        }
+      )
+    }
+    
+  }
+
 
   backToAdmin(){
     this.router.navigate(['/admin/panel']);

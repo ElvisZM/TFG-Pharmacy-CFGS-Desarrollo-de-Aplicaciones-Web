@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class LoginService {
-  private token_url = 'http://127.0.0.1:8000/oauth2/token/';
+
+  private urlPath = environment.apiTokenUrl
 
   constructor(private http:HttpClient) { }
 
@@ -24,7 +26,7 @@ export class LoginService {
       'Content-Type': 'application/x-www-form-urlencoded',
     }
 
-    return this.http.post<any>(this.token_url, dataGetToken.toString(),{headers:cabecera})
+    return this.http.post<any>(this.urlPath, dataGetToken.toString(),{headers:cabecera})
       .pipe(
         catchError(error => {
           throw error;
