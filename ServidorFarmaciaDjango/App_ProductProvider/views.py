@@ -105,7 +105,7 @@ def suministro_productos_list(request):
 def producto_editar(request, cn_prod):
     if(request.user.has_perm("App_ProductProvider.change_producto")):
         producto = Producto.objects.get(cn_prod=cn_prod)
-        productoCreateSerializer = ProductoSerializerCreate(instance=producto, data=request.data)
+        productoCreateSerializer = ProductoSerializerCreate(instance=producto, data=request.data, partial=True)
         if productoCreateSerializer.is_valid():
             try:
                 productoCreateSerializer.save()
@@ -170,7 +170,7 @@ def helper_cif_prov(request, nombre_prov):
 @api_view(['GET'])
 def helper_id_cat(request, nombre_cat):
     categoria = Categoria.objects.get(nombre_cat=nombre_cat)
-    serializer = ProveedorSerializer(categoria)
+    serializer = CategoriaProductoSerializer(categoria)
     return Response(serializer.data)
 
 

@@ -121,7 +121,7 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
         if (modeloFarmacia is None or modeloCategoria is None or modeloProveedor is None):
             raise serializers.ValidationError('La farmacia, la categoria o el proveedor no existen')
         
-        elif (self.initial_data['imagen_prod'] is None):
+        elif (self.initial_data['imagen_prod'] == ""):
             
             modeloProducto = Producto.objects.create(
             cn_prod = validated_data['cn_prod'],
@@ -178,17 +178,17 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError('La farmacia, la categoria o el proveedor no existen')
         
         
-        elif (self.initial_data['imagen_prod'] is None):
+        elif (self.initial_data['imagen_prod'] == ""):
         
         
             
             instance.cn_prod = validated_data['cn_prod']
-            instance.imagen_prod = validated_data['imagen_prod']
+            instance.imagen_prod = self.initial_data['imagen_prod']
             instance.nombre_prod = validated_data['nombre_prod']
             instance.descripcion = validated_data['descripcion']
             instance.precio = validated_data['precio']
             instance.stock = validated_data['stock']
-            instance.cif_farm = validated_data['cif_farm'],
+            instance.cif_farm = validated_data['cif_farm']
             instance.categoria_id = modeloCategoria
             instance.farmacia_id = modeloFarmacia
             instance.save()
@@ -218,8 +218,6 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
             
         modeloFarmacia = Farmacia.objects.filter(cif_farm = validated_data['cif_farm']).first()
         
-        # modeloProveedor = Proveedor.objects.filter(cif_prov = self.initial_data['cif_prov']).first()
-            
         modeloProducto = Producto.objects.filter(cn_prod=validated_data['cn_prod'], cif_farm=validated_data['cif_farm']).first()
             
         SuministroProducto.objects.filter(producto_id=instance, cantidad=instance.stock).update(fecha_pedido=date.today(),
