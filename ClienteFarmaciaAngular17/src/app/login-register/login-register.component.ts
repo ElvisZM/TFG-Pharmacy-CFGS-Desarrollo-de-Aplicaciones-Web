@@ -208,7 +208,8 @@ export class LoginRegisterComponent implements OnInit{
         last_name: payLoad.family_name,
         email: payLoad.email,
         profile_pic: payLoad.picture,
-        rol: 2
+        rol: 2,
+        token: payLoad.jti
       }
       this.registerService.registerGoogleDataToServer(dataToSave).subscribe(
         response => {
@@ -238,18 +239,13 @@ export class LoginRegisterComponent implements OnInit{
             first_name: datos_response.name,
             email: datos_response.email,
             profile_pic: datos_response.picture.data.url,
-            rol: 2
+            rol: 2,
+            token: accessToken
           }
           this.registerService.registerFacebookDataToServer(dataToSave).subscribe(
             response => {
-              // this.authService.exchangeFacebookToken(accessToken).subscribe(
-              //   response => {
-              //     console.log(response);
-              //   }, (error) => {
-              //     console.log(error);
-              //   }
-              // )
-              this.authService.setNamePicture(datos_response.name, datos_response.picture.data.url)
+
+              this.authService.setNamePicture(dataToSave.first_name, dataToSave.profile_pic)
               this.authService.setTokenCookie(accessToken);
               this.authService.setUserRol(dataToSave.rol.toString())
               this.router.navigate(['/']);

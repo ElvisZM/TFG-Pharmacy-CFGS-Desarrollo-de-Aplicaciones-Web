@@ -79,7 +79,7 @@
                   <ul class="ul-cuenta-interior">
                       <li class="apartado-cuenta-interior">
                           <div class="google-facebook" *ngIf="rol!=='1'">
-                              <button>Mi carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
+                              <button (click)="carritoCompra()">Mi carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
                           </div>
                       </li>
                       <li class="apartado-cuenta-interior" *ngIf="rol==='1'">

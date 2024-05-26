@@ -55,62 +55,64 @@ export class AuthService {
     this.router.navigate(['/']);
     setTimeout(() => {
       window.location.reload();
-    },400);
+    },500);
     google.accounts.id.disableAutoSelect();
   }
 
   getHeadersApiRequest() {
-    let headers: any = {}
-   
-    if(this.getTokenCookie().length > 0) {
+    let headers_vacio: any = {}
+    let token: string = this.getTokenCookie();
+    if(token) {
       return {
         headers : new HttpHeaders({
-        'Authorization': `Bearer ${this.getTokenCookie()}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
         })
       };
     }
-    return headers;
-    }
+    return headers_vacio;
+  }
 
-    getHeadersUserInfo(){
-      return {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${this.getTokenCookie()}`
-        })}
-    }
+  getHeadersUserInfo(){
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.getTokenCookie()}`
+      })}
+  }
 
-    getUserInfo(){
-      const headers = this.getHeadersUserInfo();
-      return this.http.get<any>(this.urlPath+'usuario/token/'+this.getTokenCookie(), headers).subscribe(
-        response => {
-          this.setNamePicture(response.usuario.first_name, response.profile_picture)
-          const rol = response.usuario.rol.toString();
-          this.setUserRol(rol.toString())
-        },error => {
-          console.log(error)
+  getUserInfo(){
+    const headers = this.getHeadersUserInfo();
+    return this.http.get<any>(this.urlPath+'usuario/token/'+this.getTokenCookie(), headers).subscribe(
+      response => {
+        const rol = response.usuario.rol.toString();
+        this.setUserRol(rol.toString())
+        if (response.administrador){
+          this.setNamePicture(response.usuario.first_name, response.administrador.profile_pic)
+
         }
-      )
-    }
+        else if (response.gerente){
+          this.setNamePicture(response.usuario.first_name, response.gerente.profile_pic)
 
-    getFacebookUserProfile(accessToken: string){
-      const fields = 'id,email,name,picture';
-      const url = `https://graph.facebook.com/me?fields=${fields}&access_token=${accessToken}`;
-      return this.http.get<any>(url);
-    }
+        }
+        else if (response.empleado){
+          this.setNamePicture(response.usuario.first_name, response.empleado.profile_pic)
 
-    exchangeFacebookToken(facebookToken: string) {
-      const body = { facebookToken };
-      const headers = new HttpHeaders().set('Content-Type', 'application/json');
+        }
+        else{
+          this.setNamePicture(response.usuario.first_name, response.cliente.profile_pic)
 
-      return this.http.post(this.urlPath+'auth/facebook', body, { headers });
-    }
+        }
+      },error => {
+        console.log(error)
+      }
+    )
+  }
 
-    loginWithFacebook(accessToken: string): Observable<any> {
-      const headers = new HttpHeaders().set('Content-Type', 'application/json');
-      const body = { access_token: accessToken };
-      return this.http.post<any>(`${this.urlPath}login/facebook`, body, { headers });
-    }
+  getFacebookUserProfile(accessToken: string){
+    const fields = 'id,email,name,picture';
+    const url = `https://graph.facebook.com/me?fields=${fields}&access_token=${accessToken}`;
+    return this.http.get<any>(url);
+  }
 
 
 

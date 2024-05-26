@@ -18,12 +18,12 @@ class Promocion(models.Model):
 class CarritoCompra(models.Model):
     codigo_compra = models.CharField(max_length=12)
     finalizado = models.BooleanField(default=False)
-    usuario = models.ForeignKey('App_AuthUsers.Cliente', on_delete=models.CASCADE)
+    usuario = models.ForeignKey('App_AuthUsers.Usuario', on_delete=models.CASCADE)
     producto_carrito = models.ManyToManyField(Producto, through='ContenidoCarrito')
 
 
 class ContenidoCarrito(models.Model):    
-    cantidad_producto = models.IntegerField()
+    cantidad_producto = models.IntegerField(default=1)
     producto_id = models.ForeignKey(Producto, on_delete=models.CASCADE)
     carrito_id = models.ForeignKey(CarritoCompra, on_delete=models.CASCADE)
 

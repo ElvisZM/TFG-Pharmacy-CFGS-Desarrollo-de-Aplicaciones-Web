@@ -23,7 +23,7 @@
         </div>
         <p class="item-price"><del class="me-3">{{ producto.precio }}€</del> <b>{{ producto.precio }}€</b></p>
         <div class="botones d-flex">
-          <button class="cart-button me-4">
+          <button class="cart-button me-4" (click)="addProductToCart(producto.id)">
             <span class="add-to-cart">Añadir</span>
             <span class="added">Añadido</span>
             <i class="fas fa-shopping-cart"></i>

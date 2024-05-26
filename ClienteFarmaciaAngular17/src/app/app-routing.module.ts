@@ -11,6 +11,7 @@ import { FormproductComponent } from './formproduct/formproduct.component';
 import { FormproductupdateComponent } from './formproductupdate/formproductupdate.component';
 import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 import { AllproductsComponent } from './allproducts/allproducts.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'admin/panel/update/product/:cn_prod/:cif_farm', component: FormproductupdateComponent},
   { path: 'productos/buscador/query/:palabra', component: BuscadorSimpleComponent},
   { path: 'productos/lista/completa', component: AllproductsComponent},
+  { path: 'carrito/productos/lista', component: ShoppingCartComponent},
 
   { path: '**', component: NotfoundpageComponent}
 ];

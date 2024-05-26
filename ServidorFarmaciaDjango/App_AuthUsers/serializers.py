@@ -72,13 +72,14 @@ class UsuarioSerializerRegistroGoogle(serializers.Serializer):
     birthday_date = serializers.DateField()
     
     def validate_username(self, username):
-        usuario = Usuario.objects.filter(username=username).first()
-        
-        if(not usuario is None):
-            raise serializers.ValidationError('Usuario existente.')
+        if username is None:
+            raise serializers.ValidationError('Nombre de usuario necesario')
         return username
     
-
+    def validate_email(self, email):
+        if email is None:
+            raise serializers.ValidationError('Email inexistente')
+        return email
 
 
 class AdministradorSerializer(serializers.ModelSerializer):
@@ -101,7 +102,7 @@ class ClienteSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Cliente
-        fields = ['id', 'picture_cli', 'direccion_cli', 'telefono_cli', 'birthday_date', 'productos_favoritos', 'votacion_prod']
+        fields = ['id', 'usuario', 'profile_pic', 'direccion_cli', 'telefono_cli', 'birthday_date', 'productos_favoritos', 'votacion_prod']
         
         
 class EmpleadoSerializer(serializers.ModelSerializer):
@@ -139,9 +140,11 @@ class UsuarioSerializerRegistroFacebook(serializers.Serializer):
     birthday_date = serializers.DateField()
     
     def validate_username(self, username):
-        usuario = Usuario.objects.filter(username=username).first()
-        
-        if(not usuario is None):
-            raise serializers.ValidationError('Usuario existente.')
+        if username is None:
+            raise serializers.ValidationError('Nombre de usuario necesario')
         return username
     
+    def validate_email(self, email):
+        if email is None:
+            raise serializers.ValidationError('Email inexistente')
+        return email

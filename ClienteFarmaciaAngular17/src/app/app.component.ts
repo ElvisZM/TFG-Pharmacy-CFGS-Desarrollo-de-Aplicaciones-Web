@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DatosService } from './servicios/datos.service';
 import { AuthService } from './servicios/auth.service';
 import { FacebookLoginProvider} from '@abacritt/angularx-social-login';
+import { CartInfoService } from './servicios/cart-info.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit, DoCheck {
   googleUser: any;
 
 
-  constructor(private datosService: DatosService, private router: Router, private authService: AuthService) { }
+  constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService) { }
 
   ngOnInit(){
     if (this.authService.getTokenCookie()){
@@ -61,6 +62,18 @@ export class AppComponent implements OnInit, DoCheck {
 
   adminPanel(){
     this.router.navigate(['/admin/panel']);
+  }
+
+  carritoCompra(){
+    this.cartInfo.getCartInfo().subscribe(
+      response => {
+        this.router.navigate(['/carrito/productos/lista'])
+
+      }, error=>{
+        console.log(error);
+      }
+
+    )
   }
 
   actualizarPalabra(){

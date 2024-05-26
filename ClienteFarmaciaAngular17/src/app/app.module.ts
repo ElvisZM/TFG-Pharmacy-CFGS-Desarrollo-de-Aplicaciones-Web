@@ -21,7 +21,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { TablesComponent } from './tables/tables.component';
 import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
-
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +48,7 @@ import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.compo
     TablesComponent,
     SocialLoginModule,
     BuscadorSimpleComponent,
+    ShoppingCartComponent
   ],
   providers: [ CsvproductosService],
   bootstrap: [AppComponent]
