@@ -22,11 +22,11 @@ import { TablesComponent } from './tables/tables.component';
 import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    
   ],
   imports: [
     BrowserModule,
@@ -48,7 +48,8 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
     TablesComponent,
     SocialLoginModule,
     BuscadorSimpleComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    PaymentComponent
   ],
   providers: [ CsvproductosService],
   bootstrap: [AppComponent]

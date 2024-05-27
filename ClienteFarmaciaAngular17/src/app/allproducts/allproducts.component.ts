@@ -20,7 +20,7 @@ export class AllproductsComponent implements OnInit {
   constructor(private datosService: DatosService, private cartInfo: CartInfoService){}
 
   ngOnInit(): void {
-      this.getAllProducts();
+      this.getAllProducts();      
   }
 
   getAllProducts(): void {

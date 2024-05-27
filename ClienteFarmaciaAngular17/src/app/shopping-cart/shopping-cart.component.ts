@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 import { CartInfoService } from '../servicios/cart-info.service';
 import { environment } from '../../environments/environment';
 import { tap } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+
 
 
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.scss'
 })
@@ -21,7 +23,9 @@ export class ShoppingCartComponent implements OnInit {
 
   recommendedProducts: Array<any> = [];
 
-  constructor(private cartInfo: CartInfoService){}
+  quantityOptions: Array<number> = [1,2,3,4,5,6,7,8,9,10]
+
+  constructor(private cartInfo: CartInfoService, private router: Router){}
 
   ngOnInit() {
     this.loadCartInfo();
@@ -39,16 +43,20 @@ export class ShoppingCartComponent implements OnInit {
     });
   }
 
+  getSubTotal(){
+    return +((this.carrito.total_carrito / 1.21)).toFixed(2)
+  }
+
   getCosteEnvio(){
     return 2
   }
 
   getIVAimport(){
-    return +(((this.carrito.total_carrito + 5) *21) / 121).toFixed(2)
+    return +((this.carrito.total_carrito / 1.21)*0.21).toFixed(2)
   }
 
   getTotalPrice(){
-    return (this.carrito.total_carrito + this.getCosteEnvio() + this.getIVAimport()).toFixed(2)  
+    return (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2)  
   }
 
 
@@ -59,6 +67,33 @@ export class ShoppingCartComponent implements OnInit {
         this.empty = this.carrito.productos.length === 0;
       })
     })
+  }
+
+  backToHome(){
+    this.router.navigate(['/'])
+  }
+
+  redirectToPayment(){
+    this.router.navigate(['/confirmacion/pago']);
+  }
+
+  deleteProductFromCart(producto_id: number){
+    this.cartInfo.deleteProduct(producto_id).subscribe(response => {
+      this.cartInfo.getCartInfo().subscribe(response => {
+        this.carrito = response;
+        this.empty = this.carrito.productos.length === 0;
+      })
+    })
+  }
+
+  updateProductUnits(producto_id: number, quantity: any){
+    this.cartInfo.updateProductQuantity(producto_id, quantity).subscribe(response => {
+      this.cartInfo.getCartInfo().subscribe(response => {
+        this.carrito = response;
+        this.empty = this.carrito.productos.length === 0;
+      })
+    })
+    console.log("evento activado")
   }
 
 }

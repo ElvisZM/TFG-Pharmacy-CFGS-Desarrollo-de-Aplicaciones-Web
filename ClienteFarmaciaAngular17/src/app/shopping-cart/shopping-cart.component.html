@@ -48,7 +48,7 @@
                                 <div class="flex-shrink-0 ms-2">
                                     <ul class="list-inline mb-0 font-size-16">
                                         <li class="list-inline-item">
-                                            <a href="#" class="text-muted px-1">
+                                            <a class="text-muted px-1" style="cursor: pointer;" (click)="deleteProductFromCart(producto.producto_id.id)">
                                                 <i class="mdi mdi-trash-can-outline"></i>
                                             </a>
                                         </li>
@@ -73,24 +73,18 @@
                                         <div class="mt-3">
                                             <p class="text-muted mb-2">Cantidad</p>
                                             <div class="d-inline-flex">
-                                                <select class="form-select form-select-sm w-xl">
-                                                    <option value="producto.cantidad_producto" [selected] >{{producto.cantidad_producto}}</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2" >2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
-                                                    <option value="7">7</option>
-                                                    <option value="8">8</option>
-                                                </select>
+                                                <select class="form-select form-select-sm w-xl" [(ngModel)]="producto.cantidad_producto" (ngModelChange)="updateProductUnits(producto.producto_id.id, $event)">
+                                                    <ng-container *ngFor="let number of quantityOptions">
+                                                        <option [value]="number" [selected]="number === producto.cantidad_producto" >{{ number }}</option>
+                                                    </ng-container>
+                                            </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="mt-3">
                                             <p class="text-muted mb-2">Total</p>
-                                            <h5>{{producto.cantidad_producto * producto.producto_id.precio}}€</h5>
+                                            <h5>{{(producto.cantidad_producto * producto.producto_id.precio).toFixed(2)}}€</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +108,7 @@
                             <tbody>
                                 <tr>
                                     <td>Sub Total :</td>
-                                    <td class="text-end">{{ carrito.total_carrito }} €</td>
+                                    <td class="text-end">{{ getSubTotal() }} €</td>
                                 </tr>
                                 <tr>
                                     <td>Descuento : </td>
@@ -134,31 +128,31 @@
                                 </tr>
                                 <tr>
                                     <div class="mt-2 mt-sm-0">
-                                        <button class="btn btn-success fw-bold" style="width:145%;">
+                                        <button class="btn btn-success fw-bold" style="width:145%;" (click)="redirectToPayment()">
                                          Tramitar pedido </button>
                                     </div>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
                                         <h5 class="mt-4">Productos Recomendados</h5>
-                                        <ul class="list-unstyled">
+                                        <ul class="list-unstyled mt-3">
                                             <ng-container *ngFor="let productoRecomendado of carrito.productos_recomendados">
-                                                <li class="d-flex">
+                                                <li class="d-flex mt-4">
                                                     <img [src]="urlPicture + productoRecomendado.imagen_prod" alt="productoRecomendado.nombre_prod" class="avatar-lg rounded" *ngIf="productoRecomendado.imagen_prod">
                                                     <img src="../../assets/imagenes/NoProductImageAvailable.png" class="avatar-lg rounded" alt="productoRecomendado.nombre_prod" *ngIf="!productoRecomendado.imagen_prod">
-                                                    <div>	
-                                                        <span class="d-block">{{ productoRecomendado.nombre_prod }}</span>
-                                                        <div class="star-rating">
-                                                            <ul class="list-inline">
-                                                              <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                                              <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                                              <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                                              <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                                              <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                                                            </ul>
+                                                    <div class="ms-3">	
+                                                        <a class="d-block" style="cursor: pointer;">{{ productoRecomendado.nombre_prod }}</a>
+                                                        <div class="star-rating mt-1">
+                                                            <p class="text-muted ">
+                                                                <i class="bx bxs-star text-warning"></i>
+                                                                <i class="bx bxs-star text-warning"></i>
+                                                                <i class="bx bxs-star text-warning"></i>
+                                                                <i class="bx bxs-star text-warning"></i>
+                                                                <i class="bx bxs-star-half text-warning"></i>
+                                                            </p>
                                                         </div>
-                                                        <span class="d-block">{{ productoRecomendado.precio }}€</span>
-                                                        <button class="btn btn-sm btn-primary mt-4 " (click)="addProductToCart(productoRecomendado.id)" >Añadir a la cesta</button>
+                                                        <span class="d-block">{{ productoRecomendado.precio }} €</span>
+                                                        <button class="btn btn-sm btn-primary mt-1 ms-0 " (click)="addProductToCart(productoRecomendado.id)" >Añadir a la cesta</button>
 
                                                     </div>
                                                 </li>
@@ -174,14 +168,11 @@
             </div>
         </div>
     </div>
-    <!-- Botones de continuar comprando y ir al checkout -->
     <div class="row my-4">
-        <!-- Botón de continuar comprando -->
         <div class="col-sm-6">
-            <a href="ecommerce-products.html" class="btn btn-link text-muted">
+            <a class="btn btn-link text-muted" style="cursor: pointer;" (click)="backToHome()">
                 <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
         </div> 
-        <!-- Botón de ir al checkout -->
         
     </div> 
     

@@ -12,6 +12,7 @@ import { FormproductupdateComponent } from './formproductupdate/formproductupdat
 import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 import { AllproductsComponent } from './allproducts/allproducts.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { PaymentComponent } from './payment/payment.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,8 @@ const routes: Routes = [
   { path: 'productos/buscador/query/:palabra', component: BuscadorSimpleComponent},
   { path: 'productos/lista/completa', component: AllproductsComponent},
   { path: 'carrito/productos/lista', component: ShoppingCartComponent},
+  { path: 'confirmacion/pago', component: PaymentComponent},
+
 
   { path: '**', component: NotfoundpageComponent}
 ];

@@ -27,6 +27,8 @@ def agregar_al_carrito(request, producto_id):
                 if (producto_carrito):                    
                     producto_aumentar = ContenidoCarrito.objects.get(carrito_id=carrito_usuario, producto_id = producto_anyadir)
                     producto_aumentar.cantidad_producto += 1
+                    if (producto_aumentar.cantidad_producto>10):
+                        producto_aumentar.cantidad_producto = 10
                     producto_aumentar.save()
                 else:
                     ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id = producto_anyadir, cantidad_producto=1)
@@ -69,19 +71,15 @@ def carrito_usuario(request):
             serializer['total_carrito'] = total_carrito
             serializer['cantidad_productos_total'] = cantidad_prod_carrito
             
-             # Obtenemos todas las categorías de los productos en el carrito
             categorias_carrito = set([producto.producto_id.categoria_id for producto in carrito_usuario.contenidocarrito_set.all()])
             
-            # Lista para almacenar los productos recomendados
             productos_recomendados = []
             
-            # Obtenemos un producto recomendado de cada categoría en el carrito
             for categoria in categorias_carrito:
                 producto_recomendado = Producto.objects.filter(categoria_id=categoria).exclude(id__in=[producto.producto_id.id for producto in carrito_usuario.contenidocarrito_set.all()]).first()
                 if producto_recomendado:
                     productos_recomendados.append(producto_recomendado)
             
-            # Serializamos los productos recomendados y los agregamos a la respuesta
             serializer_productos_recomendados = ProductoSerializer(productos_recomendados, many=True)
             serializer['productos_recomendados'] = serializer_productos_recomendados.data
             
@@ -142,7 +140,31 @@ def bajar_unidad_carrito(request, producto_id):
             
             except Exception as error:
                 return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        else:
+            return Response("Metodo no permitido", status=status.HTTP_405_METHOD_NOT_ALLOWED)
     else:
-        return Response({"Necesita iniciar sesion"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)
 
+@api_view(['PUT'])
+def actualizar_cantidad_producto(request, producto_id):
+    if (request.user.is_authenticated):
+        if request.method == "PUT":
+            try:
+                producto_actualizar_ud = Producto.objects.get(id=producto_id)
+                
+                carrito_usuario = CarritoCompra.objects.select_related("usuario").prefetch_related("producto_carrito").filter(usuario = request.user, finalizado = False).first()
+                
+                producto_carrito = ContenidoCarrito.objects.select_related("producto_id", "carrito_id").filter(carrito_id = carrito_usuario, producto_id = producto_actualizar_ud).first()
+                
+                producto_carrito.cantidad_producto = int(request.data['cantidad'])
+                producto_carrito.save()
+                
+                return Response("Cantidad Producto actualizada correctamente", status=status.HTTP_200_OK)
+                
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response("Metodo no permitido", status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    else:
+        return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)
+    
