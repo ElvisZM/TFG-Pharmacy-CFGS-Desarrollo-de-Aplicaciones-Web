@@ -11,19 +11,18 @@
             <div class="d-flex flex-column mb-5"> <span class="far fa-calendar-alt text"><span class="ps-2">Fecha
                         pago:</span></span> <span class="ps-3">28 Marzo, 2024</span> </div>
             <div class="d-flex align-items-center justify-content-between text mt-5">
-                <div class="d-flex flex-column text"> <span>Atencion al cliente:</span> <span>Chat Online 24/7</span>
+                <div class="d-flex flex-column text"> <span>Atencion al cliente:</span> <span >Chat Online 24/7</span>
                 </div>
                 <div class="btn btn-primary rounded-circle"><span class="fas fa-comment-alt"></span></div>
             </div>
         </div>
     </div>
     <div class="card box2 shadow-sm">
-        <div class="d-flex align-items-center justify-content-between p-md-5 p-4"> <span class="h5 fw-bold m-0">Payment
-                methods</span>
+        <div class="d-flex align-items-center justify-content-between p-md-5 p-4"> <span class="h5 fw-bold m-0">Métodos de pago</span>
             <div > <i class="fa-brands fa-cc-amex fa-2xl me-2"></i>  <i class="fa-brands fa-cc-mastercard fa-2xl me-3"></i> <i class="fa-brands fa-cc-visa fa-2xl me-3"></i> <i class="fa-brands fa-cc-discover fa-2xl me-3"></i> <i class="fa-brands fa-cc-paypal fa-2xl me-2"></i> <i class="fa-brands fa-cc-diners-club fa-2xl me-2"></i> <i class="fa-brands fa-cc-jcb fa-2xl"></i></div>
         </div>
         <ul class="nav nav-tabs mb-3 px-md-4 px-2">
-            <li class="nav-item"> <a class="nav-link px-2 active" aria-current="page" href="#">Credit Card</a> </li>
+            <li class="nav-item"> <a class="nav-link px-2 active" aria-current="page" href="#">Tarjeta de Crédito</a> </li>
             <li class="nav-item"> <a class="nav-link px-2" href="#">PayPal</a> </li>
         </ul>
 
@@ -187,8 +186,8 @@
                 <div class="d-flex justify-content-between">
                     <div class="w-50">
                         <div class="form-group">
-                            <label class="fw-bold" for="direccion_envio">Dirección de envio</label>
-                            <input class="form-control" id="direccion_envio" type="text" placeholder="Introduzca una dirección de envío" formControlName="payment_direccion_envio" required >
+                            <label class="fw-bold" for="direccion_envio">Dirección de envio (calle o avd)</label>
+                            <input class="form-control" id="direccion_envio" type="text" placeholder="" formControlName="payment_direccion_envio" required >
                         </div>
 
                         <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_direccion_envio')!.touched && FormPaymentProduct.get('payment_direccion_envio')!.hasError('required')">
@@ -213,13 +212,16 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <div class="w-50">
-                        <label class="fw-bold" for="ciudad">Ciudad</label>
-                        <select class="form-select mb-0" formControlName="payment_ciudad" id="ciudad">
-                            <option disabled >Seleccione una ciudad</option>
-                            <option >hola</option>
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label class="fw-bold" for="municipio">Municipio</label>
+                            <input class="form-control" id="municipio" type="text" placeholder="Introduzca su municipio" formControlName="payment_municipio" required >
+                        </div>
 
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_municipio')!.touched && FormPaymentProduct.get('payment_municipio')!.hasError('required')">
+                            <h6>Necesita rellenar este campo.</h6>
+                        </div>
+
+                    </div>
 
                     <div class="w-50 ms-5">
                         <label class="fw-bold" for="provincia">Provincia</label>
@@ -240,10 +242,10 @@
             <div class="validaciones alert alert-danger" *ngIf="campoFormVacio">
                 <h6>{{ formVacioError }}</h6>
             </div>
-
+            <app-pdftemplate class="d-none" #pdfContent></app-pdftemplate>
             <div class="d-flex justify-content-between botones ">
                 <button class="w-25 ms-4 fw-bold" name="back" (click)="backToCart()">Volver al carrito</button>
-                <button class="w-25 me-4 fw-bold" type="submit" name="update" [disabled]="campoFormVacio">Realizar Compra</button>
+                <button class="w-25 me-4 fw-bold" type="submit" name="update" [disabled]="campoFormVacio" (click)="exportToPDF()">Realizar Compra</button>
             </div>
                                 
 
@@ -252,43 +254,3 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="payment-title">
-    <h1>Payment Information</h1>
-</div>
-
-<div class="d-flex">
-    <div class="container preload">
-        
-    </div>
-    
-</div> -->

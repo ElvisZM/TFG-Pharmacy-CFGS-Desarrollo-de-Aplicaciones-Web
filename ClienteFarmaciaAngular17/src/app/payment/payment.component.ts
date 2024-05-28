@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
@@ -6,16 +6,22 @@ import { CrudproductService } from '../servicios/crudproduct.service';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { SavepaymentService } from '../servicios/savepayment.service';
+import { jsPDF, HTMLOptions } from 'jspdf';
+import html2canvas from 'html2canvas'; 
+import { PdftemplateComponent } from '../pdftemplate/pdftemplate.component';
+
 
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, PdftemplateComponent],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss'
 })
 export class PaymentComponent implements OnInit{
+
+  @ViewChild(PdftemplateComponent) pdftemplateComponent!: PdftemplateComponent;
 
 
   public FormPaymentProduct! : FormGroup;
@@ -32,7 +38,7 @@ export class PaymentComponent implements OnInit{
   payment_codigo_seguridad: string="";
   payment_direccion_envio: string="";
   payment_codigo_postal: string="";
-  payment_ciudad!: FormControl;
+  payment_municipio: string="";
   payment_provincia!: FormControl;
 
   selectedCiudadOption!: string;
@@ -118,11 +124,12 @@ export class PaymentComponent implements OnInit{
       payment_codigo_seguridad:['', Validators.required],
       payment_direccion_envio:['', Validators.required],
       payment_codigo_postal:['', Validators.required],
-      payment_ciudad:[''],
+      payment_municipio:['', Validators.required],
       payment_provincia:[''],
     });
 
   }
+
 
   buyProduct(){
     // return this.savePayment.creditcardPayment()
@@ -187,5 +194,23 @@ export class PaymentComponent implements OnInit{
 
     this.cvv = cvvInput;
   }
+
+  exportToPDF() {
+    var data = document.getElementById('contentToConvert');  //Id of the table
+    html2canvas(data!).then(canvas => {  
+      // Few necessary setting options  
+      let imgWidth = 208;   
+      let pageHeight = 295;    
+      let imgHeight = canvas.height * imgWidth / canvas.width;  
+      let heightLeft = imgHeight;  
+
+      const contentDataURL = canvas.toDataURL('image/png')  
+      let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+      let position = 0;  
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+      pdf.save('MYPdf.pdf'); // Generated PDF   
+    });  
+  }  
+
 
 }

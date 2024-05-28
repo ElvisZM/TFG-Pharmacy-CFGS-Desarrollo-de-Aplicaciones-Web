@@ -23,10 +23,12 @@ import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } fro
 import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PaymentComponent } from './payment/payment.component';
+import { PdftemplateComponent } from './pdftemplate/pdftemplate.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,7 @@ import { PaymentComponent } from './payment/payment.component';
     SocialLoginModule,
     BuscadorSimpleComponent,
     ShoppingCartComponent,
-    PaymentComponent
+    PaymentComponent,
   ],
   providers: [ CsvproductosService],
   bootstrap: [AppComponent]
