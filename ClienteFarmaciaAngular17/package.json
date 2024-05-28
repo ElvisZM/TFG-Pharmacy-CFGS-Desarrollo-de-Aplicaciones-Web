@@ -26,6 +26,7 @@
     "bootstrap": "^5.3.3",
     "google-auth-library": "^9.8.0",
     "gsap": "^3.12.5",
+    "imask": "^7.6.1",
     "jquery": "^3.7.1",
     "ngx-bootstrap": "^12.0.0",
     "ngx-cookie-service": "^17.1.0",

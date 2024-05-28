@@ -28,6 +28,10 @@ class Votacion(models.Model):
 
 class Compra(models.Model):
     fecha_compra = models.DateField(null=False, blank=False)
+    direccion_envio = models.CharField(max_length=200)
+    codigo_postal = models.IntegerField()
+    ciudad = models.CharField(max_length=100)
+    provincia = models.CharField(max_length=100)
     cliente_id = models.ForeignKey('App_AuthUsers.Cliente', on_delete=models.CASCADE)
     # empleado_id = models.ForeignKey(settings.EMPLOYEE_MODEL, on_delete=models.CASCADE)
     carrito_id = models.OneToOneField(CarritoCompra, on_delete=models.CASCADE)
@@ -44,7 +48,9 @@ class Pago(models.Model):
         max_length=2,
         choices=entidades,
     )
+    titular_tarjeta = models.CharField(max_length=100)
     numero_tarjeta = models.CharField(max_length=20)
+    tipo_tarjeta = models.CharField(max_length=20)
     fecha_pago = models.DateField(null=True, blank=True)
     cliente_id = models.ForeignKey('App_AuthUsers.Cliente', on_delete=models.CASCADE)
     subscripcion_id = models.ForeignKey(Subscripcion, on_delete=models.CASCADE)

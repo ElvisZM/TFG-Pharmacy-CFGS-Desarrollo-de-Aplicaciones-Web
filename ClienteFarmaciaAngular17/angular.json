@@ -41,8 +41,8 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/gsap/dist/gsap.min.js",
-              "src/assets/js/login-register.js",
-              "src/assets/js/creditcard.js"
+              "src/assets/js/login-register.js"
+              // "src/assets/js/creditcard.js"
 
             ]
           },
