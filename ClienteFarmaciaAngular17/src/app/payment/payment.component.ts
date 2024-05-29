@@ -3,25 +3,23 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CrudproductService } from '../servicios/crudproduct.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { SavepaymentService } from '../servicios/savepayment.service';
-import { jsPDF, HTMLOptions } from 'jspdf';
+import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas'; 
-import { PdftemplateComponent } from '../pdftemplate/pdftemplate.component';
-
-
+import { AuthService } from '../servicios/auth.service';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, PdftemplateComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  providers: [DatePipe],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss'
 })
 export class PaymentComponent implements OnInit{
 
-  @ViewChild(PdftemplateComponent) pdftemplateComponent!: PdftemplateComponent;
 
 
   public FormPaymentProduct! : FormGroup;
@@ -107,10 +105,11 @@ export class PaymentComponent implements OnInit{
   "Zaragoza"
   ]
 
+  html_template: any;
 
+  fecha_compra = new Date()
 
-
-  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService) { }
+  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.titleService.setTitle('Confirmacion de Pago');
@@ -130,6 +129,9 @@ export class PaymentComponent implements OnInit{
 
   }
 
+  ngDoCheck(){
+    // this.html_template = document.getElementById('contentToConvert');
+  }
 
   buyProduct(){
     // return this.savePayment.creditcardPayment()
@@ -195,22 +197,37 @@ export class PaymentComponent implements OnInit{
     this.cvv = cvvInput;
   }
 
-  exportToPDF() {
-    var data = document.getElementById('contentToConvert');  //Id of the table
-    html2canvas(data!).then(canvas => {  
-      // Few necessary setting options  
-      let imgWidth = 208;   
-      let pageHeight = 295;    
-      let imgHeight = canvas.height * imgWidth / canvas.width;  
-      let heightLeft = imgHeight;  
 
-      const contentDataURL = canvas.toDataURL('image/png')  
-      let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
-      let position = 0;  
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
-      pdf.save('MYPdf.pdf'); // Generated PDF   
-    });  
-  }  
 
+  export() {
+    console.log('printing');
+    const data = document.getElementById('pdfContent');
+    data!.style.display = 'block';
+    this.generatePDF(data);
+    data!.style.display = 'none';
+  }
+
+  generatePDF(htmlContent: any) {
+    html2canvas(htmlContent).then(canvas => {
+        const imgWidth = 210;
+        const pageHeight = 297;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+        let date_compra = this.datePipe.transform(this.fecha_compra, 'yyyy-MM-dd')
+        pdf.save(`PSurPharmacy_${this.authService.getNamePicture().name}_${date_compra}.pdf`);
+    });
+  }
 
 }

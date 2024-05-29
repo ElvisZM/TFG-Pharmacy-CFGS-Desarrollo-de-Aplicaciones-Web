@@ -26,6 +26,7 @@
     "bootstrap": "^5.3.3",
     "google-auth-library": "^9.8.0",
     "gsap": "^3.12.5",
+    "html2canvas": "^1.4.1",
     "jquery": "^3.7.1",
     "jspdf": "^2.5.1",
     "ngx-bootstrap": "^12.0.0",
