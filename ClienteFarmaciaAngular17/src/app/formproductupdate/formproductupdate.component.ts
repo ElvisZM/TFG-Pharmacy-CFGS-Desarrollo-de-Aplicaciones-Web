@@ -117,9 +117,7 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   }
 
   ngDoCheck(){
-    if(this.FormUpdateProduct){
-      this.emptyFieldsFunction();
-    }
+    this.emptyFieldsFunction();
   }
 
 

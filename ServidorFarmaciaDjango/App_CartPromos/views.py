@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from .forms import *
 from rest_framework.permissions import AllowAny
 from oauth2_provider.models import AccessToken
+import numpy as np
 
 
 
@@ -34,8 +35,12 @@ def agregar_al_carrito(request, producto_id):
                     ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id = producto_anyadir, cantidad_producto=1)
 
             else:
-                CarritoCompra.objects.create(usuario=request.user, finalizado=False)
-                carrito_usuario = CarritoCompra.objects.get(usuario = request.user, realizado=False)
+                num_aleatorios = list(map(str, np.random.randint(1,10,10)))
+                codigo_id_compra = 'CC'+''.join(num_aleatorios)
+        
+
+                CarritoCompra.objects.create(codigo_compra= codigo_id_compra,usuario=request.user, finalizado=False)
+                carrito_usuario = CarritoCompra.objects.get(usuario = request.user, finalizado=False)
                 ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id = producto_anyadir,cantidad_producto = 1)
             
             return Response({"Producto agregado al carrito correctamente"}, status=status.HTTP_200_OK)
@@ -83,11 +88,17 @@ def carrito_usuario(request):
             serializer_productos_recomendados = ProductoSerializer(productos_recomendados, many=True)
             serializer['productos_recomendados'] = serializer_productos_recomendados.data
             
+            cliente_usuario = Cliente.objects.get(usuario=request.user)
+            serializer_cliente = ClienteSerializer(cliente_usuario)
+            serializer['cliente'] = serializer_cliente.data
             
             return Response(serializer)
         
         except CarritoCompra.DoesNotExist:
-            CarritoCompra.objects.create(usuario=request.user, finalizado=False)
+            codigo_id_compra = str(np.random.randint(1,10,5))
+            
+            
+            CarritoCompra.objects.create(codigo_compra=codigo_id_compra, usuario=request.user, finalizado=False)
             carrito_usuario = CarritoCompra.objects.get(usuario=request.user, finalizado=False)
             serializer=CarritoCompraSerializer(carrito_usuario)
             return Response(serializer.data)

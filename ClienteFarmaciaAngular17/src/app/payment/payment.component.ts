@@ -9,6 +9,7 @@ import { SavepaymentService } from '../servicios/savepayment.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas'; 
 import { AuthService } from '../servicios/auth.service';
+import { CartInfoService } from '../servicios/cart-info.service';
 
 @Component({
   selector: 'app-payment',
@@ -45,10 +46,7 @@ export class PaymentComponent implements OnInit{
   campoFormVacio: boolean = false;
   formVacioError: string = 'Por favor, rellene todos los campos.';
 
-  categories: any[] = [];
-  pharmacies: any[] = [];
-  providers: any[] = [];
-
+  carrito: any = {};
 
   provincias: Array<string> = [
   "Álava",
@@ -105,13 +103,14 @@ export class PaymentComponent implements OnInit{
   "Zaragoza"
   ]
 
-  html_template: any;
-
   fecha_compra = new Date()
+  date_compra = this.datePipe.transform(this.fecha_compra, 'yyyy-MM-dd')
 
-  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe) { }
+
+  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService) { }
 
   ngOnInit() {
+    this.loadCartInfo();
     this.titleService.setTitle('Confirmacion de Pago');
 
 
@@ -130,16 +129,103 @@ export class PaymentComponent implements OnInit{
   }
 
   ngDoCheck(){
-    // this.html_template = document.getElementById('contentToConvert');
+    if(this.FormPaymentProduct){
+      this.emptyFieldsFunction();
+    }
   }
 
   buyProduct(){
     // return this.savePayment.creditcardPayment()
   }
 
+
+  loadCartInfo() {
+    this.cartInfo.getCartInfo().subscribe(response => {
+      this.carrito = response;
+
+      console.log(this.carrito);      
+    });
+  }
+
+  getSubTotal(){
+    return +((this.carrito.total_carrito / 1.21)).toFixed(2)
+  }
+
+  getCosteEnvio(){
+    return 2
+  }
+
+  getIVAimport(){
+    return +((this.carrito.total_carrito / 1.21)*0.21).toFixed(2)
+  }
+
+  getTotalPrice(){
+    return (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2)  
+  }
+
+  getPharmaInfo(){
+    return {"nombre": this.carrito.productos[0].producto_id.farmacia_id.nombre_farm,
+            "direccion": this.carrito.productos[0].producto_id.farmacia_id.direccion_farm,
+            "telefono": this.carrito.productos[0].producto_id.farmacia_id.telefono_farm}
+  }
+
+  getCardNumberMasked(cardNumber: string): string {
+    const cleanedCardNumber = cardNumber.replace(/\s/g, ''); // Elimina los espacios
+    return cleanedCardNumber.slice(-4).padStart(cleanedCardNumber.length, '*');
+  }
+
+  getCardType(cardNumber: string): string {
+
+    const cleanedCardNumber = cardNumber.replace(/[\s-]/g, '');
+
+    const cardPatterns: { [key: string]: RegExp } = {
+      'Amex': /^3[47][0-9]{13}$/,
+      'MasterCard': /^5[1-5][0-9]{14}$/,
+      'Visa': /^4[0-9]{12}(?:[0-9]{3})?$/,
+      'Discover': /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+      'JCB': /^(?:2131|1800|35\d{3})\d{11}$/,
+      'DinersClub': /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+      'PayPal': /^99[0-9]{10}$/, // Número ficticio para PayPal, debes adaptar según tus necesidades
+    };
+
+    for (const [cardType, pattern] of Object.entries(cardPatterns)) {
+      if (pattern.test(cleanedCardNumber)) {
+        return cardType;
+      }
+    }
+    return 'Unknown';
+  }
+
+
   backToCart(){
     this.router.navigate(['carrito/productos/lista']);
   }
+
+
+
+  emptyFieldsFunction(){
+    let emptyField = false;
+
+    if(this.FormPaymentProduct.get('payment_municipio')?.value === undefined ||
+       this.FormPaymentProduct.get('payment_municipio')?.value === ""){
+        emptyField=true;
+    }
+
+    Object.keys(this.FormPaymentProduct.controls).forEach(control => {
+      if(this.FormPaymentProduct.get(control)?.value=== ''){
+        emptyField = true;
+      }else if(this.FormPaymentProduct.get(control)?.value=== null){
+        emptyField = true;
+      }
+    })
+    this.campoFormVacio = emptyField;
+  }
+
+
+
+
+
+
 
   flipCard(){
     let card = document.getElementsByClassName('creditcard')[0]; 
@@ -225,8 +311,7 @@ export class PaymentComponent implements OnInit{
             pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
             heightLeft -= pageHeight;
         }
-        let date_compra = this.datePipe.transform(this.fecha_compra, 'yyyy-MM-dd')
-        pdf.save(`PSurPharmacy_${this.authService.getNamePicture().name}_${date_compra}.pdf`);
+        pdf.save(`PSurPharmacy_${this.authService.getNamePicture().name}_${this.date_compra}.pdf`);
     });
   }
 

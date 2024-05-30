@@ -30,7 +30,7 @@ class Compra(models.Model):
     fecha_compra = models.DateField(null=False, blank=False)
     direccion_envio = models.CharField(max_length=200)
     codigo_postal = models.IntegerField()
-    ciudad = models.CharField(max_length=100)
+    municipio = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
     cliente_id = models.ForeignKey('App_AuthUsers.Cliente', on_delete=models.CASCADE)
     # empleado_id = models.ForeignKey(settings.EMPLOYEE_MODEL, on_delete=models.CASCADE)

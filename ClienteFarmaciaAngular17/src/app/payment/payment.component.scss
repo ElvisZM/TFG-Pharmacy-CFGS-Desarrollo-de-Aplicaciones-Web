@@ -533,6 +533,13 @@ input {
     color: white;
 }
 
+button:disabled {
+    background-color: #d3d3d3; /* Color de fondo apagado */
+    color: #a9a9a9;           /* Color de texto apagado */
+    border: 1px solid #d3d3d3; /* Borde opcional */
+    cursor: not-allowed;       /* Cursor para indicar que está deshabilitado */
+    opacity: 0.6;              /* Opacidad para hacer que el botón se vea apagado */
+}
 
 
 
@@ -686,11 +693,11 @@ table th{
 }
 
 .invoice-1 .name{
-    font-size: 18px;
+    font-size: 15px;
     margin-bottom: 5px;
     text-transform: uppercase;
     color: #262525;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .invoice-1 .mb-10{
