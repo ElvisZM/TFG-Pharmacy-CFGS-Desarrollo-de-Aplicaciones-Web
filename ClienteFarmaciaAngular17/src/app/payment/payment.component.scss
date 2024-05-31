@@ -534,11 +534,11 @@ input {
 }
 
 button:disabled {
-    background-color: #d3d3d3; /* Color de fondo apagado */
-    color: #a9a9a9;           /* Color de texto apagado */
-    border: 1px solid #d3d3d3; /* Borde opcional */
-    cursor: not-allowed;       /* Cursor para indicar que está deshabilitado */
-    opacity: 0.6;              /* Opacidad para hacer que el botón se vea apagado */
+    background-color: #d3d3d3;
+    color: #a9a9a9;           
+    border: 1px solid #d3d3d3;
+    cursor: not-allowed;      
+    opacity: 0.6;             
 }
 
 
@@ -640,6 +640,12 @@ button:disabled {
     font-size: 14px;
     margin-bottom: 20px;
     line-height: 23px;
+}
+
+.invo-addr-1 {
+    white-space: nowrap;
+    word-break: break-all;
+
 }
 
 .invoice-content .item-desc-1 {

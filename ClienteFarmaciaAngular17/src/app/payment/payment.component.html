@@ -238,7 +238,7 @@
             
             <div class="d-flex justify-content-between botones ">
                 <button class="w-25 ms-4 fw-bold" name="back" (click)="backToCart()">Volver al carrito</button>
-                <button class="w-25 me-4 fw-bold" type="submit" name="update" [disabled]="campoFormVacio" (click)="export()">Realizar Compra</button>
+                <button class="w-25 me-4 fw-bold" type="submit" name="update"  (click)="export()">Realizar Compra</button>
             </div>
                                 
 
@@ -291,8 +291,9 @@
                                         </ng-container>    
                                         </h2>
                                         <p class="invo-addr-1">
-                                            {{carrito.usuario.email}} <br/>
-                                            21-12 Green Street, Meherpur, Bangladesh <br/>
+                                            {{carrito.usuario.email.replace('@', '&#64;').replace('.', '&#46;')}} <br/>
+                                            {{ this.getAdressComplete() }} <br/>
+                                            {{ this.getMunicipioProvincia() }}
                                         </p>
                                     </div>
                                 </div>
@@ -302,7 +303,7 @@
                                             <h4 class="inv-title-1">Empresa</h4>
                                             <h2 class="name mb-10">{{this.getPharmaInfo().nombre}}</h2>
                                             <p class="invo-addr-1">
-                                                www.elvisdevlab.com <br/>
+                                                www&#46;elvisdevlab&#46;com <br/>
                                                 {{this.getPharmaInfo().direccion}} <br/>
                                             </p>
                                         </div>

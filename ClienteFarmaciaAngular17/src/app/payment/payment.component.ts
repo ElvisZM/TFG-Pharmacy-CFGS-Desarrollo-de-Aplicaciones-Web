@@ -15,7 +15,6 @@ import { CartInfoService } from '../servicios/cart-info.service';
   selector: 'app-payment',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  providers: [DatePipe],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss'
 })
@@ -106,6 +105,9 @@ export class PaymentComponent implements OnInit{
   fecha_compra = new Date()
   date_compra = this.datePipe.transform(this.fecha_compra, 'yyyy-MM-dd')
 
+  pdfStored: any;
+
+  direccion_completa: string = '';
 
   constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService) { }
 
@@ -194,6 +196,19 @@ export class PaymentComponent implements OnInit{
       }
     }
     return 'Unknown';
+  }
+
+  getAdressComplete(){
+    let direccion = this.FormPaymentProduct.get('payment_direccion_envio')?.value.toString()
+    let codigo_postal = this.FormPaymentProduct.get('payment_codigo_postal')?.value.toString()
+    this.direccion_completa = `${direccion}, ${codigo_postal}`;
+    return this.direccion_completa.toString();
+  }
+
+  getMunicipioProvincia(){
+    let municipio = this.FormPaymentProduct.get('payment_municipio')?.value.toString()
+    let provincia = this.FormPaymentProduct.get('payment_provincia')?.value.toString()
+    return `${municipio}, ${provincia}`;
   }
 
 
@@ -285,33 +300,77 @@ export class PaymentComponent implements OnInit{
 
 
 
+  // export() {
+  //   console.log('printing');
+  //   const data = document.getElementById('pdfContent');
+  //   data!.style.display = 'block';
+  //   this.generatePDF(data);
+  //   data!.style.display = 'none';
+  // }
+
+  // generatePDF(htmlContent: any) {
+  //   html2canvas(htmlContent).then(canvas => {
+  //       const imgWidth = 210;
+  //       const pageHeight = 297;
+  //       const imgHeight = canvas.height * imgWidth / canvas.width;
+  //       let heightLeft = imgHeight;
+  //       const pdf = new jsPDF('p', 'mm', 'a4');
+  //       let position = 0;
+
+  //       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+  //       heightLeft -= pageHeight;
+
+  //       while (heightLeft >= 0) {
+  //           position = heightLeft - imgHeight;
+  //           pdf.addPage();
+  //           pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+  //           heightLeft -= pageHeight;
+  //       }
+  //       pdf.save(`PSurPharmacy_${this.authService.getNamePicture().name}_${this.date_compra}.pdf`);
+  //   });
+  // }
+
+
   export() {
     console.log('printing');
+    this.getAdressComplete()
     const data = document.getElementById('pdfContent');
     data!.style.display = 'block';
-    this.generatePDF(data);
+    this.generateAndSendPDF(data);
     data!.style.display = 'none';
+    this.router.navigate(['/confirmacion/pago'])
   }
 
-  generatePDF(htmlContent: any) {
+  generateAndSendPDF(htmlContent: any) {
     html2canvas(htmlContent).then(canvas => {
-        const imgWidth = 210;
-        const pageHeight = 297;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-        let heightLeft = imgHeight;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        let position = 0;
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      let position = 0;
 
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
 
-        while (heightLeft >= 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-        }
-        pdf.save(`PSurPharmacy_${this.authService.getNamePicture().name}_${this.date_compra}.pdf`);
+      while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+      }
+
+      // Convert the PDF to base64
+      const pdfOutput = pdf.output('arraybuffer');
+      const pdfBlob = new Blob([pdfOutput], { type: 'application/pdf' });
+      const reader = new FileReader();
+      reader.readAsDataURL(pdfBlob);
+      reader.onloadend = () => {
+          const base64data = reader.result as string;
+          this.savePayment.sendToPowerAutomate(base64data);
+      };
+
+      this.savePayment.pdfStored = pdfBlob;
     });
   }
 

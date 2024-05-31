@@ -23,6 +23,9 @@ import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } fro
 import { BuscadorSimpleComponent } from './buscador-simple/buscador-simple.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PaymentComponent } from './payment/payment.component';
+import { ConfirmationPaymentComponent } from './confirmation-payment/confirmation-payment.component';
+import { DatePipe } from '@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -51,8 +54,9 @@ import { PaymentComponent } from './payment/payment.component';
     BuscadorSimpleComponent,
     ShoppingCartComponent,
     PaymentComponent,
+    ConfirmationPaymentComponent
   ],
-  providers: [ CsvproductosService],
+  providers: [ CsvproductosService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

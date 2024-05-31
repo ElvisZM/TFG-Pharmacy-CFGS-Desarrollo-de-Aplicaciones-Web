@@ -74,7 +74,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   redirectToPayment(){
-    this.router.navigate(['/confirmacion/pago']);
+    this.router.navigate(['/tipo/pago']);
   }
 
   deleteProductFromCart(producto_id: number){

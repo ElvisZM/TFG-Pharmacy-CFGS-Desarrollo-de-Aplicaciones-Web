@@ -58,6 +58,9 @@ export class AppComponent implements OnInit, DoCheck {
 
   products(){
     this.router.navigate(['productos/lista/completa']);
+    setTimeout(() => 
+      window.location.reload()
+    );
   }
 
   adminPanel(){
