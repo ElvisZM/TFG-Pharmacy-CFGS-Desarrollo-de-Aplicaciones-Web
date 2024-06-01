@@ -107,15 +107,17 @@ export class PaymentComponent implements OnInit{
 
   pdfStored: any;
 
-  direccion_completa: string = '';
+  direccion_completa!: string;
 
   constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService) { }
 
   ngOnInit() {
-    this.loadCartInfo();
     this.titleService.setTitle('Confirmacion de Pago');
+    this.cartInfo.getCartInfo().subscribe(response => {
 
-
+      this.carrito = response;
+        
+    });
 
     this.FormPaymentProduct = this.fb.group({
       payment_nombre_titular:['', Validators.required],
@@ -143,7 +145,6 @@ export class PaymentComponent implements OnInit{
 
   loadCartInfo() {
     this.cartInfo.getCartInfo().subscribe(response => {
-      this.carrito = response;
 
       console.log(this.carrito);      
     });
@@ -162,15 +163,21 @@ export class PaymentComponent implements OnInit{
   }
 
   getTotalPrice(){
+    this.savePayment.total_compra = +((this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2));
     return (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2)  
   }
-
-  getPharmaInfo(){
-    return {"nombre": this.carrito.productos[0].producto_id.farmacia_id.nombre_farm,
+  getPharmaInfo() {
+    if (this.carrito && this.carrito.productos && this.carrito.productos.length > 0) {
+        return {
+            "nombre": this.carrito.productos[0].producto_id.farmacia_id.nombre_farm,
             "direccion": this.carrito.productos[0].producto_id.farmacia_id.direccion_farm,
-            "telefono": this.carrito.productos[0].producto_id.farmacia_id.telefono_farm}
-  }
-
+            "telefono": this.carrito.productos[0].producto_id.farmacia_id.telefono_farm
+        };
+    } else {
+        return {};
+    }
+}
+    
   getCardNumberMasked(cardNumber: string): string {
     const cleanedCardNumber = cardNumber.replace(/\s/g, ''); // Elimina los espacios
     return cleanedCardNumber.slice(-4).padStart(cleanedCardNumber.length, '*');
@@ -199,16 +206,24 @@ export class PaymentComponent implements OnInit{
   }
 
   getAdressComplete(){
-    let direccion = this.FormPaymentProduct.get('payment_direccion_envio')?.value.toString()
-    let codigo_postal = this.FormPaymentProduct.get('payment_codigo_postal')?.value.toString()
-    this.direccion_completa = `${direccion}, ${codigo_postal}`;
-    return this.direccion_completa.toString();
+    let direccion = this.FormPaymentProduct.get('payment_direccion_envio')?.value.toString();
+    let codigo_postal = this.FormPaymentProduct.get('payment_codigo_postal')?.value.toString();
+    let adress = `${direccion}, ${codigo_postal}`;
+    this.savePayment.direccion_envio = adress;
+
+    return adress;
+  }
+
+  getPostalCode(){
+    return this.FormPaymentProduct.get('payment_codigo_postal')?.value.toString();
   }
 
   getMunicipioProvincia(){
     let municipio = this.FormPaymentProduct.get('payment_municipio')?.value.toString()
     let provincia = this.FormPaymentProduct.get('payment_provincia')?.value.toString()
-    return `${municipio}, ${provincia}`;
+    let muni_prov = `${municipio}, ${provincia}`;
+    this.savePayment.municipio_provincia = muni_prov;
+    return muni_prov;
   }
 
 
@@ -367,7 +382,7 @@ export class PaymentComponent implements OnInit{
       reader.readAsDataURL(pdfBlob);
       reader.onloadend = () => {
           const base64data = reader.result as string;
-          this.savePayment.sendToPowerAutomate(base64data);
+          this.savePayment.sendToPowerAutomate(base64data, this.carrito);
       };
 
       this.savePayment.pdfStored = pdfBlob;

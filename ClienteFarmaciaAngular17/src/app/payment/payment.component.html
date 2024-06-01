@@ -1,4 +1,4 @@
-<div class="container bg-light d-md-flex align-items-center">
+<div class="container bg-light d-md-flex align-items-center" *ngIf="carrito">
     <div class="card box1 shadow-sm p-md-5 p-md-5 p-4">
         <div class="fw-bolder mb-4"></div>
 
@@ -283,17 +283,20 @@
                         <div class="invoice-top">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="invoice-number mb-30">
+                                    <div class="invoice-number mb-30" *ngIf="carrito">
                                         <h4 class="inv-title-1">Cliente</h4>
-                                        <h2 class="name mb-10">{{carrito.cliente.usuario.first_name}}
-                                        <ng-container *ngIf="carrito.usuario.last_name">
-                                            {{carrito.usuario.last_name}}
-                                        </ng-container>    
-                                        </h2>
-                                        <p class="invo-addr-1">
-                                            {{carrito.usuario.email.replace('@', '&#64;').replace('.', '&#46;')}} <br/>
-                                            {{ this.getAdressComplete() }} <br/>
-                                            {{ this.getMunicipioProvincia() }}
+                                        <div class="d-flex" *ngIf="carrito?.cliente?.usuario">
+                                            <h2 class="name mb-10" >{{carrito.cliente.usuario.first_name}}</h2>
+                                            <h2 class="name mb-10 ms-1" *ngIf="carrito.usuario">{{carrito.usuario.last_name}}</h2>
+                                        </div>
+                                        <p class="">
+                                            {{carrito && carrito.usuario ? carrito.usuario.email : ''}}
+                                        </p>
+                                        <p>
+                                            {{this.getAdressComplete()}} 
+                                        </p>
+                                        <p>
+                                            {{this.getMunicipioProvincia()}} 
                                         </p>
                                     </div>
                                 </div>
@@ -302,9 +305,10 @@
                                         <div class="invoice-number-inner">
                                             <h4 class="inv-title-1">Empresa</h4>
                                             <h2 class="name mb-10">{{this.getPharmaInfo().nombre}}</h2>
-                                            <p class="invo-addr-1">
+                                            <p class="">
                                                 www&#46;elvisdevlab&#46;com <br/>
                                                 {{this.getPharmaInfo().direccion}} <br/>
+                                                Sevilla, Sevilla <br/>
                                             </p>
                                         </div>
                                     </div>
