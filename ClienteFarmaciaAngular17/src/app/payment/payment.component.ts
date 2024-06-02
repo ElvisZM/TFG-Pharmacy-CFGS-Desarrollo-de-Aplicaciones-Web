@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, DoCheck, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas'; 
 import { AuthService } from '../servicios/auth.service';
 import { CartInfoService } from '../servicios/cart-info.service';
+import { color } from 'html2canvas/dist/types/css/types/color';
 
 @Component({
   selector: 'app-payment',
@@ -109,14 +110,25 @@ export class PaymentComponent implements OnInit{
 
   direccion_completa!: string;
 
-  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService) { }
+  @ViewChild('paymentPayPal') paymentPayPal!: ElementRef;
+
+  showPayPal: boolean = false;
+  total_price: string="";
+  PayPalData: boolean = false;
+  PayPalIdTransaction: string = "";
+  PayPalEmailTransaction: string = "";
+  PayPalClientName: string = "";
+  PayPalShippingAddress: string = "";
+  PayPalMunicipioProvincia: string= "";
+  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.titleService.setTitle('Confirmacion de Pago');
     this.cartInfo.getCartInfo().subscribe(response => {
 
       this.carrito = response;
-        
+      this.total_price = (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2).toString()
+      console.log(this.total_price)         
     });
 
     this.FormPaymentProduct = this.fb.group({
@@ -129,27 +141,77 @@ export class PaymentComponent implements OnInit{
       payment_municipio:['', Validators.required],
       payment_provincia:[''],
     });
+  }
 
+  ngAfterViewInit() {
+    if (this.paymentPayPal) {
+      window.paypal.Buttons(
+        {
+          style: {
+            layout: 'horizontal',
+            color: 'blue',
+            shape: 'rect',
+            label: 'paypal'
+          },
+          createOrder: (data: any, actions: any) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: this.total_price,
+                    currency_code: "EUR"
+                  }
+                }
+              ]
+            })
+          },
+          onApprove: (data: any, actions: any) => {
+            return actions.order.capture().then((details: any) => {
+              this.PayPalData = true;
+              this.PayPalIdTransaction = details.id
+              this.PayPalEmailTransaction = details.payer.email_address
+              this.PayPalClientName = details.payer.name.given_name + " " + details.payer.name.surname
+              this.PayPalShippingAddress = details.purchase_units[0].shipping.address.address_line_1 + ", " + details.purchase_units[0].shipping.address.postal_code
+              this.PayPalMunicipioProvincia = details.purchase_units[0].shipping.address.admin_area_1 + ", " + details.purchase_units[0].shipping.address.admin_area_2
+
+              this.changeDetector.detectChanges();
+              this.buyProductPayPal();
+              
+            });
+          },
+          onError: (error: any) => {
+            console.error(error);
+          }
+        }
+      ).render(this.paymentPayPal.nativeElement);
+    } else {
+      console.error('paymentPayPal is undefined');
+    }
   }
 
   ngDoCheck(){
     if(this.FormPaymentProduct){
       this.emptyFieldsFunction();
     }
+    
   }
 
-  buyProduct(){
-    // return this.savePayment.creditcardPayment()
+  buyProductPayPal(){
+    this.savePayment.nombre_cli = this.PayPalClientName
+    this.savePayment.id_pedido = this.carrito.codigo_compra
+    this.savePayment.metodo_pago = 'PayPal'
+    this.savePayment.direccion_envio = this.PayPalShippingAddress
+    this.savePayment.municipio_provincia = this.PayPalMunicipioProvincia
+    this.savePayment.telefono_farm = this.getPharmaInfo().telefono
+    const data = document.getElementById('pdfContent');
+    data!.style.display = 'block';
+    this.generateAndSendPDF(data);
+    data!.style.display = 'none';
+    this.router.navigate(['/confirmacion/pago'])
+
   }
 
-
-  loadCartInfo() {
-    this.cartInfo.getCartInfo().subscribe(response => {
-
-      console.log(this.carrito);      
-    });
-  }
-
+  
   getSubTotal(){
     return +((this.carrito.total_carrito / 1.21)).toFixed(2)
   }
@@ -164,7 +226,7 @@ export class PaymentComponent implements OnInit{
 
   getTotalPrice(){
     this.savePayment.total_compra = +((this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2));
-    return (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2)  
+    return this.savePayment.total_compra
   }
   getPharmaInfo() {
     if (this.carrito && this.carrito.productos && this.carrito.productos.length > 0) {
@@ -194,11 +256,11 @@ export class PaymentComponent implements OnInit{
       'Discover': /^6(?:011|5[0-9]{2})[0-9]{12}$/,
       'JCB': /^(?:2131|1800|35\d{3})\d{11}$/,
       'DinersClub': /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-      'PayPal': /^99[0-9]{10}$/, // Número ficticio para PayPal, debes adaptar según tus necesidades
     };
 
     for (const [cardType, pattern] of Object.entries(cardPatterns)) {
       if (pattern.test(cleanedCardNumber)) {
+        this.savePayment.metodo_pago = cardType
         return cardType;
       }
     }
@@ -313,7 +375,17 @@ export class PaymentComponent implements OnInit{
     this.cvv = cvvInput;
   }
 
+  showCreditCardMethod(){
+    let pp = document.getElementById('pp')
+    pp?.setAttribute('class', 'd-none')
+    this.showPayPal = false;
+  }
 
+  showPayPalMethod(){
+    let pp = document.getElementById('pp')
+    pp?.setAttribute('class', 'd-block')
+    this.showPayPal = true;
+  }
 
   // export() {
   //   console.log('printing');
@@ -346,9 +418,11 @@ export class PaymentComponent implements OnInit{
   // }
 
 
-  export() {
+  buyProductCreditCard() {
     console.log('printing');
-    this.getAdressComplete()
+    this.savePayment.nombre_cli = this.carrito.cliente.usuario.first_name + ' ' + this.carrito.cliente.usuario.last_name
+    this.savePayment.id_pedido = this.carrito.codigo_compra
+    this.savePayment.telefono_farm = this.getPharmaInfo().telefono
     const data = document.getElementById('pdfContent');
     data!.style.display = 'block';
     this.generateAndSendPDF(data);
@@ -375,14 +449,13 @@ export class PaymentComponent implements OnInit{
           heightLeft -= pageHeight;
       }
 
-      // Convert the PDF to base64
       const pdfOutput = pdf.output('arraybuffer');
       const pdfBlob = new Blob([pdfOutput], { type: 'application/pdf' });
       const reader = new FileReader();
       reader.readAsDataURL(pdfBlob);
       reader.onloadend = () => {
           const base64data = reader.result as string;
-          this.savePayment.sendToPowerAutomate(base64data, this.carrito);
+          // this.savePayment.sendToPowerAutomate(base64data, this.carrito, this.PayPalData);
       };
 
       this.savePayment.pdfStored = pdfBlob;

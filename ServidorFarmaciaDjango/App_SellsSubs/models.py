@@ -32,6 +32,7 @@ class Compra(models.Model):
     codigo_postal = models.IntegerField()
     municipio = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
+    total_pagar = models.FloatField() 
     cliente_id = models.ForeignKey('App_AuthUsers.Cliente', on_delete=models.CASCADE)
     # empleado_id = models.ForeignKey(settings.EMPLOYEE_MODEL, on_delete=models.CASCADE)
     carrito_id = models.OneToOneField(CarritoCompra, on_delete=models.CASCADE)

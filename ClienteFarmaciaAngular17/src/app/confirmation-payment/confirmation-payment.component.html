@@ -10,7 +10,7 @@
 
                         <h5 class="text-center"><b>¡Gracias por tu compra en Polígono Sur Pharmacy!</b></h5>
 
-                        <span class="font-weight-bold d-block mt-4">Hola, Chris</span>
+                        <span class="font-weight-bold d-block mt-4">Hola, {{nombre_cliente}}</span>
                         <span>Nos complace informarte que tu pedido ha sido confirmado y está en proceso de preparación. A continuación, te proporcionamos los detalles de tu compra:</span>
 
                         <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
@@ -23,7 +23,7 @@
                                             <div class="py-2 text-center">
 
                                                 <span class="d-block text-muted">Fecha Compra</span>
-                                            <span class="d-block pt-3">12 Jan,2018</span>
+                                            <span class="d-block pt-3">{{fecha_compra}}</span>
                                                 
                                             </div>
                                         </td>
@@ -32,7 +32,7 @@
                                             <div class="py-2 text-center">
 
                                                 <span class="d-block text-muted">No Pedido</span>
-                                            <span class="d-block pt-3">MT12332345</span>
+                                            <span class="d-block pt-3">{{numero_pedido}}</span>
                                                 
                                             </div>
                                         </td>
@@ -40,8 +40,8 @@
                                         <td>
                                             <div class="py-2 text-center">
 
-                                                <span class="d-block text-muted">Método de pago</span>
-                                                <span class="d-block pt-3">Mastercard</span>
+                                                <span class="d-block text-muted">Tipo de pago</span>
+                                                <span class="d-block pt-3">{{metodo_pago}}</span>
                                                 
                                             </div>
                                         </td>
@@ -49,8 +49,8 @@
                                         <td>
                                             <div class="py-2 text-center">
 
-                                                <span class="d-block text-muted">Shiping Address</span>
-                                            <span class="d-block pt-3">414 Advert Avenue, NY,USA</span>
+                                                <span class="d-block text-muted">Direccion de Envío</span>
+                                            <span class="d-block pt-3">{{address}}</span>
                                                 
                                             </div>
                                         </td>
@@ -67,7 +67,7 @@
 
                         <p>Si deseas descargar tu factura inmediatamente, por favor haz clic <a style="cursor: pointer;" (click)="downloadPDF()">aquí</a>.</p>
                             
-                        <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos en servicioalcliente.psurpharmacy&#64;hotmail.com o llamarnos al [Número de teléfono de soporte].</p>
+                        <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos en servicioalcliente.psurpharmacy&#64;hotmail.com o llamarnos al {{telefono}}.</p>
                         
                         <p >Gracias por confiar en nosotros.</p>
                         
