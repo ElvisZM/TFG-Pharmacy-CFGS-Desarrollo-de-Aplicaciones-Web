@@ -25,6 +25,7 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ConfirmationPaymentComponent } from './confirmation-payment/confirmation-payment.component';
 import { DatePipe } from '@angular/common';
+import { ProductDetailsComponent } from './product-details/product-details.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { DatePipe } from '@angular/common';
     BuscadorSimpleComponent,
     ShoppingCartComponent,
     PaymentComponent,
-    ConfirmationPaymentComponent
+    ConfirmationPaymentComponent,
+    ProductDetailsComponent
   ],
   providers: [ CsvproductosService, DatePipe],
   bootstrap: [AppComponent]

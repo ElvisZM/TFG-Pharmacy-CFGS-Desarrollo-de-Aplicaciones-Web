@@ -14,6 +14,7 @@ import { AllproductsComponent } from './allproducts/allproducts.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ConfirmationPaymentComponent } from './confirmation-payment/confirmation-payment.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'carrito/productos/lista', component: ShoppingCartComponent},
   { path: 'tipo/pago', component: PaymentComponent},
   { path: 'confirmacion/pago', component: ConfirmationPaymentComponent },
+  { path: 'detalles/producto', component: ProductDetailsComponent},
 
   { path: '**', component: NotfoundpageComponent}
 ];
