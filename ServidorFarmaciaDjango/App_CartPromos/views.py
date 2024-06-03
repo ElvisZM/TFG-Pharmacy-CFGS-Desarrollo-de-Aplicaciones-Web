@@ -95,7 +95,8 @@ def carrito_usuario(request):
             return Response(serializer)
         
         except CarritoCompra.DoesNotExist:
-            codigo_id_compra = str(np.random.randint(1,10,5))
+            num_aleatorios = list(map(str, np.random.randint(1,10,10)))
+            codigo_id_compra = 'CC'+''.join(num_aleatorios)
             
             
             CarritoCompra.objects.create(codigo_compra=codigo_id_compra, usuario=request.user, finalizado=False)

@@ -24,7 +24,7 @@ class CarritoCompra(models.Model):
 
 class ContenidoCarrito(models.Model):    
     cantidad_producto = models.IntegerField(default=1)
-    producto_id = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    carrito_id = models.ForeignKey(CarritoCompra, on_delete=models.CASCADE)
+    producto_id = models.ForeignKey(Producto, on_delete=models.CASCADE, db_column='producto_id')
+    carrito_id = models.ForeignKey(CarritoCompra, on_delete=models.CASCADE, db_column='carrito_id')
 
 

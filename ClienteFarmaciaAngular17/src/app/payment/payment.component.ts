@@ -10,7 +10,6 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas'; 
 import { AuthService } from '../servicios/auth.service';
 import { CartInfoService } from '../servicios/cart-info.service';
-import { color } from 'html2canvas/dist/types/css/types/color';
 
 @Component({
   selector: 'app-payment',
@@ -44,7 +43,6 @@ export class PaymentComponent implements OnInit{
   selectedProvinciaOption!: string;
 
   campoFormVacio: boolean = false;
-  formVacioError: string = 'Por favor, rellene todos los campos.';
 
   carrito: any = {};
 
@@ -120,10 +118,11 @@ export class PaymentComponent implements OnInit{
   PayPalClientName: string = "";
   PayPalShippingAddress: string = "";
   PayPalMunicipioProvincia: string= "";
+
   constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.titleService.setTitle('Confirmacion de Pago');
+    this.titleService.setTitle('Metodo de Pago');
     this.cartInfo.getCartInfo().subscribe(response => {
 
       this.carrito = response;
@@ -168,8 +167,11 @@ export class PaymentComponent implements OnInit{
           onApprove: (data: any, actions: any) => {
             return actions.order.capture().then((details: any) => {
               this.PayPalData = true;
+              console.log(details);
               this.PayPalIdTransaction = details.id
+              this.savePayment.idTransactionPayPal = this.PayPalIdTransaction
               this.PayPalEmailTransaction = details.payer.email_address
+              this.savePayment.paypalEmailTransaccion = this.PayPalEmailTransaction
               this.PayPalClientName = details.payer.name.given_name + " " + details.payer.name.surname
               this.PayPalShippingAddress = details.purchase_units[0].shipping.address.address_line_1 + ", " + details.purchase_units[0].shipping.address.postal_code
               this.PayPalMunicipioProvincia = details.purchase_units[0].shipping.address.admin_area_1 + ", " + details.purchase_units[0].shipping.address.admin_area_2
@@ -199,7 +201,8 @@ export class PaymentComponent implements OnInit{
   buyProductPayPal(){
     this.savePayment.nombre_cli = this.PayPalClientName
     this.savePayment.id_pedido = this.carrito.codigo_compra
-    this.savePayment.metodo_pago = 'PayPal'
+    this.savePayment.metodo_pago = 'paypal'
+    this.savePayment.tipo_tarjeta = 'PayPal'
     this.savePayment.direccion_envio = this.PayPalShippingAddress
     this.savePayment.municipio_provincia = this.PayPalMunicipioProvincia
     this.savePayment.telefono_farm = this.getPharmaInfo().telefono
@@ -207,6 +210,7 @@ export class PaymentComponent implements OnInit{
     data!.style.display = 'block';
     this.generateAndSendPDF(data);
     data!.style.display = 'none';
+    this.savePayment.savingData(this.carrito.usuario.id);
     this.router.navigate(['/confirmacion/pago'])
 
   }
@@ -242,6 +246,7 @@ export class PaymentComponent implements OnInit{
     
   getCardNumberMasked(cardNumber: string): string {
     const cleanedCardNumber = cardNumber.replace(/\s/g, ''); // Elimina los espacios
+    this.savePayment.cardNumber = cleanedCardNumber;
     return cleanedCardNumber.slice(-4).padStart(cleanedCardNumber.length, '*');
   }
 
@@ -260,7 +265,7 @@ export class PaymentComponent implements OnInit{
 
     for (const [cardType, pattern] of Object.entries(cardPatterns)) {
       if (pattern.test(cleanedCardNumber)) {
-        this.savePayment.metodo_pago = cardType
+        this.savePayment.tipo_tarjeta = cardType
         return cardType;
       }
     }
@@ -365,7 +370,7 @@ export class PaymentComponent implements OnInit{
 
   onCardTitularInput(event: any): void {
     let cardTitularInput = event.target.value;
-
+    this.savePayment.titular_card = cardTitularInput;
     this.cardTitular = cardTitularInput;
   }
 
@@ -387,46 +392,17 @@ export class PaymentComponent implements OnInit{
     this.showPayPal = true;
   }
 
-  // export() {
-  //   console.log('printing');
-  //   const data = document.getElementById('pdfContent');
-  //   data!.style.display = 'block';
-  //   this.generatePDF(data);
-  //   data!.style.display = 'none';
-  // }
-
-  // generatePDF(htmlContent: any) {
-  //   html2canvas(htmlContent).then(canvas => {
-  //       const imgWidth = 210;
-  //       const pageHeight = 297;
-  //       const imgHeight = canvas.height * imgWidth / canvas.width;
-  //       let heightLeft = imgHeight;
-  //       const pdf = new jsPDF('p', 'mm', 'a4');
-  //       let position = 0;
-
-  //       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-  //       heightLeft -= pageHeight;
-
-  //       while (heightLeft >= 0) {
-  //           position = heightLeft - imgHeight;
-  //           pdf.addPage();
-  //           pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-  //           heightLeft -= pageHeight;
-  //       }
-  //       pdf.save(`PSurPharmacy_${this.authService.getNamePicture().name}_${this.date_compra}.pdf`);
-  //   });
-  // }
-
-
   buyProductCreditCard() {
     console.log('printing');
     this.savePayment.nombre_cli = this.carrito.cliente.usuario.first_name + ' ' + this.carrito.cliente.usuario.last_name
     this.savePayment.id_pedido = this.carrito.codigo_compra
+    this.savePayment.metodo_pago = "creditcard"
     this.savePayment.telefono_farm = this.getPharmaInfo().telefono
     const data = document.getElementById('pdfContent');
     data!.style.display = 'block';
     this.generateAndSendPDF(data);
     data!.style.display = 'none';
+    this.savePayment.savingData(this.carrito.usuario.id);
     this.router.navigate(['/confirmacion/pago'])
   }
 

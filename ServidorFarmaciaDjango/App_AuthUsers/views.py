@@ -18,7 +18,7 @@ from .forms import *
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import Group
-from oauth2_provider.models import AccessToken
+from oauth2_provider.models import AccessToken, Application
 from django.conf import settings
 from datetime import date, timedelta
 import numpy as np
@@ -129,11 +129,12 @@ class registrar_usuario_google(generics.CreateAPIView):
                     rol = serializers.data.get('rol')
                     
                     token_expiration = timezone.now() + timedelta(seconds=settings.OAUTH2_PROVIDER['ACCESS_TOKEN_EXPIRE_SECONDS'])
+                    aplicacion = Application.objects.all().first()                    
                     
                     if comprobar_usuario_existente:
                         
                         if comprobar_usuario_existente.first_name == serializers.data.get('first_name'):
-                            AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=1, user_id=comprobar_usuario_existente.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
+                            AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=aplicacion.id, user_id=comprobar_usuario_existente.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
                             return Response('Usuario ya registrado', status=status.HTTP_200_OK)
                         
                         return Response('El email ya existe en otro usuario', status=status.HTTP_400_BAD_REQUEST)
@@ -146,7 +147,7 @@ class registrar_usuario_google(generics.CreateAPIView):
                             rol = rol,
                             )
                     
-                    AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=1, user_id=user.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
+                    AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=aplicacion.id, user_id=user.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
                     
                     
                     if(rol == Usuario.CLIENTE):
@@ -210,11 +211,11 @@ class registrar_usuario_facebook(generics.CreateAPIView):
                     rol = serializers.data.get('rol')
                     
                     token_expiration = timezone.now() + timedelta(seconds=settings.OAUTH2_PROVIDER['ACCESS_TOKEN_EXPIRE_SECONDS'])
-                    
+                    aplicacion = Application.objects.all().first()                    
                     if comprobar_usuario_existente:
                         
                         if comprobar_usuario_existente.first_name == serializers.data.get('first_name'):
-                            AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=1, user_id=comprobar_usuario_existente.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
+                            AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=aplicacion.id, user_id=comprobar_usuario_existente.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
                             return Response('Usuario ya registrado', status=status.HTTP_200_OK)
                         
                         return Response('El email ya existe en otro usuario', status=status.HTTP_400_BAD_REQUEST)
@@ -228,7 +229,7 @@ class registrar_usuario_facebook(generics.CreateAPIView):
                             rol = rol,
                             )
                     
-                    AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=1, user_id=user.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
+                    AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=aplicacion.id, user_id=user.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
                     
                     
                     if(rol == Usuario.CLIENTE):

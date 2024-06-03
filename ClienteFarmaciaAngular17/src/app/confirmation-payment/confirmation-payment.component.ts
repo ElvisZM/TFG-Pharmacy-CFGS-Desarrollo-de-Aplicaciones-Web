@@ -14,7 +14,7 @@ export class ConfirmationPaymentComponent implements OnInit {
   nombre_cliente: string = "";
   fecha_compra: any;
   numero_pedido: string = "";
-  metodo_pago: string = "";
+  tipo_tarjeta: string = "";
   address: string = "";
   telefono: string = "";
 
@@ -28,7 +28,7 @@ export class ConfirmationPaymentComponent implements OnInit {
     this.nombre_cliente = this.savePayment.nombre_cli
     this.fecha_compra = this.savePayment.date_compra
     this.numero_pedido = this.savePayment.id_pedido
-    this.metodo_pago = this.savePayment.metodo_pago
+    this.tipo_tarjeta = this.savePayment.tipo_tarjeta
     this.address = this.savePayment.direccion_envio + ", " + this.savePayment.municipio_provincia
     this.telefono = this.savePayment.telefono_farm
   }
