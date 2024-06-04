@@ -32,7 +32,7 @@ export class DatosService {
   }
 
   getProductsList(): Observable<any> {
-    const headers = this.authService.getHeadersUserInfo()
+    const headers = this.authService.getHeadersInfoAPI()
     return this.http.get<any>(this.urlPath+'productos/list', headers)
   }
 
@@ -52,12 +52,18 @@ export class DatosService {
   }
 
   getProduct(cn_prod: number, cif_farm: string ): Observable<any> {
-    const headers = this.authService.getHeadersUserInfo()
+    const headers = this.authService.getHeadersInfoAPI()
     return this.http.get<any>(this.urlPath+'producto/'+cn_prod+'/'+cif_farm, headers)
   }
 
+  getProductRecommended(cat_name: string): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'producto/recomendado/'+cat_name, headers)
+  }
+
   simpleSearchProduct(palabraBuscada: string): Observable<any> {
-    return this.http.get<any>(this.urlPath+'productos/buscador/query/simple', { params: { textoBusqueda: palabraBuscada } })
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/buscador/query/simple/'+palabraBuscada, headers)
   }
 
   getProvider(cn_prod: number): Observable<any> {

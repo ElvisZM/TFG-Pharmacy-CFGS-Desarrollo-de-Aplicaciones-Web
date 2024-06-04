@@ -6,7 +6,7 @@
   <div class="col-sm-3 card" *ngFor="let producto of AllProducts">
     <div class="thumb-wrapper">
       <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-      <div class="img-box">
+      <div class="img-box bg-primary container" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)" style="cursor: pointer;">
         <img [src]="urlPicture + producto.imagen_prod" class="img-fluid imagen_prod" [alt]="producto.nombre_prod" *ngIf="producto.imagen_prod">									
         <img src="../../assets/imagenes/NoProductImageAvailable.png" class="img-fluid imagen_prod" alt="producto.nombre_prod" *ngIf="!producto.imagen_prod">									
       </div>

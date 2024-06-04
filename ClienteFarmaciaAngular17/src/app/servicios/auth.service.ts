@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment';
 
 
 export class AuthService {
+  private APITokenNoLoggedIn = environment.APITokenNoLoggedIn
 
   private urlPath = environment.apiUrlAuthUsers;
 
@@ -78,6 +79,14 @@ export class AuthService {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.getTokenCookie()}`
       })}
+  }
+
+  getHeadersInfoAPI(){
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.APITokenNoLoggedIn}`
+      })
+    }
   }
 
   getUserInfo(){

@@ -30,7 +30,7 @@ const routes: Routes = [
   { path: 'carrito/productos/lista', component: ShoppingCartComponent},
   { path: 'tipo/pago', component: PaymentComponent},
   { path: 'confirmacion/pago', component: ConfirmationPaymentComponent },
-  { path: 'detalles/producto', component: ProductDetailsComponent},
+  { path: 'detalles/producto/:cn_prod/:cif_farm', component: ProductDetailsComponent},
 
   { path: '**', component: NotfoundpageComponent}
 ];

@@ -127,7 +127,6 @@ export class PaymentComponent implements OnInit{
 
       this.carrito = response;
       this.total_price = (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2).toString()
-      console.log(this.total_price)         
     });
 
     this.FormPaymentProduct = this.fb.group({

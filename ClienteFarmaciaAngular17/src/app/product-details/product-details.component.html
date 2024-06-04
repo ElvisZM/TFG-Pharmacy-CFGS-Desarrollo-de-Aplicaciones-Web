@@ -1,14 +1,14 @@
-    <!-- Breadcrumb Section Begin -->
+<div *ngIf="product">
     <section class="breadcrumb-section set-bg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Vegetable’s Package</h2>
+                        <h2>{{product.nombre_prod}}</h2>
                         <div class="breadcrumb__option">
-                            <a href="./index.html">Home</a>
-                            <a href="./index.html">Vegetables</a>
-                            <span>Vegetable’s Package</span>
+                            <a href="./index.html">Categorías</a>
+                            <a href="./index.html">{{product.categoria_id.nombre_cat}}</a>
+                            <span>{{product.nombre_prod}}</span>
                         </div>
                     </div>
                 </div>
@@ -24,15 +24,18 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
-                            <img class="product__details__pic__item--large"
-                                src="../../assets/imagenes/ibuprofeno.jpg" alt="">
+                            <img *ngIf="api_imagen_existe" class="product__details__pic__item--large"
+                                [src]="api_imagen_url" alt="Imagen del Producto">
+                            <img *ngIf="!api_imagen_existe" class="product__details__pic__item--large"
+                                src="../../assets/imagenes/NoProductImageAvailable.png" alt="Producto sin Imagen">
+
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>Vetgetable’s Package</h3>
+                        <h3>{{product.nombre_prod}}</h3>
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -41,24 +44,54 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div>
-                        <div class="product__details__price">$50.00</div>
-                        <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
-                            vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
-                            quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
-                        <div class="product__details__quantity">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="number" value="1">
-                                </div>
+                        <div class="product__details__price">{{product.precio}} €</div>
+                        <p>{{product.descripcion}}</p>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="col-md-2 col-4 product__details__quantity">
+                                <label class="mb-2 quantity">Cantidad</label>
+                                <ng-container *ngIf="product.stock >= 10">
+                                    <select class="form-select border border-secondary " style="height: 35px;">
+                                        <ng-container *ngFor="let number of quantityOptions ">
+                                            <option [value]="number" [selected]="number === 1">{{number}}</option>
+                                        </ng-container>
+                                    </select>
+                                </ng-container>
+
+                                <ng-container *ngIf="product.stock < 10">
+                                    <select class="form-select border border-secondary " style="height: 35px;">
+                                        <ng-container *ngFor="let i of [].constructor(product.stock + 1)">
+                                            <option [value]=i [selected]="i === 1">{{i}}</option>
+                                        </ng-container>
+                                    </select>
+                                </ng-container>
+
+                            </div>
+                            <div class="col-md-6 col-8 d-flex ms-3 mt-4"> <button class="cart-button me-4">
+                                    <span class="add-to-cart">Añadir</span>
+                                    <span class="added">Añadido</span>
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <i class="fas fa-box"></i>
+                                </button>
+                                <button class="favorite-button">
+                                    <div class="icon">
+                                        <div class="star"></div>
+                                    </div>
+                                    <span>Me gusta</span>
+                                </button>
                             </div>
                         </div>
-                        <a href="#" class="primary-btn">ADD TO CARD</a>
+
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
-                            <li><b>Availability</b> <span>In Stock</span></li>
-                            <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                            <li><b>Weight</b> <span>0.5 kg</span></li>
-                            <li><b>Share on</b>
+                            <li><b>Disponibilidad</b>
+                                <span *ngIf="product.stock > 0">En Stock</span>
+                                <span *ngIf="product.stock === 0">Sin Stock</span>
+                            </li>
+
+                            <li><b>Categoria</b> <span>{{product.categoria_id.nombre_cat}} </span></li>
+                            <li><b>Laboratorio</b> <span>{{product.proveedor_id[0].nombre_prov}}</span></li>
+                            <li><b>Compartir</b>
                                 <div class="share">
                                     <a href="#"><i class="fa-brands fa-tiktok"></i></a>
                                     <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
@@ -69,70 +102,387 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="col-lg-12">
                     <div class="product__details__tab">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                    aria-selected="true">Description</a>
+                                <a class="nav-link active" [class.active]="review" data-toggle="tab"
+                                    style="cursor: pointer;" role="tab" aria-selected="true"
+                                    (click)="showReviews()">Reviews <span>(1)</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                                    aria-selected="false">Information</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                    aria-selected="false">Reviews <span>(1)</span></a>
+                                <a class="nav-link" [class.active]="!review" data-toggle="tab" style="cursor: pointer;"
+                                    role="tab" aria-selected="false" (click)="showProspecto()">Prospecto</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                        Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Vivamus
-                                        suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam sit amet quam
-                                        vehicula elementum sed sit amet dui. Donec rutrum congue leo eget malesuada.
-                                        Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur arcu erat,
-                                        accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a
-                                        pellentesque nec, egestas non nisi. Vestibulum ac diam sit amet quam vehicula
-                                        elementum sed sit amet dui. Vestibulum ante ipsum primis in faucibus orci luctus
-                                        et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
-                                        vel, ullamcorper sit amet ligula. Proin eget tortor risus.</p>
-                                        <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                        ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                        elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                        porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                        nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
-                                        Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed
-                                        porttitor lectus nibh. Vestibulum ac diam sit amet quam vehicula elementum
-                                        sed sit amet dui. Proin eget tortor risus.</p>
+                            <div class="tab-pane active" [class.active]="review" role="tabpanel">
+                                <!-- <div class="product__details__tab__desc">
+                                  <input type="text" name="comentario" id="comentario" placeholder="Escribe tu comentario">
+                                  <h6>Comentarios y Calificación</h6>
+                                  <div class="review-section d-flex align-items-center">
+                                    <div class="star-rating mr-3">
+                                      <i class="fa fa-star star-1"></i>
+                                      <i class="fa fa-star star-2"></i>
+                                      <i class="fa fa-star star-3"></i>
+                                      <i class="fa fa-star star-4"></i>
+                                      <i class="fa fa-star star-5"></i>
+                                    </div>
+                                    <p>Tu calificación: <span class="rating-value">0</span> estrellas</p>
+                                  </div>
+                                  <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
+                                    Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Vivamus
+                                    suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam sit amet quam
+                                    vehicula elementum sed sit amet dui. Donec rutrum congue leo eget malesuada.
+                                    Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur arcu erat,
+                                    accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a
+                                    pellentesque nec, egestas non nisi. Vestibulum ac diam sit amet quam vehicula
+                                    elementum sed sit amet dui. Vestibulum ante ipsum primis in faucibus orci luctus
+                                    et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
+                                    vel, ullamcorper sit amet ligula. Proin eget tortor risus.</p>
+                                  <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
+                                    ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
+                                    elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
+                                    porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
+                                    nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
+                                    Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed
+                                    porttitor lectus nibh. Vestibulum ac diam sit amet quam vehicula elementum
+                                    sed sit amet dui. Proin eget tortor risus.</p>
+                                </div> -->
+
+                                <section class="bg-light py-5 py-xl-8">
+                                    <div class="container">
+                                        <div class="row justify-content-md-center">
+
+
+                                            <h2 class="fs-6 text-secondary mb-4 text-uppercase text-center">
+                                                ¡CUENTANOS TU EXPERIENCIA CON ESTE PRODUCTO!</h2>
+
+                                            <div
+                                                class="height-100 d-flex justify-content-center align-items-center container w-75">
+                                                <div class="card p-3 container">
+                                                    <h5 class="">Añade tu comentario</h5>
+                                                    <textarea id="textarea" class="form-control"> </textarea>
+                                                    <div class="mt-3 d-flex justify-content-between align-items-center">
+                                                        <span id="count"></span>
+                                                        <button class="btn btn-sm btn-danger">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+
+
+
+
+
+                                                <p class="display-5 mb-4 mb-md-5 text-center">Lo que nuestros clientes
+                                                    opinan de este producto.</p>
+                                                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="container overflow-hidden">
+                                        <div class="row gy-4 gy-md-0 gx-xxl-5">
+                                            <div class="col-12 col-md-4">
+                                                <div class="card border-0 border-bottom border-primary shadow-sm">
+                                                    <div class="card-body p-4 p-xxl-5">
+                                                        <figure>
+                                                            <img class="img-fluid rounded rounded-circle mb-4 border border-5"
+                                                                loading="lazy" src="../../assets/imagenes/Logo.jpg"
+                                                                alt="">
+                                                            <figcaption>
+                                                                <div class="bsb-ratings text-warning mb-3"
+                                                                    data-bsb-star="5" data-bsb-star-off="0"></div>
+                                                                <blockquote class="bsb-blockquote-icon mb-4">Nam
+                                                                    ultricies, ex lacinia dapibus faucibus, sapien ipsum
+                                                                    euismod massa, at aliquet erat turpis quis diam.
+                                                                    Class aptent taciti sociosqu ad litora torquent per
+                                                                    conubia nostra, per inceptos himenaeos.</blockquote>
+                                                                <h4 class="mb-2">Luna John</h4>
+                                                                <h5 class="fs-6 text-secondary mb-0">UX Designer</h5>
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="card border-0 border-bottom border-primary shadow-sm">
+                                                    <div class="card-body p-4 p-xxl-5">
+                                                        <figure>
+                                                            <img class="img-fluid rounded rounded-circle mb-4 border border-5"
+                                                                loading="lazy" src="./assets/img/testimonial-img-2.jpg"
+                                                                alt="">
+                                                            <figcaption>
+                                                                <div class="bsb-ratings text-warning mb-3"
+                                                                    data-bsb-star="4" data-bsb-star-off="1"></div>
+                                                                <blockquote class="bsb-blockquote-icon mb-4">Nam
+                                                                    ultricies, ex lacinia dapibus faucibus, sapien ipsum
+                                                                    euismod massa, at aliquet erat turpis quis diam.
+                                                                    Class aptent taciti sociosqu ad litora torquent per
+                                                                    conubia nostra, per inceptos himenaeos.</blockquote>
+                                                                <h4 class="mb-2">Mark Smith</h4>
+                                                                <h5 class="fs-6 text-secondary mb-0">Marketing
+                                                                    Specialist</h5>
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="card border-0 border-bottom border-primary shadow-sm">
+                                                    <div class="card-body p-4 p-xxl-5">
+                                                        <figure>
+                                                            <img class="img-fluid rounded rounded-circle mb-4 border border-5"
+                                                                loading="lazy" src="./assets/img/testimonial-img-4.jpg"
+                                                                alt="">
+                                                            <figcaption>
+                                                                <div class="bsb-ratings text-warning mb-3"
+                                                                    data-bsb-star="5" data-bsb-star-off="0"></div>
+                                                                <blockquote class="bsb-blockquote-icon mb-4">Nam
+                                                                    ultricies, ex lacinia dapibus faucibus, sapien ipsum
+                                                                    euismod massa, at aliquet erat turpis quis diam.
+                                                                    Class aptent taciti sociosqu ad litora torquent per
+                                                                    conubia nostra, per inceptos himenaeos.</blockquote>
+                                                                <h4 class="mb-2">Luke Reeves</h4>
+                                                                <h5 class="fs-6 text-secondary mb-0">Sales Manager</h5>
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+
+
+                                <div class="mb-3 container">
+                                    <h3 class="mb-4">How students rated this courses</h3>
+                                    <div class="row align-items-center">
+                                        <div class="col-auto text-center">
+                                            <h3 class="display-2 fw-bold">4.5</h3>
+                                            <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            <i class="mdi mdi-star me-n1-half text-warning"></i>
+                                            <p class="mb-0 fs-6">(Based on 27 reviews)</p>
+                                        </div>
+                                        <!-- Progress Bar -->
+                                        <div class="col pt-3 order-3 order-md-2">
+                                            <div class="progress mb-3" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar"
+                                                    style="width: 90%;" aria-valuenow="90" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="progress mb-3" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar"
+                                                    style="width: 80%;" aria-valuenow="80" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="progress mb-3" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar"
+                                                    style="width: 70%;" aria-valuenow="70" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="progress mb-3" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar"
+                                                    style="width: 60%;" aria-valuenow="60" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="progress mb-0" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar"
+                                                    style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-auto col-6 order-2 order-md-3">
+                                            <!-- Rating -->
+                                            <div>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <span class="ms-1">53%</span>
+                                            </div>
+                                            <div>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <span class="ms-1">36%</span>
+                                            </div>
+                                            <div>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <span class="ms-1">9%</span>
+                                            </div>
+                                            <div>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <span class="ms-1">3%</span>
+                                            </div>
+                                            <div>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <i class="mdi mdi-star me-n1 text-light"></i>
+                                                <span class="ms-1">2%</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                        Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                        Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                                        sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                                        eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                        Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                                        sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                                        diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                        Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                                        Proin eget tortor risus.</p>
-                                    <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                        ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                        elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                        porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                        nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.</p>
+                                <hr class="my-5 container">
+                                <div class="mb-3 container">
+                                    <div class="d-lg-flex align-items-center justify-content-between mb-5">
+                                        <!-- Reviews -->
+                                        <div class="mb-3 mb-lg-0">
+                                            <h3 class="mb-0">Reviews</h3>
+                                        </div>
+                                        <div>
+                                            <form class="form-inline">
+                                                <div class="d-flex align-items-center me-2">
+                                                    <span class="position-absolute ps-3">
+                                                        <i class="fe fe-search"></i>
+                                                    </span>
+                                                    <input type="search" class="form-control ps-6"
+                                                        placeholder="Search Review">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- Rating -->
+                                    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
+                                        <img src="../assets/images/avatar/avatar-2.jpg" alt=""
+                                            class="rounded-circle avatar-lg">
+                                        <div class="ms-3">
+                                            <h4 class="mb-1">
+                                                Max Hawkins
+                                                <span class="ms-1 fs-6 text-muted">2 Days ago</span>
+                                            </h4>
+                                            <div class="fs-6 mb-2">
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            </div>
+                                            <p>Lectures were at a really good pace and I never felt lost. The instructor
+                                                was well informed and allowed
+                                                me to learn and navigate Figma easily.</p>
+                                            <div class="d-lg-flex">
+                                                <p class="mb-0">Was this review helpful?</p>
+                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Rating -->
+                                    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
+                                        <img src="../assets/images/avatar/avatar-3.jpg" alt=""
+                                            class="rounded-circle avatar-lg">
+                                        <div class="ms-3">
+                                            <h4 class="mb-1">Arthur Williamson <span class="ms-1 fs-6 text-muted">3 Days
+                                                    ago</span></h4>
+                                            <div class="fs-6 mb-2">
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            </div>
+                                            <p>Its pretty good.Just a reminder that there are also students with
+                                                Windows, meaning Figma its a bit
+                                                different of yours. Thank you!</p>
+                                            <div class="d-lg-flex">
+                                                <p class="mb-0">Was this review helpful?</p>
+                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Rating -->
+                                    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
+                                        <img src="../assets/images/avatar/avatar-4.jpg" alt=""
+                                            class="rounded-circle avatar-lg">
+                                        <div class="ms-3">
+                                            <h4 class="mb-1">Claire Jones <span class="ms-1 fs-6 text-muted">4 Days
+                                                    ago</span></h4>
+                                            <div class="fs-6 mb-2">
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            </div>
+                                            <p>
+                                                Great course for learning Figma, the only bad detail would be that some
+                                                icons are not included in the
+                                                assets. But 90% of the icons needed are included, and the voice of the
+                                                instructor
+                                                was very clear and easy to understood.
+                                            </p>
+                                            <div class="d-lg-flex">
+                                                <p class="mb-0">Was this review helpful?</p>
+                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Rating -->
+                                    <div class="d-flex align-items-start">
+                                        <img src="../assets/images/avatar/avatar-5.jpg" alt=""
+                                            class="rounded-circle avatar-lg">
+                                        <div class="ms-3">
+                                            <h4 class="mb-1">
+                                                Bessie Pena
+                                                <span class="ms-1 fs-6 text-muted">5 Days ago</span>
+                                            </h4>
+                                            <div class="fs-6 mb-2">
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                                <i class="mdi mdi-star me-n1 text-warning"></i>
+                                            </div>
+                                            <p>
+                                                I have really enjoyed this class and learned a lot, found it very
+                                                inspiring and helpful, thank you!
+                                                <i class="em em-heart_eyes ms-2 fs-6"></i>
+                                            </p>
+                                            <div class="d-lg-flex">
+                                                <p class="mb-0">Was this review helpful?</p>
+                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+
+
+
+
+
+
                             </div>
-                            <div class="tab-pane" id="tabs-3" role="tabpanel">
+
+                            <div class="tab-pane" [class.active]="!review" role="tabpanel">
                                 <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
+                                    <h6>Prospecto</h6>
                                     <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
                                         Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
                                         Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
@@ -160,74 +510,40 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title related__product__title">
-                        <h2>Related Product</h2>
+                        <h2>Productos Recomendados</h2>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic" >
-                            <img class="product__details__pic__item--large"
-                                src="../../assets/imagenes/ibuprofeno.jpg" alt="">
-                            <ul class="product__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
+                <ng-container *ngFor="let productoRecomendado of productos_recomendados">
+                    <div class="col-lg-3 col-md-4 col-sm-6" *ngIf="productoRecomendado.id != product.id">
+                        <div class="product__item">
+                            <div class="product__item__pic"
+                                (click)="getProductInfo(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
+                                <img *ngIf="api_imagen_existe" class="product__details__pic__item--large"
+                                    [src]="url+productoRecomendado.imagen_prod" alt="">
+                                <img *ngIf="!api_imagen_existe" class="product__details__pic__item--large"
+                                    src="../../assets/imagenes/NoProductImageAvailable.png" alt="">
+                                <ul class="product__item__pic__hover">
+                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6><a href="#">{{productoRecomendado.nombre_prod}}</a></h6>
+                                <h5>{{productoRecomendado.precio}} €</h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <ul class="product__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg">
-                            <ul class="product__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </div>
     </section>
     <!-- Related Product Section End -->
+</div>
+
+
+
+
+

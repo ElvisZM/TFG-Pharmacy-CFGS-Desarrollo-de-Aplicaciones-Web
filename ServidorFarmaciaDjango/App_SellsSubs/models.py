@@ -12,14 +12,7 @@ class Subscripcion(models.Model):
     cliente_id = models.OneToOneField('App_AuthUsers.Cliente', on_delete=models.CASCADE, db_column='cliente_id')
     
 class Votacion(models.Model):
-    numeros = [
-        (1,"1"), 
-        (2,"2"), 
-        (3,"3"),
-        (4,"4"),
-        (5,"5"),
-        ]
-    puntuacion = models.IntegerField(choices=numeros)
+    puntuacion = models.IntegerField()
     fecha_votacion = models.DateField(default=timezone.now)
     comenta_votacion = models.TextField()
     producto_id = models.ForeignKey(Producto, on_delete=models.CASCADE, db_column='producto_id')

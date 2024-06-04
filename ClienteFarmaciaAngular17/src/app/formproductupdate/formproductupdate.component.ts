@@ -6,6 +6,8 @@ import { CrudproductService } from '../servicios/crudproduct.service';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { DatosService } from '../servicios/datos.service';
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-formproductupdate',
@@ -18,7 +20,7 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
 
   product: any;
 
-  url: string="http://localhost:8000";
+  public url = environment.apiImageUrl;
 
   public FormUpdateProduct! : FormGroup;
 

@@ -66,7 +66,7 @@ def registrar_producto_csv(request):
         return Response('Sin permisos para esta operación', status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+# @permission_classes([AllowAny])
 def productos_list(request):
     productos = Producto.objects.all()
     serializer = ProductoSerializer(productos, many=True)
@@ -133,6 +133,7 @@ def producto_eliminar(request, cn_prod, cif_farm):
 
 
 @api_view(['GET'])
+# @permission_classes([AllowAny])
 def producto_obtener(request, cn_prod, cif_farm):
     producto = Producto.objects.get(cn_prod=cn_prod, cif_farm=cif_farm)
     serializer = ProductoSerializer(producto)
@@ -175,13 +176,12 @@ def helper_id_cat(request, nombre_cat):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def productos_buscador_simple(request):
-    formulario = BusquedaProductoForm(request.query_params)
+def productos_buscador_simple(request, busqueda):
+    data = {'textoBusqueda': busqueda}
+    formulario = BusquedaProductoForm(data)
     if (formulario.is_valid()):
-        texto = formulario.data.get('textoBusqueda')
+        texto = formulario.cleaned_data['textoBusqueda'].lower().strip()
         
-        texto = formulario.data.get('textoBusqueda').lower().strip()
         productos = Producto.objects.all()
 
         try:
@@ -198,3 +198,9 @@ def productos_buscador_simple(request):
         
         return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     
+@api_view(['GET'])
+def productos_recomendados(request, nombre_cat):
+    categoria = Categoria.objects.filter(nombre_cat=nombre_cat).first()
+    productos_recomendados = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos_recomendados, many=True)
+    return Response(productos_serializer.data)
