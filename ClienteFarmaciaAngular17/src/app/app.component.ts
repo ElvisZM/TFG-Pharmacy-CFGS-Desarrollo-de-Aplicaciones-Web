@@ -4,6 +4,7 @@ import { DatosService } from './servicios/datos.service';
 import { AuthService } from './servicios/auth.service';
 import { FacebookLoginProvider} from '@abacritt/angularx-social-login';
 import { CartInfoService } from './servicios/cart-info.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +17,11 @@ export class AppComponent implements OnInit, DoCheck {
   name: string = '';
   picture: string = '';
   rol: string = '';
+  source: string = '';
 
   googleUser: any;
+
+  public url = environment.apiImageUrl
 
 
   constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService) { }
@@ -28,6 +32,7 @@ export class AppComponent implements OnInit, DoCheck {
       this.name = this.authService.getNamePicture().name;
       this.picture = this.authService.getNamePicture().picture;
       this.rol = this.authService.getUserRol();
+      this.source = this.authService.getSource()
     }else{
       this.token = false;
     }
@@ -41,6 +46,7 @@ export class AppComponent implements OnInit, DoCheck {
       this.name = this.authService.getNamePicture().name;
       this.picture = this.authService.getNamePicture().picture;
       this.rol = this.authService.getUserRol();
+      this.source = this.authService.getSource();
     }else{
       this.token = false;
     }

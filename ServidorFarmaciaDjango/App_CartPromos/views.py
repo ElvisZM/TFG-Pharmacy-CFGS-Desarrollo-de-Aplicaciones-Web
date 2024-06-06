@@ -180,3 +180,40 @@ def actualizar_cantidad_producto(request, producto_id):
     else:
         return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)
     
+@api_view(['POST'])
+def agregar_producto_detalles(request, producto_id):
+    if (request.user.is_authenticated):
+        if (request.method == 'POST'):
+            producto_agregar = Producto.objects.get(id=producto_id)
+            cantidad_agregar = int(request.data['cantidad'])
+            
+            try:
+                carrito_usuario = CarritoCompra.objects.get(usuario=request.user, finalizado=False)
+                
+                try:
+                    producto_carrito = ContenidoCarrito.objects.get(carrito_id=carrito_usuario, producto_id=producto_agregar)
+                    
+                    producto_carrito.cantidad_producto+=cantidad_agregar
+                    if(producto_carrito.cantidad_producto>10):
+                        producto_carrito.cantidad_producto=10
+                    producto_carrito.save()
+                        
+                    return Response('Producto añadido', status=status.HTTP_200_OK)
+                
+                except:
+                    ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id=producto_agregar, cantidad_producto = cantidad_agregar)
+                    
+                    return Response('Producto añadido', status=status.HTTP_200_OK)
+                
+            except:
+                carrito_usuario = CarritoCompra.objects.create(usuario=request.user, finalizado=False)
+                
+                ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id=producto_agregar, cantidad_producto = cantidad_agregar)            
+                
+                return Response('Producto añadido', status=status.HTTP_200_OK)
+        
+        else:
+            return Response('Metodo no permitido', status=status.HTTP_405_METHOD_NOT_ALLOWED)
+                
+    else:
+        return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)

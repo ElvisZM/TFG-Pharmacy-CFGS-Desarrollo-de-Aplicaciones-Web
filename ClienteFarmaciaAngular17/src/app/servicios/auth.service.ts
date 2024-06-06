@@ -24,7 +24,8 @@ export class AuthService {
   }
 
   getTokenCookie(){
-    return this.cookies.get("token");
+    const token: string = this.cookies.get("token");
+    return token;
   }
 
   setNamePicture(name:string, picture_url?:string){
@@ -46,6 +47,15 @@ export class AuthService {
 
   getUserRol(){
     return this.cookies.get("user_rol")
+  }
+
+  setSource(source:string){
+    this.cookies.set("source", source)
+  }
+
+  getSource(){
+    const source = this.cookies.get("source");
+    return source
   }
 
   logout() {
@@ -95,20 +105,24 @@ export class AuthService {
       response => {
         const rol = response.usuario.rol.toString();
         this.setUserRol(rol.toString())
+        
         if (response.administrador){
           this.setNamePicture(response.usuario.first_name, response.administrador.profile_pic)
-
+          this.setSource(response.administrador.source)
         }
         else if (response.gerente){
           this.setNamePicture(response.usuario.first_name, response.gerente.profile_pic)
+          this.setSource(response.gerente.source)
 
         }
         else if (response.empleado){
           this.setNamePicture(response.usuario.first_name, response.empleado.profile_pic)
+          this.setSource(response.empleado.source)
 
         }
         else{
           this.setNamePicture(response.usuario.first_name, response.cliente.profile_pic)
+          this.setSource(response.cliente.source)
 
         }
       },error => {

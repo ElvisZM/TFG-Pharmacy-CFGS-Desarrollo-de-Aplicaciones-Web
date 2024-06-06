@@ -5,4 +5,5 @@ admin.site.register(Usuario)
 admin.site.register(Gerente)
 admin.site.register(Empleado)
 admin.site.register(Cliente)
+admin.site.register(Administrador)
 

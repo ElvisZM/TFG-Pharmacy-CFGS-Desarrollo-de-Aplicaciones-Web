@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,11 @@ export class DatosService {
 
   productCN!: number;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  fecha = new Date()
+  date_today = this.datePipe.transform(this.fecha, 'yyyy-MM-dd')
+
+
+  constructor(private http: HttpClient, private authService: AuthService, private datePipe: DatePipe) { }
 
   setPalabraBuscada(palabraObtenida: string) {
     this.palabraBusqueda = palabraObtenida;

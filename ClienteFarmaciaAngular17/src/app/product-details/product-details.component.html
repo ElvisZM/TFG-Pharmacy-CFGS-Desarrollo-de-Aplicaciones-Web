@@ -51,23 +51,24 @@
                             <div class="col-md-2 col-4 product__details__quantity">
                                 <label class="mb-2 quantity">Cantidad</label>
                                 <ng-container *ngIf="product.stock >= 10">
-                                    <select class="form-select border border-secondary " style="height: 35px;">
+                                    <select class="form-select border border-secondary " style="height: 43px; margin-bottom:0.5rem;" [(ngModel)]="quantitySelected">
                                         <ng-container *ngFor="let number of quantityOptions ">
-                                            <option [value]="number" [selected]="number === 1">{{number}}</option>
+                                            <option [value]="number">{{number}}</option>
                                         </ng-container>
                                     </select>
                                 </ng-container>
 
                                 <ng-container *ngIf="product.stock < 10">
-                                    <select class="form-select border border-secondary " style="height: 35px;">
+                                    <select class="form-select border border-secondary " style="height: 43px; margin-bottom:0.5rem;" [(ngModel)]="quantitySelected">
                                         <ng-container *ngFor="let i of [].constructor(product.stock + 1)">
-                                            <option [value]=i [selected]="i === 1">{{i}}</option>
+                                            <option [value]=i>{{i}}</option>
                                         </ng-container>
                                     </select>
                                 </ng-container>
 
                             </div>
-                            <div class="col-md-6 col-8 d-flex ms-3 mt-4"> <button class="cart-button me-4">
+                            <div class="col-md-6 col-8 d-flex ms-3 mt-4"> 
+                                <button class="cart-button me-4" (click)="addProductToCart(product.id, quantitySelected)">
                                     <span class="add-to-cart">Añadir</span>
                                     <span class="added">Añadido</span>
                                     <i class="fas fa-shopping-cart"></i>
@@ -85,7 +86,7 @@
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Disponibilidad</b>
-                                <span *ngIf="product.stock > 0">En Stock</span>
+                                <span *ngIf="product.stock > 0">En Stock <span *ngIf="product.stock <= 10">product.stock</span></span>
                                 <span *ngIf="product.stock === 0">Sin Stock</span>
                             </li>
 
@@ -93,10 +94,11 @@
                             <li><b>Laboratorio</b> <span>{{product.proveedor_id[0].nombre_prov}}</span></li>
                             <li><b>Compartir</b>
                                 <div class="share">
-                                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-                                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a style="cursor: pointer;"><i class="fa-brands fa-tiktok"></i></a>
+                                    <a style="cursor: pointer;"><i class="fa-brands fa-x-twitter"></i></a>
+                                    <a style="cursor: pointer;"><i class="fab fa-instagram"></i></a>
+                                    <a style="cursor: pointer;"><i class="fab fa-facebook-f"></i></a>
+                                    <a style="cursor: pointer;"><i class="fa-brands fa-whatsapp"></i></a>
                                 </div>
                             </li>
                         </ul>
@@ -118,38 +120,6 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" [class.active]="review" role="tabpanel">
-                                <!-- <div class="product__details__tab__desc">
-                                  <input type="text" name="comentario" id="comentario" placeholder="Escribe tu comentario">
-                                  <h6>Comentarios y Calificación</h6>
-                                  <div class="review-section d-flex align-items-center">
-                                    <div class="star-rating mr-3">
-                                      <i class="fa fa-star star-1"></i>
-                                      <i class="fa fa-star star-2"></i>
-                                      <i class="fa fa-star star-3"></i>
-                                      <i class="fa fa-star star-4"></i>
-                                      <i class="fa fa-star star-5"></i>
-                                    </div>
-                                    <p>Tu calificación: <span class="rating-value">0</span> estrellas</p>
-                                  </div>
-                                  <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                    Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Vivamus
-                                    suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam sit amet quam
-                                    vehicula elementum sed sit amet dui. Donec rutrum congue leo eget malesuada.
-                                    Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur arcu erat,
-                                    accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a
-                                    pellentesque nec, egestas non nisi. Vestibulum ac diam sit amet quam vehicula
-                                    elementum sed sit amet dui. Vestibulum ante ipsum primis in faucibus orci luctus
-                                    et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
-                                    vel, ullamcorper sit amet ligula. Proin eget tortor risus.</p>
-                                  <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                    ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                    elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                    porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                    nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
-                                    Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed
-                                    porttitor lectus nibh. Vestibulum ac diam sit amet quam vehicula elementum
-                                    sed sit amet dui. Proin eget tortor risus.</p>
-                                </div> -->
 
                                 <section class="bg-light py-5 py-xl-8">
                                     <div class="container">
@@ -159,56 +129,99 @@
                                             <h2 class="fs-6 text-secondary mb-4 text-uppercase text-center">
                                                 ¡CUENTANOS TU EXPERIENCIA CON ESTE PRODUCTO!</h2>
 
-                                            <div
-                                                class="height-100 d-flex justify-content-center align-items-center container w-75">
-                                                <div class="card p-3 container">
-                                                    <h5 class="">Añade tu comentario</h5>
-                                                    <textarea id="textarea" class="form-control"> </textarea>
-                                                    <div class="mt-3 d-flex justify-content-between align-items-center">
-                                                        <span id="count"></span>
-                                                        <button class="btn btn-sm btn-danger">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="height-100 d-flex justify-content-center align-items-center container w-75 mb-4">
+                                                <div class="card p-4 shadow-sm container">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                      <img src="../../assets/imagenes/usuario-noimg.webp" alt="No Photo" class="user-photo rounded-circle" *ngIf="!userLoged">
 
+                                                      <img src="../../assets/imagenes/usuario-noimg.webp" alt="User Photo" class="user-photo rounded-circle" *ngIf="userLoged && !user_picture">
+
+                                                      <img [src]="user_picture" alt="User Photo" class="user-photo rounded-circle" *ngIf="userLoged && user_picture && (source==='google' || source==='facebook')">
+
+                                                      <img [src]="url + user_picture" alt="User Photo" class="user-photo rounded-circle" *ngIf="userLoged && user_picture && source==='app'">
+
+                                                      <h5 class="ms-3 mb-0">Añadir comentario...</h5>
+                                                      <h5 class="ms-3 mb-0 fw-bold"><a style="cursor: pointer; text-decoration: underline; color:blue" (click)="login()" *ngIf="!userLoged">Iniciar sesión</a></h5>
+                                                    </div>
+                                                    <form [formGroup]="FormReviewProduct" (ngSubmit)="sendReview()" *ngIf="userLoged">
+                                                        <div class="d-flex">
+                                                            <h5 class="valoracion">¿Cómo valorarías este producto?</h5>
+                                                            <div class="rating"> 
+                                                                <input type="radio" name="rating" value="5" (click)="setRating(5)" id="5">
+                                                                <label for="5">☆</label> 
+                                                                
+                                                                <input type="radio" name="rating" value="4" (click)="setRating(4)"id="4">
+                                                                <label for="4">☆</label>
+                                                                
+                                                                <input type="radio" name="rating" value="3" (click)="setRating(3)"id="3">
+                                                                <label for="3">☆</label> 
+                                                                
+                                                                <input type="radio" name="rating" value="2" (click)="setRating(2)"id="2">
+                                                                <label for="2">☆</label> 
+                                                                
+                                                                <input type="radio" name="rating" value="1" (click)="setRating(1)"id="1">
+                                                                <label for="1">☆</label> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group mb-3">
+                                                            <input type="text" class="titulo-review" formControlName="review_titulo" placeholder="Título de tu reseña">
+                                                        </div>
+
+                                                        <div class="form-group mb-3">
+                                                            <textarea id="textarea" class="form-control" formControlName="review_texto" placeholder="Escribe tu comentario aquí..."></textarea>
+                                                        </div>
+
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-primary" type="submit" [disabled]="campoFormVacio">Enviar Reseña</button>
+                                                        </div>
+                                                    </form>
+                                                </div>                                                  
+                                            </div>
 
                                             <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
 
-
-
-
-
-                                                <p class="display-5 mb-4 mb-md-5 text-center">Lo que nuestros clientes
-                                                    opinan de este producto.</p>
-                                                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                                                <p class="display-5 mb-4 mb-md-5 text-center">Lo que nuestros clientes opinan de este producto.</p>
+                                                <hr class="mx-auto mb-5 mb-xl-9 border-dark-subtle">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="container overflow-hidden">
+                                    <div class="container overflow-hidden" *ngIf="product_reviews">
                                         <div class="row gy-4 gy-md-0 gx-xxl-5">
-                                            <div class="col-12 col-md-4">
-                                                <div class="card border-0 border-bottom border-primary shadow-sm">
-                                                    <div class="card-body p-4 p-xxl-5">
-                                                        <figure>
-                                                            <img class="img-fluid rounded rounded-circle mb-4 border border-5"
-                                                                loading="lazy" src="../../assets/imagenes/Logo.jpg"
-                                                                alt="">
-                                                            <figcaption>
-                                                                <div class="bsb-ratings text-warning mb-3"
-                                                                    data-bsb-star="5" data-bsb-star-off="0"></div>
-                                                                <blockquote class="bsb-blockquote-icon mb-4">Nam
-                                                                    ultricies, ex lacinia dapibus faucibus, sapien ipsum
-                                                                    euismod massa, at aliquet erat turpis quis diam.
-                                                                    Class aptent taciti sociosqu ad litora torquent per
-                                                                    conubia nostra, per inceptos himenaeos.</blockquote>
-                                                                <h4 class="mb-2">Luna John</h4>
-                                                                <h5 class="fs-6 text-secondary mb-0">UX Designer</h5>
-                                                            </figcaption>
-                                                        </figure>
+                                            <ng-container *ngFor="let review of product_reviews">
+                                                
+                                                <div class="col-12 col-md-4">
+                                                    <div class="card h-100 border-0 border-bottom border-primary shadow-sm">
+                                                        <div class="card-body p-4 p-xxl-5">
+                                                            <figure>
+
+                                                                <img class="photo-reviews img-fluid rounded rounded-circle mb-4 border border-5" loading="lazy" [src]="url + review.cliente_id.profile_pic" alt="" *ngIf="review.cliente_id.profile_pic && review.cliente_id.source==='app'" >
+
+                                                                <img class="photo-reviews img-fluid rounded rounded-circle mb-4 border border-5" loading="lazy" [src]=" decodeProfilePicUrl(review.cliente_id.profile_pic)" alt="" *ngIf="review.cliente_id.profile_pic && (review.cliente_id.source==='google' || review.cliente_id.source==='facebook')" >
+
+                                                                <img class="photo-reviews img-fluid rounded rounded-circle mb-4 border border-5" loading="lazy" src="../../assets/imagenes/usuario-noimg.webp" alt="" *ngIf="!review.cliente_id.profile_pic" >
+
+                                                                <figcaption>
+                                                                    <div class="bsb-ratings text-warning mb-3" [attr.data-bsb-star]="review.puntuacion" data-bsb-star-off="0">
+                                                                    </div>
+
+                                                                    <blockquote class="bsb-blockquote-icon mb-4">
+                                                                        {{ review.comenta_votacion }}
+                                                                    </blockquote>
+
+                                                                    <h4 class="mb-2">{{review.titulo}}</h4>
+
+                                                                    <h5 class="fs-6 text-secondary mb-0">
+                                                                        {{ review.cliente_id.usuario.first_name }} {{ review.cliente_id.usuario.last_name }}
+                                                                    </h5>
+                                                                </figcaption>
+                                                            </figure>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </ng-container>
+                                            
                                             <div class="col-12 col-md-4">
                                                 <div class="card border-0 border-bottom border-primary shadow-sm">
                                                     <div class="card-body p-4 p-xxl-5">
@@ -239,6 +252,8 @@
                                                             <img class="img-fluid rounded rounded-circle mb-4 border border-5"
                                                                 loading="lazy" src="./assets/img/testimonial-img-4.jpg"
                                                                 alt="">
+
+                                                            
                                                             <figcaption>
                                                                 <div class="bsb-ratings text-warning mb-3"
                                                                     data-bsb-star="5" data-bsb-star-off="0"></div>
@@ -257,226 +272,6 @@
                                         </div>
                                     </div>
                                 </section>
-
-
-
-                                <div class="mb-3 container">
-                                    <h3 class="mb-4">How students rated this courses</h3>
-                                    <div class="row align-items-center">
-                                        <div class="col-auto text-center">
-                                            <h3 class="display-2 fw-bold">4.5</h3>
-                                            <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            <i class="mdi mdi-star me-n1-half text-warning"></i>
-                                            <p class="mb-0 fs-6">(Based on 27 reviews)</p>
-                                        </div>
-                                        <!-- Progress Bar -->
-                                        <div class="col pt-3 order-3 order-md-2">
-                                            <div class="progress mb-3" style="height: 6px;">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 90%;" aria-valuenow="90" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                            <div class="progress mb-3" style="height: 6px;">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 80%;" aria-valuenow="80" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                            <div class="progress mb-3" style="height: 6px;">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 70%;" aria-valuenow="70" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                            <div class="progress mb-3" style="height: 6px;">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 60%;" aria-valuenow="60" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                            <div class="progress mb-0" style="height: 6px;">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-auto col-6 order-2 order-md-3">
-                                            <!-- Rating -->
-                                            <div>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <span class="ms-1">53%</span>
-                                            </div>
-                                            <div>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <span class="ms-1">36%</span>
-                                            </div>
-                                            <div>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <span class="ms-1">9%</span>
-                                            </div>
-                                            <div>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <span class="ms-1">3%</span>
-                                            </div>
-                                            <div>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <i class="mdi mdi-star me-n1 text-light"></i>
-                                                <span class="ms-1">2%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="my-5 container">
-                                <div class="mb-3 container">
-                                    <div class="d-lg-flex align-items-center justify-content-between mb-5">
-                                        <!-- Reviews -->
-                                        <div class="mb-3 mb-lg-0">
-                                            <h3 class="mb-0">Reviews</h3>
-                                        </div>
-                                        <div>
-                                            <form class="form-inline">
-                                                <div class="d-flex align-items-center me-2">
-                                                    <span class="position-absolute ps-3">
-                                                        <i class="fe fe-search"></i>
-                                                    </span>
-                                                    <input type="search" class="form-control ps-6"
-                                                        placeholder="Search Review">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <!-- Rating -->
-                                    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
-                                        <img src="../assets/images/avatar/avatar-2.jpg" alt=""
-                                            class="rounded-circle avatar-lg">
-                                        <div class="ms-3">
-                                            <h4 class="mb-1">
-                                                Max Hawkins
-                                                <span class="ms-1 fs-6 text-muted">2 Days ago</span>
-                                            </h4>
-                                            <div class="fs-6 mb-2">
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            </div>
-                                            <p>Lectures were at a really good pace and I never felt lost. The instructor
-                                                was well informed and allowed
-                                                me to learn and navigate Figma easily.</p>
-                                            <div class="d-lg-flex">
-                                                <p class="mb-0">Was this review helpful?</p>
-                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
-                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Rating -->
-                                    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
-                                        <img src="../assets/images/avatar/avatar-3.jpg" alt=""
-                                            class="rounded-circle avatar-lg">
-                                        <div class="ms-3">
-                                            <h4 class="mb-1">Arthur Williamson <span class="ms-1 fs-6 text-muted">3 Days
-                                                    ago</span></h4>
-                                            <div class="fs-6 mb-2">
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            </div>
-                                            <p>Its pretty good.Just a reminder that there are also students with
-                                                Windows, meaning Figma its a bit
-                                                different of yours. Thank you!</p>
-                                            <div class="d-lg-flex">
-                                                <p class="mb-0">Was this review helpful?</p>
-                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
-                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Rating -->
-                                    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
-                                        <img src="../assets/images/avatar/avatar-4.jpg" alt=""
-                                            class="rounded-circle avatar-lg">
-                                        <div class="ms-3">
-                                            <h4 class="mb-1">Claire Jones <span class="ms-1 fs-6 text-muted">4 Days
-                                                    ago</span></h4>
-                                            <div class="fs-6 mb-2">
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            </div>
-                                            <p>
-                                                Great course for learning Figma, the only bad detail would be that some
-                                                icons are not included in the
-                                                assets. But 90% of the icons needed are included, and the voice of the
-                                                instructor
-                                                was very clear and easy to understood.
-                                            </p>
-                                            <div class="d-lg-flex">
-                                                <p class="mb-0">Was this review helpful?</p>
-                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
-                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Rating -->
-                                    <div class="d-flex align-items-start">
-                                        <img src="../assets/images/avatar/avatar-5.jpg" alt=""
-                                            class="rounded-circle avatar-lg">
-                                        <div class="ms-3">
-                                            <h4 class="mb-1">
-                                                Bessie Pena
-                                                <span class="ms-1 fs-6 text-muted">5 Days ago</span>
-                                            </h4>
-                                            <div class="fs-6 mb-2">
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                                <i class="mdi mdi-star me-n1 text-warning"></i>
-                                            </div>
-                                            <p>
-                                                I have really enjoyed this class and learned a lot, found it very
-                                                inspiring and helpful, thank you!
-                                                <i class="em em-heart_eyes ms-2 fs-6"></i>
-                                            </p>
-                                            <div class="d-lg-flex">
-                                                <p class="mb-0">Was this review helpful?</p>
-                                                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
-                                                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-
-
 
                             </div>
 
@@ -526,7 +321,7 @@
                                     src="../../assets/imagenes/NoProductImageAvailable.png" alt="">
                                 <ul class="product__item__pic__hover">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                    <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
                                     <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
                             </div>
@@ -542,8 +337,3 @@
     </section>
     <!-- Related Product Section End -->
 </div>
-
-
-
-
-

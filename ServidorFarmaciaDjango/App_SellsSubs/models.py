@@ -12,6 +12,7 @@ class Subscripcion(models.Model):
     cliente_id = models.OneToOneField('App_AuthUsers.Cliente', on_delete=models.CASCADE, db_column='cliente_id')
     
 class Votacion(models.Model):
+    titulo = models.CharField(max_length=250)
     puntuacion = models.IntegerField()
     fecha_votacion = models.DateField(default=timezone.now)
     comenta_votacion = models.TextField()

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import *
+
 from .serializers import *
 from django.db.models import Q
 from rest_framework.response import Response
@@ -7,6 +8,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from oauth2_provider.models import AccessToken, Application
+
 
 # Create your views here.
 @api_view(['POST'])
@@ -104,3 +107,59 @@ def save_payment(request):
     else:
         return Response('Necesita iniciar sesion', status=status.HTTP_401_UNAUTHORIZED)
         
+
+@api_view(['POST'])        
+def create_review(request):
+    if (request.user.is_authenticated):
+        if request.method == 'POST':
+            try:
+                cliente = Cliente.objects.get(usuario=request.user.id)
+                producto_review = Producto.objects.get(id=request.data['producto_id'])
+                
+                datos = request.data
+                serializer = ReviewSerializerCreate(data=datos)
+                if serializer.is_valid():
+                    
+                    Votacion.objects.create(titulo=serializer.data['titulo'], puntuacion=serializer.data['puntuacion'], fecha_votacion=serializer.data['fecha_votacion'], comenta_votacion = serializer.data['comenta_votacion'], producto_id=producto_review, cliente_id=cliente)
+                    
+                    return Response('Review añadida', status=status.HTTP_200_OK)
+                
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+            except Exception as error:
+                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                
+        else:
+            return Response('Metodo no permitido', status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+    else:
+        return Response('Necesita iniciar sesion', status=status.HTTP_401_UNAUTHORIZED)
+    
+    
+@api_view(['GET'])    
+def reviews_list(request):
+    reviews = Votacion.objects.all()
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def product_reviews(request, product_id):
+    producto = Producto.objects.get(id=product_id)
+    producto_reviews = Votacion.objects.filter(producto_id=producto)
+    serializer = ReviewSerializer(producto_reviews, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def eliminar_review(request, review_id):
+    if (request.user.has_perm('App_SellsSubs.delete_votacion')):
+        review = Votacion.objects.get(id = review_id)
+        try:
+            review.delete()
+            return Response('Review eliminada')
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response('Sin permisos para esta operacion', status=status.HTTP_403_FORBIDDEN)

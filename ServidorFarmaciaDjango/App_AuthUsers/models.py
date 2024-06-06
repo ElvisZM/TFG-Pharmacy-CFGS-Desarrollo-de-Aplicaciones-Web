@@ -22,6 +22,7 @@ class Usuario(AbstractUser):
 
 class Administrador(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    source = models.CharField(max_length=50)
     profile_pic = models.ImageField(upload_to='profile/admin_pic/', null=True, blank=True)
     direccion_admin = models.CharField(max_length=200)
     telefono_admin = models.IntegerField(null=True, blank=True)
@@ -30,6 +31,7 @@ class Administrador(models.Model):
 
 class Gerente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    source = models.CharField(max_length=50)
     profile_pic = models.ImageField(upload_to='profile/manager_pic/', null=True, blank=True)
     direccion_ger = models.CharField(max_length=200)
     telefono_ger = models.IntegerField(null=True, blank=True)
@@ -41,6 +43,7 @@ class Gerente(models.Model):
 
 class Empleado(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    source = models.CharField(max_length=50)
     profile_pic = models.ImageField(upload_to='profile/employee_pic/', null=True, blank=True)
     direccion_emp = models.CharField(max_length=200)
     telefono_emp = models.IntegerField(null=True, blank=True)
@@ -53,6 +56,7 @@ class Empleado(models.Model):
 
 class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    source = models.CharField(max_length=50)
     profile_pic = models.ImageField(upload_to='profile/client_pic/', null=True, blank=True)
     direccion_cli = models.CharField(max_length=200, null=True, blank=True)
     telefono_cli = models.IntegerField(null=True, blank=True)

@@ -66,8 +66,12 @@
               </li>
               <li class="apartado-cuenta-logeado" *ngIf="token">
                 <a href="#">
-                    <div class="letras-animacion d-flex" *ngIf="picture">
+                    <div class="letras-animacion d-flex" *ngIf="picture && (source === 'google' || source==='facebook')">
                         <img class="profile-picture" [src]="picture" alt="Profile Picture" ><h5>{{name}}</h5>
+                    </div>
+
+                    <div class="letras-animacion d-flex" *ngIf="picture && source === 'app'">
+                        <img class="profile-picture" [src]="url + picture" alt="Profile Picture" ><h5>{{name}}</h5>
                     </div>
 
                     <div class="letras-animacion d-flex" *ngIf="!picture">

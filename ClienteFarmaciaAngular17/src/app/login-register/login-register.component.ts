@@ -50,7 +50,7 @@ export class LoginRegisterComponent implements OnInit{
 
   passwordVisibility: boolean = false;
 
-  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService, private titleService: Title) {
+  constructor(private router: Router, private registerService: RegistroService, private loginService: LoginService, public fb: FormBuilder, private activatedRoute:ActivatedRoute, private authService:AuthService, private titleService: Title, private ngZone: NgZone) {
     
     this.FormRegister = this.fb.group({
       register_name:['', Validators.required],
@@ -174,7 +174,6 @@ export class LoginRegisterComponent implements OnInit{
   login() {
     const user = {username:this.login_username,password:this.login_password}
     this.loginService.loginToken(user).subscribe((data)=>{
-      console.log(data)
       this.authService.setTokenCookie(data.access_token);
       this.authService.getUserInfo();
       this.router.navigate(['/']);
@@ -213,10 +212,13 @@ export class LoginRegisterComponent implements OnInit{
       }
       this.registerService.registerGoogleDataToServer(dataToSave).subscribe(
         response => {
-          this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
-          this.authService.setTokenCookie(payLoad.jti);
-          this.authService.setUserRol(dataToSave.rol.toString())
-          this.router.navigate(['/']);
+          this.ngZone.run(() => {
+
+            this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
+            this.authService.setTokenCookie(payLoad.jti);
+            this.authService.setUserRol(dataToSave.rol.toString())
+            this.router.navigate(['/']);
+          });
           
         },error =>{
           console.log(error);            
@@ -244,11 +246,14 @@ export class LoginRegisterComponent implements OnInit{
           }
           this.registerService.registerFacebookDataToServer(dataToSave).subscribe(
             response => {
+              this.ngZone.run(() => {
 
-              this.authService.setNamePicture(dataToSave.first_name, dataToSave.profile_pic)
-              this.authService.setTokenCookie(accessToken);
-              this.authService.setUserRol(dataToSave.rol.toString())
-              this.router.navigate(['/']);
+
+                this.authService.setNamePicture(dataToSave.first_name, dataToSave.profile_pic)
+                this.authService.setTokenCookie(accessToken);
+                this.authService.setUserRol(dataToSave.rol.toString())
+                this.router.navigate(['/']);
+              });
               
             },error =>{
               console.log(error);            

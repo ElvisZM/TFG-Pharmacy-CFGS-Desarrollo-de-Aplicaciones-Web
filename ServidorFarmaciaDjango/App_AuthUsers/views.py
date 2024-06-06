@@ -44,26 +44,26 @@ class registrar_usuario(generics.CreateAPIView):
                 if(rol == Usuario.CLIENTE):
                     grupo = Group.objects.get(name='Cliente') 
                     grupo.user_set.add(user)
-                    cliente = Cliente.objects.create( usuario = user, direccion_cli = serializers.data.get("domicilio"), telefono_cli = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                    cliente = Cliente.objects.create( usuario = user, source='app',direccion_cli = serializers.data.get("domicilio"), telefono_cli = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
                     cliente.save()
                     
                 elif(rol == Usuario.EMPLEADO):
                     grupo = Group.objects.get(name='Empleado') 
                     grupo.user_set.add(user)
-                    empleado = Empleado.objects.create( usuario = user, direccion_emp = serializers.data.get("domicilio"), telefono_emp = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                    empleado = Empleado.objects.create( usuario = user, source='app', direccion_emp = serializers.data.get("domicilio"), telefono_emp = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
                     empleado.save()
                 
                 elif(rol == Usuario.GERENTE):
                     grupo = Group.objects.get(name='Gerente') 
                     grupo.user_set.add(user)
-                    gerente = Gerente.objects.create( usuario = user, direccion_ger = serializers.data.get("domicilio"), telefono_ger = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                    gerente = Gerente.objects.create( usuario = user, source='app', direccion_ger = serializers.data.get("domicilio"), telefono_ger = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
                     gerente.save()
                     
                 elif(rol == Usuario.ADMINISTRADOR):
                     grupo = Group.objects.get(name='Administrador') 
                     grupo.user_set.add(user)
-                    cliente = Administrador.objects.create( usuario = user, direccion_admin = serializers.data.get("domicilio"), telefono_admin = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
-                    cliente.save()
+                    administrador = Administrador.objects.create( usuario = user, source='app', direccion_admin = serializers.data.get("domicilio"), telefono_admin = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                    administrador.save()
                     
                 usuarioSerializado = UsuarioSerializer(user)
                 return Response(usuarioSerializado.data)
@@ -153,26 +153,26 @@ class registrar_usuario_google(generics.CreateAPIView):
                     if(rol == Usuario.CLIENTE):
                         grupo = Group.objects.get(name='Cliente') 
                         grupo.user_set.add(user)
-                        cliente = Cliente.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_cli = None, telefono_cli = None, birthday_date = serializers.data.get('birthday_date'))
+                        cliente = Cliente.objects.create( usuario = user, source='google', profile_pic = request.data["profile_pic"], direccion_cli = None, telefono_cli = None, birthday_date = serializers.data.get('birthday_date'))
                         cliente.save()
                         
                     elif(rol == Usuario.EMPLEADO):
                         grupo = Group.objects.get(name='Empleado') 
                         grupo.user_set.add(user)
-                        empleado = Empleado.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_emp = None, telefono_emp = None, birthday_date = serializers.data.get('birthday_date'))
+                        empleado = Empleado.objects.create( usuario = user, source='google', profile_pic = request.data["profile_pic"], direccion_emp = None, telefono_emp = None, birthday_date = serializers.data.get('birthday_date'))
                         empleado.save()
                     
                     elif(rol == Usuario.GERENTE):
                         grupo = Group.objects.get(name='Gerente') 
                         grupo.user_set.add(user)
-                        gerente = Gerente.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_ger = None, telefono_ger = None, birthday_date = serializers.data.get('birthday_date'))
+                        gerente = Gerente.objects.create( usuario = user, source='google', profile_pic = request.data["profile_pic"], direccion_ger = None, telefono_ger = None, birthday_date = serializers.data.get('birthday_date'))
                         gerente.save()
                         
                     elif(rol == Usuario.ADMINISTRADOR):
                         grupo = Group.objects.get(name='Administrador') 
                         grupo.user_set.add(user)
-                        cliente = Administrador.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_admin = None, telefono_admin = None, birthday_date = serializers.data.get('birthday_date'))
-                        cliente.save()
+                        administrador = Administrador.objects.create( usuario = user, source='google', profile_pic = request.data["profile_pic"], direccion_admin = None, telefono_admin = None, birthday_date = serializers.data.get('birthday_date'))
+                        administrador.save()
                         
                     usuarioSerializado = UsuarioSerializer(user)
                     return Response('Usuario registrado con exito', status=status.HTTP_200_OK)
@@ -235,26 +235,26 @@ class registrar_usuario_facebook(generics.CreateAPIView):
                     if(rol == Usuario.CLIENTE):
                         grupo = Group.objects.get(name='Cliente') 
                         grupo.user_set.add(user)
-                        cliente = Cliente.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_cli = None, telefono_cli = None, birthday_date = serializers.data.get('birthday_date'))
+                        cliente = Cliente.objects.create( usuario = user, source='facebook', profile_pic = request.data["profile_pic"], direccion_cli = None, telefono_cli = None, birthday_date = serializers.data.get('birthday_date'))
                         cliente.save()
                         
                     elif(rol == Usuario.EMPLEADO):
                         grupo = Group.objects.get(name='Empleado') 
                         grupo.user_set.add(user)
-                        empleado = Empleado.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_emp = None, telefono_emp = None, birthday_date = serializers.data.get('birthday_date'))
+                        empleado = Empleado.objects.create( usuario = user, source='facebook', profile_pic = request.data["profile_pic"], direccion_emp = None, telefono_emp = None, birthday_date = serializers.data.get('birthday_date'))
                         empleado.save()
                     
                     elif(rol == Usuario.GERENTE):
                         grupo = Group.objects.get(name='Gerente') 
                         grupo.user_set.add(user)
-                        gerente = Gerente.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_ger = None, telefono_ger = None, birthday_date = serializers.data.get('birthday_date'))
+                        gerente = Gerente.objects.create( usuario = user, source='facebook', profile_pic = request.data["profile_pic"], direccion_ger = None, telefono_ger = None, birthday_date = serializers.data.get('birthday_date'))
                         gerente.save()
                         
                     elif(rol == Usuario.ADMINISTRADOR):
                         grupo = Group.objects.get(name='Clientes') 
                         grupo.user_set.add(user)
-                        cliente = Administrador.objects.create( usuario = user, profile_pic = request.data["profile_pic"], direccion_admin = None, telefono_admin = None, birthday_date = serializers.data.get('birthday_date'))
-                        cliente.save()
+                        administrador = Administrador.objects.create( usuario = user, source='facebook', profile_pic = request.data["profile_pic"], direccion_admin = None, telefono_admin = None, birthday_date = serializers.data.get('birthday_date'))
+                        administrador.save()
                         
                     usuarioSerializado = UsuarioSerializer(user)
                     return Response("Usuario Creado", status=status.HTTP_200_OK)
@@ -265,52 +265,3 @@ class registrar_usuario_facebook(generics.CreateAPIView):
         
         except Exception as err:
             return Response(repr(err), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def auth_facebook_oauth(request):
-    facebook_token = request.data['facebookToken']
-
-    facebook_response = requests.get('https://graph.facebook.com/me', params={'access_token': facebook_token})
-    facebook_data = facebook_response.json()
-
-    if 'id' in facebook_data:
-        try:
-            nombre_separado = facebook_data['name'].split(' ')
-            first_name = nombre_separado[0]
-            last_name = nombre_separado[1]
-            user = Usuario.objects.get(first_name=first_name, last_name=last_name)
-            username=user.username
-        except Usuario.DoesNotExist:
-            user = None
-        if user is not None:
-            user = authenticate(request, username=username, password=facebook_data['id'])
-            if user:
-                token = generate_custom_access_token(user)
-                return JsonResponse({'access_token': token})
-        else:
-            return JsonResponse({'error': 'Usuario no encontrado'}, status=401)
-    else:
-        return JsonResponse({'error': 'Token de acceso de Facebook inválido'}, status=401)
-    
-
-def generate_custom_access_token(user):
-
-    secret=settings.SECRET_KEY_TOKEN_FB
-
-    payload = {
-        'user_id': user.id,
-        'exp': timezone.now() + timedelta(days=1)  
-    }
-
-    token = jwt.encode(payload, secret, algorithm='HS256')
-
-    access_token = AccessToken.objects.create(
-        token=token,
-        user=user,
-        expires=timezone.now() + timedelta(days=1),
-        scope='read write'  # Define los alcances necesarios
-    )
-
-    # Devuelve el token generado
-    return token.decode('utf-8')

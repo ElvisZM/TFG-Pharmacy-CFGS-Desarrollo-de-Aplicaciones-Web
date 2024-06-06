@@ -102,13 +102,13 @@ class ClienteSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Cliente
-        fields = ['id', 'usuario', 'profile_pic', 'direccion_cli', 'telefono_cli', 'birthday_date', 'productos_favoritos', 'votacion_prod']
+        fields = '__all__'
         
         
 class EmpleadoSerializer(serializers.ModelSerializer):
     
     usuario = UsuarioSerializer()
-    farm_id = FarmaciaSerializer()
+    farmacia_id = FarmaciaSerializer()
     
     class Meta:
         model = Empleado
@@ -118,6 +118,7 @@ class EmpleadoSerializer(serializers.ModelSerializer):
 class GerenteSerializer(serializers.ModelSerializer):
     
     usuario = UsuarioSerializer()
+    farmacia_id = FarmaciaSerializer()
     
     class Meta:
         model = Gerente

@@ -4,6 +4,8 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from App_AuthUsers.models import *
+from App_AuthUsers.serializers import ClienteSerializer
+from App_ProductProvider.serializers import ProductoSerializer
 
 class CompraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,3 +103,44 @@ class PagoSerializerPayPal(serializers.ModelSerializer):
         return fecha_pago
     
     
+class ReviewSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Votacion
+        fields = ['titulo', 'puntuacion', 'fecha_votacion', 'comenta_votacion']
+        
+    def validate_titulo(self, titulo):
+        if titulo is None:
+            raise serializers.ValidationError('El titulo no puede ser nulo')
+        return titulo
+        
+        
+    def validate_puntuacion(self, puntuacion):
+        try:
+            puntuacion = int(puntuacion)
+        except ValueError:
+            raise serializers.ValidationError('La puntuacion no es un número válido')
+        
+        if puntuacion is None or (0 > puntuacion > 5):
+            raise serializers.ValidationError('La puntuacion no es valida')
+        return puntuacion
+
+
+    def validate_fecha_votacion(self, fecha_votacion):
+        if fecha_votacion is None:
+            raise serializers.ValidationError('La fecha de votacion no puede ser nula')
+        return fecha_votacion
+    
+    
+    def validate_comenta_votacion(self, comenta_votacion):
+        if comenta_votacion is None:
+            raise serializers.ValidationError('El comentario no puede ser nula')            
+        return comenta_votacion
+    
+        
+class ReviewSerializer(serializers.ModelSerializer):
+    producto_id = ProductoSerializer()
+    cliente_id = ClienteSerializer()
+    
+    class Meta:
+        fields = '__all__'
+        model= Votacion

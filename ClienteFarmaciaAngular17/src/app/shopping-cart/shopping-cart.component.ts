@@ -91,7 +91,6 @@ export class ShoppingCartComponent implements OnInit {
         this.empty = this.carrito.productos.length === 0;
       })
     })
-    console.log("evento activado")
   }
 
 }
