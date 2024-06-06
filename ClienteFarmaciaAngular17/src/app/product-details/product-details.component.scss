@@ -76,7 +76,7 @@
 
 .product__details__text .product__details__price {
 	font-size: 30px;
-	color: #dd2222;
+	color: #252525;
 	font-weight: 600;
 	margin-bottom: 15px;
 }
@@ -222,7 +222,7 @@
 	position: absolute;
 	left: 0;
 	bottom: -50px;
-	width: 100%;
+	width: 100% !important;
 	text-align: center;
 	-webkit-transition: all, 0.5s;
 	-moz-transition: all, 0.5s;
@@ -690,6 +690,7 @@
 .card {
 	border: none;
 	border-radius: 1rem;
+	position: relative;
 }
 
 .form-control {
@@ -764,14 +765,18 @@
 
 .photo-reviews{
 	width: 6rem;
+	height: auto;
+	margin-top: 1.3rem !important;
 }
 
 
 
 .card-body {
     display: flex;
+	
     flex-direction: column;
     justify-content: space-between;
+	height: 27rem;
 }
 
 .card-body figure {
@@ -784,3 +789,20 @@
 	margin-top: 1rem;
 }
 
+.bottom-reviews{
+	position: absolute;
+	bottom: 2.5rem;
+}
+
+.bsb-ratings{
+	margin: 0;
+	padding: 0;
+}
+
+.alert{
+	position: relative;
+	bottom: -43px;
+	margin-right: 4rem !important;
+
+	width: 100%;
+}

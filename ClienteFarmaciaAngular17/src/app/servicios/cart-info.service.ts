@@ -25,6 +25,8 @@ export class CartInfoService {
 
   userCart: any;
 
+  productoAddedCart: boolean = false;
+
   constructor(private http: HttpClient, private router:Router, private authService: AuthService) { }
 
 
@@ -49,7 +51,7 @@ export class CartInfoService {
     return this.http.put(this.urlPath + 'carrito/actualizar/cantidad/producto/'+producto_id,{"cantidad":quantity} ,headers)
   }
   
-  addProductExistFromDetails(producto_id: number, quantity: any){
+  addProductFromDetails(producto_id: number, quantity: any){
     const headers = this.authService.getHeadersApiRequest()
     return this.http.post(this.urlPath + 'carrito/agregar/productos/detalles/'+producto_id, {"cantidad":quantity}, headers)
   }

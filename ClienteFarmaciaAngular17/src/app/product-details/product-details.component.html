@@ -15,9 +15,7 @@
             </div>
         </div>
     </section>
-    <!-- Breadcrumb Section End -->
 
-    <!-- Product Details Section Begin -->
     <section class="product-details spad">
         <div class="container">
             <div class="row">
@@ -37,12 +35,18 @@
                     <div class="product__details__text">
                         <h3>{{product.nombre_prod}}</h3>
                         <div class="product__details__rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
+                            <ng-container *ngFor="let i of [].constructor(getStarCounts(average).fullStars)">
+                                <i class="fa fa-star"></i>
+                              </ng-container>
+                              
+                              <ng-container *ngIf="getStarCounts(average).hasHalfStar">
+                                <i class="fa fa-star-half"></i>
+                              </ng-container>
+                              
+                              <ng-container *ngFor="let i of [].constructor(getStarCounts(average).emptyStars)">
+                                <i class="fa fa-star-o"></i>
+                              </ng-container>
+                            <span class="ms-2" *ngIf="product_reviews">{{ product_reviews.length }} reviews</span>
                         </div>
                         <div class="product__details__price">{{product.precio}} €</div>
                         <p>{{product.descripcion}}</p>
@@ -111,7 +115,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" [class.active]="review" data-toggle="tab"
                                     style="cursor: pointer;" role="tab" aria-selected="true"
-                                    (click)="showReviews()">Reviews <span>(1)</span></a>
+                                    (click)="showReviews()">Reviews <span *ngIf="product_reviews">({{ product_reviews.length }})</span></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" [class.active]="!review" data-toggle="tab" style="cursor: pointer;"
@@ -188,33 +192,47 @@
                                     </div>
 
                                     <div class="container overflow-hidden" *ngIf="product_reviews">
-                                        <div class="row gy-4 gy-md-0 gx-xxl-5">
+                                        <h3 class="text-center" *ngIf="product_reviews.length == 0">No hay ninguna reseña sobre este producto. ¡Se el primero en dar tu opinión!</h3>
+                                        <div class="row gy-4 gy-md-0 gx-xxl-5" *ngIf="product_reviews.length > 0">
                                             <ng-container *ngFor="let review of product_reviews">
                                                 
-                                                <div class="col-12 col-md-4">
+                                                <div class="col-12 col-md-4 mb-4">
                                                     <div class="card h-100 border-0 border-bottom border-primary shadow-sm">
-                                                        <div class="card-body p-4 p-xxl-5">
+                                                        <div class="card-body p-4 p-xxl-3">
                                                             <figure>
 
-                                                                <img class="photo-reviews img-fluid rounded rounded-circle mb-4 border border-5" loading="lazy" [src]="url + review.cliente_id.profile_pic" alt="" *ngIf="review.cliente_id.profile_pic && review.cliente_id.source==='app'" >
+                                                                <img class="photo-reviews img-fluid rounded rounded-circle border border-5" loading="lazy" [src]="url + review.cliente_id.profile_pic" alt="" *ngIf="review.cliente_id.profile_pic && review.cliente_id.source==='app'" >
 
-                                                                <img class="photo-reviews img-fluid rounded rounded-circle mb-4 border border-5" loading="lazy" [src]=" decodeProfilePicUrl(review.cliente_id.profile_pic)" alt="" *ngIf="review.cliente_id.profile_pic && (review.cliente_id.source==='google' || review.cliente_id.source==='facebook')" >
+                                                                <img class="photo-reviews img-fluid rounded rounded-circle border border-5" loading="lazy" [src]=" decodeProfilePicUrl(review.cliente_id.profile_pic)" alt="" *ngIf="review.cliente_id.profile_pic && (review.cliente_id.source==='google' || review.cliente_id.source==='facebook')" >
 
-                                                                <img class="photo-reviews img-fluid rounded rounded-circle mb-4 border border-5" loading="lazy" src="../../assets/imagenes/usuario-noimg.webp" alt="" *ngIf="!review.cliente_id.profile_pic" >
+                                                                <img class="photo-reviews img-fluid rounded rounded-circle border border-5" loading="lazy" src="../../assets/imagenes/usuario-noimg.webp" alt="" *ngIf="!review.cliente_id.profile_pic" >
 
                                                                 <figcaption>
                                                                     <div class="bsb-ratings text-warning mb-3" [attr.data-bsb-star]="review.puntuacion" data-bsb-star-off="0">
                                                                     </div>
 
-                                                                    <blockquote class="bsb-blockquote-icon mb-4">
+                                                                    <blockquote class="bsb-blockquote-icon mb-4" *ngIf="!(review.comenta_votacion.length > 100)">
                                                                         {{ review.comenta_votacion }}
                                                                     </blockquote>
 
-                                                                    <h4 class="mb-2">{{review.titulo}}</h4>
+                                                                    <blockquote class="bsb-blockquote-icon mb-4" *ngIf="review.comenta_votacion.length > 100">
+                                                                        {{ review.comenta_votacion.slice(0,100) }}...
+                                                                    </blockquote>
 
-                                                                    <h5 class="fs-6 text-secondary mb-0">
+                                                                    <div class="bottom-reviews">
+
+                                                                        <h4 class="mb-2" *ngIf="review.titulo.length > 30">{{review.titulo.slice(0,30)}}...</h4>
+
+                                                                        <h4 class="mb-2" *ngIf="!(review.titulo.length > 30)">{{review.titulo}}</h4>
+
+                                                                        <h5 class="fs-6 text-secondary mb-0">
                                                                         {{ review.cliente_id.usuario.first_name }} {{ review.cliente_id.usuario.last_name }}
-                                                                    </h5>
+                                                                        </h5>
+
+                                                                        <h5 class="fs-6 text-secondary mt-1">
+                                                                            {{ review.fecha_votacion }}
+                                                                        </h5>
+                                                                    </div>
                                                                 </figcaption>
                                                             </figure>
                                                         </div>
@@ -222,53 +240,6 @@
                                                 </div>
                                             </ng-container>
                                             
-                                            <div class="col-12 col-md-4">
-                                                <div class="card border-0 border-bottom border-primary shadow-sm">
-                                                    <div class="card-body p-4 p-xxl-5">
-                                                        <figure>
-                                                            <img class="img-fluid rounded rounded-circle mb-4 border border-5"
-                                                                loading="lazy" src="./assets/img/testimonial-img-2.jpg"
-                                                                alt="">
-                                                            <figcaption>
-                                                                <div class="bsb-ratings text-warning mb-3"
-                                                                    data-bsb-star="4" data-bsb-star-off="1"></div>
-                                                                <blockquote class="bsb-blockquote-icon mb-4">Nam
-                                                                    ultricies, ex lacinia dapibus faucibus, sapien ipsum
-                                                                    euismod massa, at aliquet erat turpis quis diam.
-                                                                    Class aptent taciti sociosqu ad litora torquent per
-                                                                    conubia nostra, per inceptos himenaeos.</blockquote>
-                                                                <h4 class="mb-2">Mark Smith</h4>
-                                                                <h5 class="fs-6 text-secondary mb-0">Marketing
-                                                                    Specialist</h5>
-                                                            </figcaption>
-                                                        </figure>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="card border-0 border-bottom border-primary shadow-sm">
-                                                    <div class="card-body p-4 p-xxl-5">
-                                                        <figure>
-                                                            <img class="img-fluid rounded rounded-circle mb-4 border border-5"
-                                                                loading="lazy" src="./assets/img/testimonial-img-4.jpg"
-                                                                alt="">
-
-                                                            
-                                                            <figcaption>
-                                                                <div class="bsb-ratings text-warning mb-3"
-                                                                    data-bsb-star="5" data-bsb-star-off="0"></div>
-                                                                <blockquote class="bsb-blockquote-icon mb-4">Nam
-                                                                    ultricies, ex lacinia dapibus faucibus, sapien ipsum
-                                                                    euismod massa, at aliquet erat turpis quis diam.
-                                                                    Class aptent taciti sociosqu ad litora torquent per
-                                                                    conubia nostra, per inceptos himenaeos.</blockquote>
-                                                                <h4 class="mb-2">Luke Reeves</h4>
-                                                                <h5 class="fs-6 text-secondary mb-0">Sales Manager</h5>
-                                                            </figcaption>
-                                                        </figure>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -297,9 +268,7 @@
             </div>
         </div>
     </section>
-    <!-- Product Details Section End -->
 
-    <!-- Related Product Section Begin -->
     <section class="related-product">
         <div class="container">
             <div class="row">
@@ -312,18 +281,27 @@
             <div class="row">
                 <ng-container *ngFor="let productoRecomendado of productos_recomendados">
                     <div class="col-lg-3 col-md-4 col-sm-6" *ngIf="productoRecomendado.id != product.id">
-                        <div class="product__item">
+                        <div class="product__item ">
                             <div class="product__item__pic"
-                                (click)="getProductInfo(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
+                                style="cursor: pointer;">
                                 <img *ngIf="api_imagen_existe" class="product__details__pic__item--large"
-                                    [src]="url+productoRecomendado.imagen_prod" alt="">
+                                    [src]="url+productoRecomendado.imagen_prod" alt="" (click)="getProductInfo(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
                                 <img *ngIf="!api_imagen_existe" class="product__details__pic__item--large"
-                                    src="../../assets/imagenes/NoProductImageAvailable.png" alt="">
-                                <ul class="product__item__pic__hover">
+                                    src="../../assets/imagenes/NoProductImageAvailable.png" alt="" (click)="getProductInfo(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
+                                <ul class="product__item__pic__hover" *ngIf="!productoAnadido">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                     <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li><a style="cursor: pointer;" (click)="addProductRecommendedToCart(productoRecomendado.id)"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
+
+                                <ul class="product__item__pic__hover " *ngIf="productoAnadido">
+                                    <li >
+                                        <div class="alert alert-danger">
+                                            <h6>Añadido al carrito</h6>
+                                        </div>
+                                    </li>
+                                </ul>
+
                             </div>
                             <div class="product__item__text">
                                 <h6><a href="#">{{productoRecomendado.nombre_prod}}</a></h6>
@@ -335,5 +313,4 @@
             </div>
         </div>
     </section>
-    <!-- Related Product Section End -->
 </div>

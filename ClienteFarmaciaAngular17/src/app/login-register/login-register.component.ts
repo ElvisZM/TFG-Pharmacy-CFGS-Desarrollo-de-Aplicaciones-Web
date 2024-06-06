@@ -199,6 +199,23 @@ export class LoginRegisterComponent implements OnInit{
     return JSON.parse(atob(token.split(".")[1]));
   }
 
+
+  decodeProfilePicUrl(encodedUrl: string) {
+    if (encodedUrl) {
+
+        const urlWithoutMedia = encodedUrl.replace('/media/', '');
+        let decodedUrl = decodeURIComponent(urlWithoutMedia);
+
+        if (decodedUrl.startsWith('https:/') && !decodedUrl.startsWith('https://')) {
+            decodedUrl = decodedUrl.replace('https:/', 'https://');
+        }
+
+        return decodedUrl;
+    } else {
+        return '';
+    }
+  }
+
   handleLogin(response: any){
     if (response){
       const payLoad = this.decodeToken(response.credential);
@@ -214,9 +231,11 @@ export class LoginRegisterComponent implements OnInit{
         response => {
           this.ngZone.run(() => {
 
-            this.authService.setNamePicture(payLoad.given_name, payLoad.picture)
+            response.profile_pic = this.decodeProfilePicUrl(response.profile_pic)
+            this.authService.setNamePicture(response.usuario.first_name, response.profile_pic)
             this.authService.setTokenCookie(payLoad.jti);
-            this.authService.setUserRol(dataToSave.rol.toString())
+            this.authService.setSource(response.source);
+            this.authService.setUserRol(response.usuario.rol)
             this.router.navigate(['/']);
           });
           
@@ -248,10 +267,12 @@ export class LoginRegisterComponent implements OnInit{
             response => {
               this.ngZone.run(() => {
 
+                response.profile_pic = this.decodeProfilePicUrl(response.profile_pic)
 
-                this.authService.setNamePicture(dataToSave.first_name, dataToSave.profile_pic)
+                this.authService.setNamePicture(response.usuario.first_name, response.profile_pic)
                 this.authService.setTokenCookie(accessToken);
-                this.authService.setUserRol(dataToSave.rol.toString())
+                this.authService.setSource(response.source);
+                this.authService.setUserRol(response.usuario.rol)
                 this.router.navigate(['/']);
               });
               

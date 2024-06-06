@@ -135,9 +135,36 @@ class registrar_usuario_google(generics.CreateAPIView):
                         
                         if comprobar_usuario_existente.first_name == serializers.data.get('first_name'):
                             AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=aplicacion.id, user_id=comprobar_usuario_existente.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
-                            return Response('Usuario ya registrado', status=status.HTTP_200_OK)
+                            
+                            if serializers.data.get('rol') == 2:
+                                cliente = Cliente.objects.get(usuario=comprobar_usuario_existente)
+                                cliente_serializer = ClienteSerializer(cliente)
+                            
+                                return Response(cliente_serializer.data, status=status.HTTP_200_OK)
                         
-                        return Response('El email ya existe en otro usuario', status=status.HTTP_400_BAD_REQUEST)
+                        
+                            elif serializers.data.get('rol') == 1:
+                                administrador = Administrador.objects.get(usuario=comprobar_usuario_existente)
+                                administrador_serializer = AdministradorSerializer(administrador)
+                            
+                                return Response(administrador_serializer.data, status=status.HTTP_200_OK)
+                        
+                        
+                            elif serializers.data.get('rol') == 3:
+                                empleado = Empleado.objects.get(usuario=comprobar_usuario_existente)
+                                empleado_serializer = EmpleadoSerializer(empleado)
+                            
+                                return Response(empleado_serializer.data, status=status.HTTP_200_OK)
+                        
+                        
+                            else:
+                                gerente = Gerente.objects.get(usuario=comprobar_usuario_existente)
+                                gerente_serializer = GerenteSerializer(gerente)
+                            
+                                return Response(gerente_serializer.data, status=status.HTTP_200_OK)
+                        
+                        else:
+                            return Response('El email ya existe en otro usuario', status=status.HTTP_400_BAD_REQUEST)
                         
                     user = Usuario.objects.create_user(
                             username= serializers.data.get('username'),
@@ -216,9 +243,37 @@ class registrar_usuario_facebook(generics.CreateAPIView):
                         
                         if comprobar_usuario_existente.first_name == serializers.data.get('first_name'):
                             AccessToken.objects.create(token=self.request.data['token'], expires=token_expiration, scope="read write groups", application_id=aplicacion.id, user_id=comprobar_usuario_existente.id, created=datetime.datetime.now(), updated=datetime.datetime.now())
-                            return Response('Usuario ya registrado', status=status.HTTP_200_OK)
                         
-                        return Response('El email ya existe en otro usuario', status=status.HTTP_400_BAD_REQUEST)
+                            if serializers.data.get('rol') == 2:
+                                cliente = Cliente.objects.get(usuario=comprobar_usuario_existente)
+                                cliente_serializer = ClienteSerializer(cliente)
+                            
+                                return Response(cliente_serializer.data, status=status.HTTP_200_OK)
+                        
+                        
+                            elif serializers.data.get('rol') == 1:
+                                administrador = Administrador.objects.get(usuario=comprobar_usuario_existente)
+                                administrador_serializer = AdministradorSerializer(administrador)
+                            
+                                return Response(administrador_serializer.data, status=status.HTTP_200_OK)
+                        
+                        
+                            elif serializers.data.get('rol') == 3:
+                                empleado = Empleado.objects.get(usuario=comprobar_usuario_existente)
+                                empleado_serializer = EmpleadoSerializer(empleado)
+                            
+                                return Response(empleado_serializer.data, status=status.HTTP_200_OK)
+                        
+                        
+                            else:
+                                gerente = Gerente.objects.get(usuario=comprobar_usuario_existente)
+                                gerente_serializer = GerenteSerializer(gerente)
+                            
+                                return Response(gerente_serializer.data, status=status.HTTP_200_OK)
+                        
+                        else:
+                        
+                            return Response('El email ya existe en otro usuario', status=status.HTTP_400_BAD_REQUEST)
                     
                     
                     user = Usuario.objects.create_user(

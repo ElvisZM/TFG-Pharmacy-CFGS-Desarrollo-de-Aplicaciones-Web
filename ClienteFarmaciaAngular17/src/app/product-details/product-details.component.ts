@@ -45,6 +45,10 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
 
   source:string = '';
 
+  productoAnadido: boolean = false;
+
+  average: number = 0;
+
   constructor(private titleService: Title, private route: ActivatedRoute, private datosService: DatosService, private router: Router, private fb: FormBuilder, private authService: AuthService, private cartInfo: CartInfoService, private reviewService: ReviewsService) { }
 
   ngOnInit(): void {
@@ -72,9 +76,14 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
           });
 
           this.reviewService.getProductReviews(this.product.id).subscribe(response =>{
-            this.product_reviews = response
-            console.log(this.product_reviews)
+            response.sort((a: any, b: any) => {
+              return b.id - a.id;
+            });
+            this.product_reviews = response.slice(0,6)
 
+            this.getAverageProductReview()
+
+            
           }, error =>{
             console.log(error)
           })
@@ -95,26 +104,18 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
     }
   }
 
-  getProductReviews(product_id: number){
-    
-  }
-
   decodeProfilePicUrl(encodedUrl: string) {
     if (encodedUrl) {
-        console.log('Encoded URL:', encodedUrl);
 
         const urlWithoutMedia = encodedUrl.replace('/media/', '');
         let decodedUrl = decodeURIComponent(urlWithoutMedia);
 
-        // Correct the URL format by ensuring 'https://' is present
         if (decodedUrl.startsWith('https:/') && !decodedUrl.startsWith('https://')) {
             decodedUrl = decodedUrl.replace('https:/', 'https://');
         }
 
-        console.log('Decoded URL:', decodedUrl);
         return decodedUrl;
     } else {
-        console.log("URL está vacía");
         return '';
     }
   }
@@ -126,11 +127,22 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
     })
   }
 
+  addProductRecommendedToCart(producto_id:number){
+    this.cartInfo.addProduct(producto_id).subscribe(response => {
+      this.productoAnadido = true;
+      setTimeout(() => {
+        this.productoAnadido = false;
+      }, 2000);
+      console.log(response)
+    })
+  }
+
 
   addProductToCart(producto_id: number, quantity: number){
     if (this.authService.getTokenCookie()){
-      console.log(producto_id)
-      this.cartInfo.addProductExistFromDetails(producto_id, quantity).subscribe(response => {
+      this.cartInfo.addProductFromDetails(producto_id, quantity).subscribe(response => {
+        this.cartInfo.productoAddedCart = true;
+        this.router.navigate(['/carrito/productos/lista']);
         console.log(response)
       })
     }else{
@@ -186,7 +198,14 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
 
 
       this.reviewService.createReview(reviewData).subscribe(response => {
-        console.log(response)
+        this.reviewService.getProductReviews(reviewData.producto_id).subscribe(response => {
+          this.FormReviewProduct.reset();
+          response.sort((a: any, b: any) => {
+            return b.id - a.id;
+          });
+          this.product_reviews = response.slice(0,6)
+        
+        })
       })
     }
   }
@@ -201,7 +220,29 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
     this.authService.getTokenCookie()?this.userLoged=true:this.userLoged=false;
     if (this.userLoged==true){
       this.user_picture=this.authService.getNamePicture().picture
+      this.source=this.authService.getSource()
     }
+  }
+
+  getAverageProductReview(){
+    let total = 0;
+    this.product_reviews.forEach((review: any) => {
+      total += review.puntuacion
+    })
+    this.average = total / this.product_reviews.length.toFixed(2);
+    console.log(this.average)
+    return this.average
+  }
+
+  getStarCounts(average: number) {
+    if (average){
+      const fullStars = Math.floor(average);
+      const hasHalfStar = (average % 1) >= 0.5;
+      const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+      return { fullStars, hasHalfStar, emptyStars };
+    }
+    return { fullStars: 0, hasHalfStar: false, emptyStars: 5 };
+  
   }
 
 

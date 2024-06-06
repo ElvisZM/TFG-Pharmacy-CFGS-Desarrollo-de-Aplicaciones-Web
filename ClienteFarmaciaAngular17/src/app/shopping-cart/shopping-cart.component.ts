@@ -23,10 +23,16 @@ export class ShoppingCartComponent implements OnInit {
 
   quantityOptions: Array<number> = [1,2,3,4,5,6,7,8,9,10]
 
+  productoAnadido: boolean = false;
+
   constructor(private cartInfo: CartInfoService, private router: Router){}
 
   ngOnInit() {
     this.loadCartInfo();
+    this.productoAnadido = this.cartInfo.productoAddedCart
+    setTimeout(() => {
+      this.productoAnadido = false
+    }, 4000)
   }
 
   ngDoCheck(): void {
@@ -35,6 +41,7 @@ export class ShoppingCartComponent implements OnInit {
 
   loadCartInfo() {
     this.cartInfo.getCartInfo().subscribe(response => {
+      console.log(response)
       this.carrito = response;
       
       this.empty = this.carrito.productos.length === 0;
@@ -67,13 +74,16 @@ export class ShoppingCartComponent implements OnInit {
     })
   }
 
+
   backToHome(){
     this.router.navigate(['/'])
   }
 
+
   redirectToPayment(){
     this.router.navigate(['/tipo/pago']);
   }
+
 
   deleteProductFromCart(producto_id: number){
     this.cartInfo.deleteProduct(producto_id).subscribe(response => {
@@ -83,6 +93,7 @@ export class ShoppingCartComponent implements OnInit {
       })
     })
   }
+
 
   updateProductUnits(producto_id: number, quantity: any){
     this.cartInfo.updateProductQuantity(producto_id, quantity).subscribe(response => {

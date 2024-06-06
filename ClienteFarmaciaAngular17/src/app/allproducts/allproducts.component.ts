@@ -16,7 +16,9 @@ export class AllproductsComponent implements OnInit {
 
   AllProducts: Array<any> = [];
 
-  public urlPicture = environment.apiImageUrl
+  public url = environment.apiImageUrl
+
+  productoAnadido: boolean = false
 
   constructor(private datosService: DatosService, private cartInfo: CartInfoService, private router:Router){}
 
@@ -35,6 +37,10 @@ export class AllproductsComponent implements OnInit {
 
   addProductToCart(producto_id: number){
     this.cartInfo.addProduct(producto_id).subscribe(response => {
+      this.productoAnadido = true
+      setTimeout(() => {
+        this.productoAnadido = false
+      }, 3000)
       console.log(response)
     }, error => {
       console.log(error)

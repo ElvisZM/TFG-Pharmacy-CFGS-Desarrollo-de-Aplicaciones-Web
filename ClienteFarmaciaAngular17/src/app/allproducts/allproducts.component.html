@@ -1,40 +1,67 @@
-<div>
-<h1 class="">MEDICAMENTOS <i class="fa-solid fa-tablets"></i></h1>
-<h3 class="text-left" style="margin-left: 5em;">Tenemos lo que necesitas </h3>
-</div>
-<div class="row">
-  <div class="col-sm-3 card" *ngFor="let producto of AllProducts">
-    <div class="thumb-wrapper">
-      <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-      <div class="img-box bg-primary container" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)" style="cursor: pointer;">
-        <img [src]="urlPicture + producto.imagen_prod" class="img-fluid imagen_prod" [alt]="producto.nombre_prod" *ngIf="producto.imagen_prod">									
-        <img src="../../assets/imagenes/NoProductImageAvailable.png" class="img-fluid imagen_prod" alt="producto.nombre_prod" *ngIf="!producto.imagen_prod">									
+
+
+
+<section class="breadcrumb-section set-bg">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12 text-center">
+              <div class="breadcrumb__text">
+                  <h2>Nuestros productos</h2>
+                  <div class="breadcrumb__option">
+                      <a href="./index.html">Home</a>
+                      <span>Productos</span>
+                  </div>
+              </div>
+          </div>
       </div>
-      <div class="thumb-content">
-        <h4>{{ producto.nombre_prod }}</h4>									
-        <div class="star-rating">
-          <ul class="list-inline">
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-          </ul>
-        </div>
-        <p class="item-price"><del class="me-3">{{ producto.precio }}€</del> <b>{{ producto.precio }}€</b></p>
-        <div class="botones d-flex">
-          <button class="cart-button me-4" (click)="addProductToCart(producto.id)">
-            <span class="add-to-cart">Añadir</span>
-            <span class="added">Añadido</span>
-            <i class="fas fa-shopping-cart"></i>
-            <i class="fas fa-box"></i>
-          </button>
-          <button class="favorite-button">
-            <div class="icon"><div class="star"></div></div>    
-            <span>Favorito</span>
-          </button>
-        </div>
-      </div>						
+  </div>
+</section>
+
+
+
+<section>
+  <div class="container">
+
+    <div class="row">
+      <div class="col-lg-12">
+          <div class="section-title related__product__title">
+              <h2>Productos Recomendados</h2>
+          </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <ng-container *ngFor="let producto of AllProducts">
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product__item ">
+                  <div class="product__item__pic"
+                      style="cursor: pointer;">
+                      <img *ngIf="producto.imagen_prod" class="product__details__pic__item--large"
+                          [src]="url+producto.imagen_prod" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)">
+                      <img *ngIf="!producto.imagen_prod" class="product__details__pic__item--large"
+                          src="../../assets/imagenes/NoProductImageAvailable.png" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)">
+                      <ul class="product__item__pic__hover" *ngIf="!productoAnadido">
+                          <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                          <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
+                          <li><a style="cursor: pointer;" (click)="addProductToCart(producto.id)"><i class="fa fa-shopping-cart"></i></a></li>
+                      </ul>
+
+                      <ul class="product__item__pic__hover " *ngIf="productoAnadido">
+                          <li >
+                              <div class="alert alert-danger">
+                                  <h6>Añadido al carrito</h6>
+                              </div>
+                          </li>
+                      </ul>
+
+                  </div>
+                  <div class="product__item__text">
+                      <h6><a href="#">{{producto.nombre_prod}}</a></h6>
+                      <h5>{{producto.precio}} €</h5>
+                  </div>
+              </div>
+          </div>
+      </ng-container>
     </div>
   </div>
-</div>
+</section>
