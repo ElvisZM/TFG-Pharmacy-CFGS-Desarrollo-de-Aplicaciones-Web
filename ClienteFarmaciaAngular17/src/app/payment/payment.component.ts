@@ -1,9 +1,9 @@
 import { Component, DoCheck, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink, NavigationEnd } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CrudproductService } from '../servicios/crudproduct.service';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, ViewportScroller } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { SavepaymentService } from '../servicios/savepayment.service';
 import jsPDF from 'jspdf';
@@ -119,9 +119,17 @@ export class PaymentComponent implements OnInit{
   PayPalShippingAddress: string = "";
   PayPalMunicipioProvincia: string= "";
 
-  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService, private changeDetector: ChangeDetectorRef) { }
+  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private savePayment: SavepaymentService, private authService: AuthService, private datePipe: DatePipe, private cartInfo: CartInfoService, private changeDetector: ChangeDetectorRef, private viewportScroller: ViewportScroller) { }
 
   ngOnInit() {
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
+    
+
     this.titleService.setTitle('Metodo de Pago');
     this.cartInfo.getCartInfo().subscribe(response => {
 
@@ -129,16 +137,8 @@ export class PaymentComponent implements OnInit{
       this.total_price = (this.carrito.total_carrito + this.getCosteEnvio()).toFixed(2).toString()
     });
 
-    this.FormPaymentProduct = this.fb.group({
-      payment_nombre_titular:['', Validators.required],
-      payment_numero_tarjeta:['', Validators.required],
-      payment_expiration:['', Validators.required],
-      payment_codigo_seguridad:['', Validators.required],
-      payment_direccion_envio:['', Validators.required],
-      payment_codigo_postal:['', Validators.required],
-      payment_municipio:['', Validators.required],
-      payment_provincia:[''],
-    });
+    this.initializeForm();
+
   }
 
   ngAfterViewInit() {
@@ -197,7 +197,91 @@ export class PaymentComponent implements OnInit{
     
   }
 
-  buyProductPayPal(){
+
+  initializeForm(): void {
+    this.FormPaymentProduct = this.fb.group({
+      payment_nombre_titular:['', Validators.required],
+      payment_numero_tarjeta:['', Validators.required],
+      payment_expiration:['', Validators.required],
+      payment_codigo_seguridad:['', Validators.required],
+      payment_direccion_envio:['', Validators.required],
+      payment_codigo_postal:['', Validators.required],
+      payment_municipio:['', Validators.required],
+      payment_provincia:[''],
+    }, {validator: this.formValidator});
+  }
+  
+  formValidator = (formGroup: FormGroup) => {
+    const titular = formGroup.get('payment_nombre_titular')?.value;
+    const numeroTarjeta = formGroup.get('payment_numero_tarjeta')?.value;
+    const expiration = formGroup.get('payment_expiration')?.value;
+    const cvv = formGroup.get('payment_codigo_seguridad')?.value;
+    const codigo_postal = formGroup.get('payment_codigo_postal')?.value
+    const municipio = formGroup.get('payment_municipio')?.value
+
+    if (!/^[a-zA-Z\s]+$/.test(titular)) {
+        formGroup.get('payment_nombre_titular')?.setErrors({ invalidTitularName: true });
+    } else {
+        formGroup.get('payment_nombre_titular')?.setErrors(null);
+    }
+
+    if (numeroTarjeta.length == 16){
+      const cardType = this.getCardType(numeroTarjeta);
+      if (cardType === 'Unknown') {
+          formGroup.get('payment_numero_tarjeta')?.setErrors({ invalidCardType: true });
+      } else {
+          formGroup.get('payment_numero_tarjeta')?.setErrors(null);
+      }
+  
+    }else{
+      formGroup.get('payment_numero_tarjeta')?.setErrors({invalidCardType: true});
+    }
+    
+
+    const [mes, año] = expiration.split('/');
+    if (!mes || !año || isNaN(+mes) || isNaN(+año) || mes.length !== 2 || año.length !== 2) {
+      formGroup.get('payment_expiration')?.setErrors({fechaCaducidadInvalida: true});
+    } else {
+      const mesNum = parseInt(mes, 10);
+      if (mesNum > 12 || mesNum < 1) {
+        formGroup.get('payment_expiration')?.setErrors({fechaCaducidadInvalida: true});
+      }else{
+        const añoNum = parseInt(`20${año}`, 10);
+        const fechaActual = new Date();
+        const fechaTarjeta = new Date(añoNum, mesNum - 1);
+        if (fechaTarjeta < fechaActual) {
+          formGroup.get('payment_expiration')?.setErrors({fechaCaducidadInvalida: true});
+        }else{
+          formGroup.get('payment_expiration')?.setErrors(null);
+        }
+      }
+    }
+
+    if (!/^\d{3}$/.test(cvv)) {
+      formGroup.get('payment_codigo_seguridad')?.setErrors({cvvInvalido: true});
+    }else{
+      formGroup.get('payment_codigo_seguridad')?.setErrors(null);
+    }
+
+
+    if (!/^\d{5}$/.test(codigo_postal)) {
+      formGroup.get('payment_codigo_postal')?.setErrors({cpInvalido: true});
+    }else{
+      formGroup.get('payment_codigo_postal')?.setErrors(null);
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(municipio)) {
+      formGroup.get('payment_municipio')?.setErrors({ municipioInvalido: true });
+  } else {
+      formGroup.get('payment_municipio')?.setErrors(null);
+  }
+
+  }
+
+
+
+
+  buyProductPayPal(): void{
     this.savePayment.nombre_cli = this.PayPalClientName
     this.savePayment.id_pedido = this.carrito.codigo_compra
     this.savePayment.metodo_pago = 'paypal'
@@ -244,7 +328,7 @@ export class PaymentComponent implements OnInit{
 }
     
   getCardNumberMasked(cardNumber: string): string {
-    const cleanedCardNumber = cardNumber.replace(/\s/g, ''); // Elimina los espacios
+    const cleanedCardNumber = cardNumber.replace(/\s/g, '');
     this.savePayment.cardNumber = cleanedCardNumber;
     return cleanedCardNumber.slice(-4).padStart(cleanedCardNumber.length, '*');
   }
@@ -346,25 +430,20 @@ export class PaymentComponent implements OnInit{
     let expirationDateInput = event.target.value;
     
     expirationDateInput = expirationDateInput.replace(/[^\d\/]/g, '');
+
+    const parts = expirationDateInput.split('/');
+    let beforeSlash = parts[0].slice(0, 2);
+    let afterSlash = parts.length > 1 ? parts[1].slice(0, 2) : '';
     
-    if (expirationDateInput.length === 2 && !expirationDateInput.includes('/')) {
-        expirationDateInput += '/';
+    expirationDateInput = beforeSlash + (afterSlash ? '/' + afterSlash : ''); 
+
+    if (expirationDateInput.length === 2 && expirationDateInput.charAt(1) !== '/') {
+      expirationDateInput += '/';
     }
 
-    expirationDateInput = expirationDateInput.slice(0, 5);
+    this.FormPaymentProduct.patchValue({ 'payment_expiration': expirationDateInput }); 
 
     this.expirationDate = expirationDateInput;
-  }
-
-  addSlash(event: KeyboardEvent): void {
-    let value = (event.target as HTMLInputElement).value;
-
-    if (value.length === 2 && !isNaN(Number(event.key))) {
-        value += '/';
-        (event.target as HTMLInputElement).value = value;
-        this.expirationDate = value;
-        event.preventDefault();
-    }
   }
 
   onCardTitularInput(event: any): void {
@@ -392,7 +471,10 @@ export class PaymentComponent implements OnInit{
   }
 
   buyProductCreditCard() {
-    console.log('printing');
+    
+    let num_tarjeta = this.FormPaymentProduct.get('payment_numero_tarjeta')?.value
+
+
     this.savePayment.nombre_cli = this.carrito.cliente.usuario.first_name + ' ' + this.carrito.cliente.usuario.last_name
     this.savePayment.id_pedido = this.carrito.codigo_compra
     this.savePayment.metodo_pago = "creditcard"

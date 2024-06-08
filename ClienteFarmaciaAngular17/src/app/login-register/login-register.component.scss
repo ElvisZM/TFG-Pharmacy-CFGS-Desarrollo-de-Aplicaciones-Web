@@ -138,33 +138,13 @@
     margin: 20px 0;
     #google-btn {
         border: 1px solid lightgrey;
+        border-radius: 0.3rem;
     }
     #google-btn:hover{
         border: 1px solid black;
+        border-radius: 0.3rem;
     }
-    .facebook{
-        height: 3.5em;
-        background-color: white;
-        color: black;
-        font-weight: bold;
-        border: 1px solid lightgrey;
-        width: 29.4em;
-        position: relative;
-        // margin-right: 5em;
-        h6{
-            font-size: small;
-        }
-        i{
-            position: absolute;
-            right: 0.3em;
-            top: 0.3em;
-            color: blue;
-        }
-    }
-    .facebook:hover{
-        border: 1px solid black;
-        background-color: lightcyan;
-    }
+    
 }
 
 .social-icons a{
@@ -176,6 +156,32 @@
     margin: 0 3px;
     width: 40px;
     height: 40px;
+}
+
+.facebook{
+    height: 3.5em;
+    background-color: #1877f2 !important;
+    color: white !important;
+    font-weight: bold;
+    border: 1px solid lightgrey;
+    width: 29.4em;
+    position: absolute;
+    bottom: 55%;
+    left: 29.5%;
+    // margin-right: 5em;
+    h6{
+        font-size: small;
+    }
+    i{
+        position: absolute;
+        right: 0.3em;
+        top: 0.3em;
+        color: white;
+    }
+}
+.facebook:hover{
+    border: 1px solid black;
+    background-color: #1461a3 !important;
 }
 
 .toggle-container{

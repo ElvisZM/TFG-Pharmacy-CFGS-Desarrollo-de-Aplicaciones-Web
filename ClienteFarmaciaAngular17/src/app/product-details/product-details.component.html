@@ -46,7 +46,7 @@
                               <ng-container *ngFor="let i of [].constructor(getStarCounts(average).emptyStars)">
                                 <i class="fa fa-star-o"></i>
                               </ng-container>
-                            <span class="ms-2" *ngIf="product_reviews">{{ product_reviews.length }} reviews</span>
+                            <span class="ms-2" *ngIf="product_reviews">{{ reviews_totales }} reviews</span>
                         </div>
                         <div class="product__details__price">{{product.precio}} €</div>
                         <p>{{product.descripcion}}</p>
@@ -64,7 +64,7 @@
 
                                 <ng-container *ngIf="product.stock < 10">
                                     <select class="form-select border border-secondary " style="height: 43px; margin-bottom:0.5rem;" [(ngModel)]="quantitySelected">
-                                        <ng-container *ngFor="let i of [].constructor(product.stock + 1)">
+                                        <ng-container *ngFor="let i of generateRange(product.stock)">
                                             <option [value]=i>{{i}}</option>
                                         </ng-container>
                                     </select>
@@ -72,7 +72,7 @@
 
                             </div>
                             <div class="col-md-6 col-8 d-flex ms-3 mt-4"> 
-                                <button class="cart-button me-4" (click)="addProductToCart(product.id, quantitySelected)">
+                                <button class="cart-button me-4" (click)="addProductToCart(product.id, quantitySelected)" [disabled]="product.stock === 0">
                                     <span class="add-to-cart">Añadir</span>
                                     <span class="added">Añadido</span>
                                     <i class="fas fa-shopping-cart"></i>
@@ -90,7 +90,7 @@
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Disponibilidad</b>
-                                <span *ngIf="product.stock > 0">En Stock <span *ngIf="product.stock <= 10">product.stock</span></span>
+                                <span *ngIf="product.stock > 0">En Stock <span *ngIf="product.stock <= 10">{{product.stock}} ud</span></span>
                                 <span *ngIf="product.stock === 0">Sin Stock</span>
                             </li>
 
@@ -115,7 +115,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" [class.active]="review" data-toggle="tab"
                                     style="cursor: pointer;" role="tab" aria-selected="true"
-                                    (click)="showReviews()">Reviews <span *ngIf="product_reviews">({{ product_reviews.length }})</span></a>
+                                    (click)="showReviews()">Reviews <span *ngIf="product_reviews"></span></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" [class.active]="!review" data-toggle="tab" style="cursor: pointer;"
@@ -186,6 +186,7 @@
                                             <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
 
                                                 <p class="display-5 mb-4 mb-md-5 text-center">Lo que nuestros clientes opinan de este producto.</p>
+                                                <h5 class="text-center" *ngIf="product_reviews && product_reviews.length > 0">{{ product_reviews.length }} reviews más recientes</h5>
                                                 <hr class="mx-auto mb-5 mb-xl-9 border-dark-subtle">
                                             </div>
                                         </div>
@@ -284,17 +285,17 @@
                         <div class="product__item ">
                             <div class="product__item__pic"
                                 style="cursor: pointer;">
-                                <img *ngIf="api_imagen_existe" class="product__details__pic__item--large"
+                                <img *ngIf="productoRecomendado.imagen_prod" class="product__details__pic__item--large"
                                     [src]="url+productoRecomendado.imagen_prod" alt="" (click)="getProductInfo(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
-                                <img *ngIf="!api_imagen_existe" class="product__details__pic__item--large"
+                                <img *ngIf="!productoRecomendado.imagen_prod" class="product__details__pic__item--large"
                                     src="../../assets/imagenes/NoProductImageAvailable.png" alt="" (click)="getProductInfo(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
-                                <ul class="product__item__pic__hover" *ngIf="!productoAnadido">
+                                <ul class="product__item__pic__hover" *ngIf="!productosAnadidos.has(productoRecomendado.id)">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                     <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
                                     <li><a style="cursor: pointer;" (click)="addProductRecommendedToCart(productoRecomendado.id)"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
 
-                                <ul class="product__item__pic__hover " *ngIf="productoAnadido">
+                                <ul class="product__item__pic__hover " *ngIf="productosAnadidos.has(productoRecomendado.id)">
                                     <li >
                                         <div class="alert alert-danger">
                                             <h6>Añadido al carrito</h6>

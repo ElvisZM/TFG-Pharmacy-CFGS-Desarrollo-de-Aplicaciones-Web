@@ -11,7 +11,6 @@ from rest_framework.permissions import AllowAny
 from oauth2_provider.models import AccessToken, Application
 
 
-# Create your views here.
 @api_view(['POST'])
 def save_payment(request):
     if (request.user.is_authenticated):
@@ -54,6 +53,7 @@ def save_payment(request):
                 if pago_serializer.is_valid() and compra_serializer.is_valid():
                     cliente = Cliente.objects.get(usuario = request.data['cliente'])
                     carrito = CarritoCompra.objects.get(codigo_compra = request.data['carrito'])
+                    
                     compra_creada = Compra.objects.create(fecha_compra=compra_serializer.data['fecha_compra'], direccion_envio=compra_serializer.data['direccion_envio'],
                     codigo_postal = compra_serializer.data['codigo_postal'],
                     municipio = compra_serializer.data['municipio'],
@@ -92,6 +92,14 @@ def save_payment(request):
                     carrito.finalizado=True
                     carrito.save()
                     
+                    contenido_carrito = ContenidoCarrito.objects.filter(carrito_id=carrito).all()
+                    
+                    for item in contenido_carrito:
+                        producto = item.producto_id
+                        producto.stock -= item.cantidad_producto
+                        producto.ventas += item.cantidad_producto
+                        producto.save()
+                    
                     return Response("Compra registrada correctamente", status=status.HTTP_200_OK)
                 
                 else:
@@ -100,7 +108,7 @@ def save_payment(request):
             except serializers.ValidationError as error:
                 return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
             except Exception as error:
-                return Response(error, status=status.HTTP_400_BAD_REQUEST)
+                return Response(repr(error), status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response('Metodo no permitido', status=status.HTTP_405_BAD_REQUEST)
         

@@ -20,7 +20,7 @@ export class AuthService {
 
 
   setTokenCookie(token:string){
-    this.cookies.set("token",token);
+    this.cookies.set("token",token, {path: '/' });
   }
 
   getTokenCookie(){
@@ -29,9 +29,9 @@ export class AuthService {
   }
 
   setNamePicture(name:string, picture_url?:string){
-    this.cookies.set("name",name);
+    this.cookies.set("name",name, {path: '/' });
     if (picture_url){
-      this.cookies.set("picture_url", picture_url);
+      this.cookies.set("picture_url", picture_url, {path: '/' });
     }
   }
 
@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   setUserRol(rol: string){
-    this.cookies.set("user_rol", rol)
+    this.cookies.set("user_rol", rol, {path: '/' })
   }
 
   getUserRol(){
@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   setSource(source:string){
-    this.cookies.set("source", source)
+    this.cookies.set("source", source, {path: '/' });
   }
 
   getSource(){
@@ -58,18 +58,24 @@ export class AuthService {
     return source
   }
 
-  logout() {
-    this.cookies.delete("token");
-    this.cookies.delete("name");
-    this.cookies.delete("picture_url");
-    this.cookies.delete("user_rol");
-    this.router.navigate(['/']);
-    setTimeout(() => {
-      window.location.reload();
-    },500);
-    google.accounts.id.disableAutoSelect();
-  }
 
+  logout() {
+    function deleteCookie(name: string) {
+      document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+    }
+  
+    const cookiesToDelete = ["token", "name", "picture_url", "user_rol", "source"];
+  
+    cookiesToDelete.forEach(cookie => deleteCookie(cookie));
+  
+    google.accounts.id.disableAutoSelect();
+  
+    this.router.navigate(['/']).then(() => {
+      window.location.reload();
+    });
+  }
+  
+  
   getHeadersApiRequest() {
     let headers_vacio: any = {}
     let token: string = this.getTokenCookie();

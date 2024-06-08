@@ -1,9 +1,9 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { DatosService } from '../servicios/datos.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../servicios/auth.service';
 import { CartInfoService } from '../servicios/cart-info.service';
@@ -45,64 +45,90 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
 
   source:string = '';
 
-  productoAnadido: boolean = false;
+  productosAnadidos: Set<number> = new Set<number>();
 
   average: number = 0;
 
-  constructor(private titleService: Title, private route: ActivatedRoute, private datosService: DatosService, private router: Router, private fb: FormBuilder, private authService: AuthService, private cartInfo: CartInfoService, private reviewService: ReviewsService) { }
+  reviews_totales: number = 0;
+
+  constructor(private titleService: Title, private route: ActivatedRoute, private datosService: DatosService, private router: Router, private fb: FormBuilder, private authService: AuthService, private cartInfo: CartInfoService, private reviewService: ReviewsService, private viewportScroller: ViewportScroller) { }
 
   ngOnInit(): void {
+
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
     
     this.route.paramMap.subscribe(params => {
       const cn_prod = +params.get('cn_prod')!;
       const cif_farm = params.get('cif_farm')!;
       this.datosService.getProduct(cn_prod, cif_farm).subscribe(
         response => {
-          this.product = response
-          this.titleService.setTitle(`${this.product.nombre_prod}`);
-          this.getProductRecommended(this.product.categoria_id.nombre_cat)
 
-          if(this.product.imagen_prod){
-            this.api_imagen_url = this.url + this.product.imagen_prod
-            this.api_imagen_existe = true;
-          }
+          this.getProductDetails(response);
 
-          this.FormReviewProduct = this.fb.group({
-            review_titulo:['', Validators.required],
-            review_texto:['', Validators.required],
-            review_votacion:[0, Validators.required],
-            review_producto:[this.product.id, Validators.required],
-            review_fecha:[this.datosService.date_today, Validators.required],
-          });
-
-          this.reviewService.getProductReviews(this.product.id).subscribe(response =>{
-            response.sort((a: any, b: any) => {
-              return b.id - a.id;
-            });
-            this.product_reviews = response.slice(0,6)
-
-            this.getAverageProductReview()
-
-            
           }, error =>{
             console.log(error)
-          })
-
         }
       )
-      
-    })
 
+    })
+    
     this.checkIfLoged()
 
-
-  }
+    }
 
   ngDoCheck() {
     if (this.FormReviewProduct){
       this.checkEmptyFields()
     }
   }
+
+
+  initializeForm(): void {
+    this.FormReviewProduct = this.fb.group({
+      review_titulo: ['', Validators.required],
+      review_texto: ['', Validators.required],
+      review_votacion: [0, Validators.required],
+      review_producto: [this.product ? this.product.id : null, Validators.required],
+      review_fecha: [this.datosService.date_today, Validators.required],
+    });
+  }
+
+  getProductDetails(product: any): void{
+    this.product = product;
+    this.titleService.setTitle(`${this.product.nombre_prod}`);
+    this.getProductRecommended(this.product.categoria_id.nombre_cat);
+
+    if (this.product.imagen_prod) {
+      this.api_imagen_url = this.url + this.product.imagen_prod;
+      this.api_imagen_existe = true;
+    }
+
+    this.initializeForm();
+
+    this.reviewService.getProductReviews(this.product.id).subscribe(
+      response => {
+
+        this.getProductReviews(response);
+      },
+      error => {
+        console.error('Error al obtener las reseñas del producto:', error);
+      }
+    );
+  }
+
+
+  getProductReviews(reviews: any): void{
+    reviews.sort((a: any, b: any) => b.id - a.id);
+    this.reviews_totales = reviews.length;
+    this.product_reviews = reviews.slice(0, 6);
+    this.getAverageProductReview();
+  }
+
 
   decodeProfilePicUrl(encodedUrl: string) {
     if (encodedUrl) {
@@ -128,13 +154,17 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
   }
 
   addProductRecommendedToCart(producto_id:number){
-    this.cartInfo.addProduct(producto_id).subscribe(response => {
-      this.productoAnadido = true;
-      setTimeout(() => {
-        this.productoAnadido = false;
-      }, 2000);
-      console.log(response)
-    })
+    if(this.authService.getTokenCookie()){
+      this.cartInfo.addProduct(producto_id).subscribe(response => {
+        this.productosAnadidos.add(producto_id)
+        setTimeout(() => {
+          this.productosAnadidos.delete(producto_id)
+        }, 2000);
+        console.log(response)
+      })
+    }else{
+      this.router.navigate(['/login-register'])
+    }
   }
 
 
@@ -196,14 +226,12 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
         producto_id: reviewForm.review_producto,
       } 
 
-
+      console.log(reviewData)
       this.reviewService.createReview(reviewData).subscribe(response => {
         this.reviewService.getProductReviews(reviewData.producto_id).subscribe(response => {
           this.FormReviewProduct.reset();
-          response.sort((a: any, b: any) => {
-            return b.id - a.id;
-          });
-          this.product_reviews = response.slice(0,6)
+          this.initializeForm()
+          this.getProductReviews(response)
         
         })
       })
@@ -230,7 +258,6 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
       total += review.puntuacion
     })
     this.average = total / this.product_reviews.length.toFixed(2);
-    console.log(this.average)
     return this.average
   }
 
@@ -245,5 +272,8 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
   
   }
 
+  generateRange(stock: number): number[] {
+    return Array.from({ length: stock }, (_, i) => i + 1);
+  }
 
 }

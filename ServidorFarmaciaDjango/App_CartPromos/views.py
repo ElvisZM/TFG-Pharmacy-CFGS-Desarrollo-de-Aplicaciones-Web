@@ -104,6 +104,17 @@ def carrito_usuario(request):
             serializer=CarritoCompraSerializer(carrito_usuario)
             return Response(serializer.data)
         
+        except CarritoCompra.MultipleObjectsReturned:
+            carritos = CarritoCompra.objects.filter(usuario=request.user, finalizado=False)
+            for carrito in carritos:
+                if carritos.first() != carrito:
+                    carrito.delete()
+                    
+            carrito_usuario = carritos.first()
+            serializer = CarritoCompraSerializer(carrito_usuario)
+            
+            return Response(serializer.data)            
+        
     else:
         return Response("Necesita iniciar sesion", status=status.HTTP_405_METHOD_NOT_ALLOWED)        
         
@@ -129,34 +140,6 @@ def quitar_del_carrito(request, producto_id):
         return Response({"Necesita iniciar sesion"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-
-@api_view(['POST'])
-def bajar_unidad_carrito(request, producto_id):
-    if(request.user.is_authenticated):
-        if request.method == 'POST':
-            try:
-                producto_bajar_ud = Producto.objects.get(id=producto_id)
-        
-                carrito_usuario = CarritoCompra.objects.select_related("usuario").prefetch_related("producto_carrito").filter(usuario=request.user, finalizado=False).first()
-                
-                producto_carrito = ContenidoCarrito.objects.select_related("carrito_id", "producto_id").filter(carrito_id = carrito_usuario, producto_id = producto_bajar_ud).first()
-                
-                if (producto_carrito and producto_carrito.cantidad_producto > 1):
-                    producto_carrito.cantidad_producto -= 1
-                    producto_carrito.save()
-                    
-                else:
-                    producto_carrito.delete()
-                    
-                return Response({"Se ha quitado una unidad del producto correctamente"}, status=status.HTTP_200_OK)
-            
-            except Exception as error:
-                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
-            return Response("Metodo no permitido", status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    else:
-        return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)
-
 @api_view(['PUT'])
 def actualizar_cantidad_producto(request, producto_id):
     if (request.user.is_authenticated):
@@ -180,6 +163,7 @@ def actualizar_cantidad_producto(request, producto_id):
     else:
         return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)
     
+    
 @api_view(['POST'])
 def agregar_producto_detalles(request, producto_id):
     if (request.user.is_authenticated):
@@ -201,12 +185,17 @@ def agregar_producto_detalles(request, producto_id):
                     return Response('Producto añadido', status=status.HTTP_200_OK)
                 
                 except:
+                    
                     ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id=producto_agregar, cantidad_producto = cantidad_agregar)
                     
                     return Response('Producto añadido', status=status.HTTP_200_OK)
                 
             except:
-                carrito_usuario = CarritoCompra.objects.create(usuario=request.user, finalizado=False)
+                num_aleatorios = list(map(str, np.random.randint(1,10,10)))
+                codigo_id_compra = 'CC'+''.join(num_aleatorios)
+                    
+                
+                carrito_usuario = CarritoCompra.objects.create(codigo_compra = codigo_id_compra, usuario=request.user, finalizado=False)
                 
                 ContenidoCarrito.objects.create(carrito_id=carrito_usuario, producto_id=producto_agregar, cantidad_producto = cantidad_agregar)            
                 
@@ -217,3 +206,4 @@ def agregar_producto_detalles(request, producto_id):
                 
     else:
         return Response("Necesita iniciar sesion", status=status.HTTP_401_UNAUTHORIZED)
+    

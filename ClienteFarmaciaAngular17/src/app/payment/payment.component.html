@@ -41,7 +41,7 @@
         
 
 
-        <form [formGroup]="FormPaymentProduct" (ngSubmit)="buyProductCreditCard()" *ngIf="!showPayPal">
+        <form [formGroup]="FormPaymentProduct" (ngSubmit)="buyProductCreditCard()" *ngIf="!showPayPal && FormPaymentProduct">
 
             <div class="d-flex">
                 <div class="creditcard  mt-4 ms-3" (click)="flipCard()">
@@ -149,8 +149,8 @@
                             <input class="form-control" id="titular_tarjeta" type="text"  formControlName="payment_nombre_titular" (input)="onCardTitularInput($event)" required maxlength="20" >
                         </div>
 
-                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_nombre_titular')!.touched && FormPaymentProduct.get('payment_nombre_titular')!.hasError('required')">
-                            <h6>Necesita rellenar este campo.</h6>
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_nombre_titular')!.touched && (FormPaymentProduct.get('payment_nombre_titular')!.hasError('required') || FormPaymentProduct.get('payment_nombre_titular')!.hasError('invalidTitularName'))">
+                            <h6>Campo vacío o inválido.</h6>
                         </div>
 
                     </div>
@@ -159,11 +159,11 @@
                     <div class="field-container">
                         <div class="">
                             <label class="fw-bold" for="numero_tarjeta">Numero de la Tarjeta</label>
-                            <input class="form-control" id="numero_tarjeta" type="text"  formControlName="payment_numero_tarjeta" required (input)="onCardNumberInput($event)" maxlength="16">
+                            <input class="form-control" id="numero_tarjeta" type="text"  formControlName="payment_numero_tarjeta" required (input)="onCardNumberInput($event)" maxlength="16" >
                         </div>
 
-                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_numero_tarjeta')!.touched && FormPaymentProduct.get('payment_numero_tarjeta')!.hasError('required')">
-                            <h6>Necesita rellenar este campo.</h6>
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_numero_tarjeta')!.touched && (FormPaymentProduct.get('payment_numero_tarjeta')!.hasError('required') || FormPaymentProduct.get('payment_numero_tarjeta')!.hasError('invalidCardType'))">
+                            <h6>Campo vacío o inválido.</h6>
                         </div>
 
                     </div>
@@ -173,12 +173,12 @@
                     <div class="field-container">
                         <div class="me-5">
                             <label class="fw-bold" for="expiration">Expiracion</label>
-                            <input class="form-control" id="expiration" type="text"  formControlName="payment_expiration" (input)="onExpirationInput($event)" required maxlength="5" (keypress)="addSlash($event)" placeholder="mm/yy">
+                            <input class="form-control" id="expiration" type="text"  formControlName="payment_expiration" (input)="onExpirationInput($event)" required maxlength="5"  placeholder="mm/yy" maxlength="5">
                             
                         </div>
 
-                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_expiration')!.touched && FormPaymentProduct.get('payment_expiration')!.hasError('required')">
-                            <h6>Necesita rellenar este campo.</h6>
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_expiration')!.touched && (FormPaymentProduct.get('payment_expiration')!.hasError('required') || FormPaymentProduct.get('payment_expiration')!.hasError('fechaCaducidadInvalida'))">
+                            <h6>Campo vacío o inválido.</h6>
                         </div>
                     </div>
 
@@ -189,8 +189,8 @@
                             <input class="form-control" id="codigo_seguridad" type="password"  formControlName="payment_codigo_seguridad" (input)="onCardCvvInput($event)" required (focus)="flipCard()" (blur)="flipCard()" maxlength="3">
                         </div>
 
-                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_codigo_seguridad')!.touched && FormPaymentProduct.get('payment_codigo_seguridad')!.hasError('required')">
-                            <h6>Necesita rellenar este campo.</h6>
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_codigo_seguridad')!.touched && (FormPaymentProduct.get('payment_codigo_seguridad')!.hasError('required') || FormPaymentProduct.get('payment_codigo_seguridad')!.hasError('cvvInvalido'))">
+                            <h6>Campo vacío o inválido.</h6>
                         </div>
                     </div>
                                                     
@@ -215,11 +215,11 @@
                     <div class="w-50 ms-5">
                         <div class="form-group">
                             <label class="fw-bold" for="codigo_postal">Codigo Postal</label>
-                            <input class="form-control" id="codigo_postal" type="text" placeholder="Introduzca el codigo postal" formControlName="payment_codigo_postal" required >
+                            <input class="form-control" id="codigo_postal" type="text" placeholder="Introduzca el codigo postal" formControlName="payment_codigo_postal" required maxlength="5">
                         </div>
 
-                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_codigo_postal')!.touched && FormPaymentProduct.get('payment_codigo_postal')!.hasError('required')">
-                            <h6>Necesita rellenar este campo.</h6>
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_codigo_postal')!.touched && (FormPaymentProduct.get('payment_codigo_postal')!.hasError('required') || FormPaymentProduct.get('payment_codigo_postal')!.hasError('cpInvalido'))">
+                            <h6>Campo vacío o inválido.</h6>
                         </div>
 
                     </div>
@@ -232,7 +232,7 @@
                             <input class="form-control" id="municipio" type="text" placeholder="Introduzca su municipio" formControlName="payment_municipio" required >
                         </div>
 
-                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_municipio')!.touched && FormPaymentProduct.get('payment_municipio')!.hasError('required')">
+                        <div class="validaciones alert alert-danger" *ngIf="FormPaymentProduct.get('payment_municipio')!.touched && (FormPaymentProduct.get('payment_municipio')!.hasError('required') || FormPaymentProduct.get('payment_municipio')!.hasError('municipioInvalido'))">
                             <h6>Necesita rellenar este campo.</h6>
                         </div>
 
@@ -253,7 +253,7 @@
             
             <div class="d-flex justify-content-between botones ">
                 <button class="w-25 ms-4 fw-bold" name="back" (click)="backToCart()">Volver al carrito</button>
-                <button class="w-25 me-4 fw-bold" type="submit" name="update"  [disabled]="campoFormVacio">Realizar Compra</button>
+                <button class="w-25 me-4 fw-bold" type="submit" [disabled]="campoFormVacio">Realizar Compra</button>
             </div>
                                 
 
@@ -301,10 +301,10 @@
                                     <div class="invoice-number mb-30" *ngIf="carrito">
                                         <h4 class="inv-title-1">Cliente</h4>
                                         <div class="d-flex" *ngIf="carrito?.cliente?.usuario && !PayPalData">
-                                            <h2 class="name mb-10" >{{carrito.cliente.usuario.first_name}}</h2>
-                                            <h2 class="name mb-10 ms-1" *ngIf="carrito.usuario">{{carrito.usuario.last_name}}</h2>
+                                            <h2 class="name" >{{carrito.cliente.usuario.first_name}}</h2>
+                                            <h2 class="name ms-1" *ngIf="carrito.usuario">{{carrito.usuario.last_name}}</h2>
                                         </div>
-                                        <h2 class="name mb-10" *ngIf="PayPalData">{{PayPalClientName}}</h2>
+                                        <h2 class="name" *ngIf="PayPalData">{{PayPalClientName}}</h2>
                                         <p class="">
                                             {{carrito && carrito.usuario ? carrito.usuario.email : ''}}
                                         </p>
@@ -326,7 +326,7 @@
                                     <div class="invoice-number mb-30">
                                         <div class="invoice-number-inner">
                                             <h4 class="inv-title-1">Empresa</h4>
-                                            <h2 class="name mb-10">{{this.getPharmaInfo().nombre}}</h2>
+                                            <h2 class="name">{{this.getPharmaInfo().nombre}}</h2>
                                             <p class="">
                                                 www&#46;elvisdevlab&#46;com <br/>
                                                 {{this.getPharmaInfo().direccion}} <br/>

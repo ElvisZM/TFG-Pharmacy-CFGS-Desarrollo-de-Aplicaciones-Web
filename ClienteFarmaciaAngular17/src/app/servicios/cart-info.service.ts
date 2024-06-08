@@ -15,6 +15,7 @@ enum jojo {
   LEFT = "Izquierda", RIGHT = "derecha"
 
 }
+
 @Injectable({
   providedIn: 'root'
 })

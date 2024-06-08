@@ -66,7 +66,6 @@ def registrar_producto_csv(request):
         return Response('Sin permisos para esta operación', status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-# @permission_classes([AllowAny])
 def productos_list(request):
     productos = Producto.objects.all()
     serializer = ProductoSerializer(productos, many=True)

@@ -34,6 +34,7 @@ class Producto(models.Model):
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=5, decimal_places=2)
     stock = models.IntegerField()
+    ventas = models.IntegerField(default=0)
     cif_farm = models.CharField(max_length=8)
     categoria_id = models.ForeignKey(Categoria, on_delete=models.CASCADE, db_column='categoria_id')
     farmacia_id = models.ForeignKey(Farmacia, on_delete=models.CASCADE, db_column='farmacia_id')

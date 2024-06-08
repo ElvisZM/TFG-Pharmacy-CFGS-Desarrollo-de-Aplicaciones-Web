@@ -130,6 +130,12 @@
     </form>
   </div>
   <div class="form-container sign-in">
+
+    <button class="btn facebook" (click)="loginFB()">
+      <h6 class="me-4">Inicia Sesión con Facebook</h6>
+      <i class="fa-brands fa-facebook fa-2x"></i>
+    </button>
+    
     <form (ngSubmit)="login()" >
       <input type="hidden" name="login" value="login">
 
@@ -140,12 +146,9 @@
 
       <div class="social-icons">
 
-        <div id="google-btn"></div>
+        <div class="mb-5" id="google-btn"></div>
 
-        <button class="btn facebook" (click)="loginFB()">
-          <h6 class="me-4">Inicia Sesión con Facebook</h6>
-          <i class="fa-brands fa-facebook fa-2x"></i>
-        </button>
+        
       </div>
 
       <span class="mb-3">o usa tu usuario y clave</span>

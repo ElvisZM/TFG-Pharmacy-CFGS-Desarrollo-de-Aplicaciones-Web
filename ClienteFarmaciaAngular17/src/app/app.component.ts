@@ -37,7 +37,6 @@ export class AppComponent implements OnInit, DoCheck {
       this.token = false;
     }
 
-
   }
 
   ngDoCheck(){

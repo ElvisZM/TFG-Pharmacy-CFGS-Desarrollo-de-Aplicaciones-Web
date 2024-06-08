@@ -1,52 +1,57 @@
 
 
-<div class="alert alert-success m-auto" *ngIf="mostrarMensaje">
-    <h4>{{ textoInfo }}<b>{{ palabraBuscada }}</b></h4>
+<section>
+  <div class="container">
 
-</div>
-<div *ngIf="mostrarImagen" class="nodata">
-    <h1>No se han encontrado resultados</h1>
-    <img src="../../assets/imagenes/no-data-found.jpg" alt="">
+    <div class="alert alert-success m-auto" *ngIf="mostrarMensaje">
+      <h4>{{ textoInfo }}<b>{{ palabraBuscada }}</b></h4>
+  
+    </div>
+    <div *ngIf="mostrarImagen" class="nodata">
+      <h1>No se han encontrado resultados</h1>
+      <img src="../../assets/imagenes/no-data-found.jpg" alt="">
+  
+    </div>
+  
 
-</div>
+    <div class="row ms-2 mt-3 d-flex align-items-center">
+      <h4 class="d-flex align-items-center">
+        <b class="me-2" *ngIf="productos">{{productos.length}}</b> resultados
+      </h4>
+    </div>
 
+    <div class="row mt-2" *ngIf="productos">
+      <ng-container *ngFor="let producto of productos">
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product__item ">
+                  <div class="product__item__pic"
+                      style="cursor: pointer;">
+                      <img *ngIf="producto.imagen_prod" class="product__details__pic__item--large"
+                          [src]="url+producto.imagen_prod" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)">
+                      <img *ngIf="!producto.imagen_prod" class="product__details__pic__item--large"
+                          src="../../assets/imagenes/NoProductImageAvailable.png" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)">
+                      <ul class="product__item__pic__hover" *ngIf="!productosAnadidos.has(producto.id)">
+                          <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                          <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
+                          <li><a style="cursor: pointer;" (click)="producto.stock > 0 && addProductToCart(producto.id)" [class.disabled]="producto.stock === 0"><i class="fa fa-shopping-cart"></i></a></li>
+                      </ul>
 
+                      <ul class="product__item__pic__hover " *ngIf="productosAnadidos.has(producto.id)">
+                          <li >
+                              <div class="alert alert-danger">
+                                  <h6>Añadido al carrito</h6>
+                              </div>
+                          </li>
+                      </ul>
 
-
-
-<div class="row">
-  <div class="col-sm-3 card" *ngFor="let producto of productos">
-    <div class="thumb-wrapper">
-      <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-      <div class="img-box">
-        <img [src]="urlPath + producto.imagen_prod" class="img-fluid imagen_prod" [alt]="producto.nombre_prod" *ngIf="producto.imagen_prod">									
-        <img src="../../assets/imagenes/NoProductImageAvailable.png" class="img-fluid imagen_prod" alt="producto.nombre_prod" *ngIf="!producto.imagen_prod">									
-      </div>
-      <div class="thumb-content">
-        <h4>{{ producto.nombre_prod }}</h4>									
-        <div class="star-rating">
-          <ul class="list-inline">
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-            <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-          </ul>
-        </div>
-        <p class="item-price"><del class="me-3">{{ producto.precio }}€</del> <b>{{ producto.precio }}€</b></p>
-        <div class="botones d-flex">
-          <button class="cart-button me-4">
-            <span class="add-to-cart">Añadir</span>
-            <span class="added">Añadido</span>
-            <i class="fas fa-shopping-cart"></i>
-            <i class="fas fa-box"></i>
-          </button>
-          <button class="favorite-button">
-            <div class="icon"><div class="star"></div></div>    
-            <span>Favorito</span>
-          </button>
-        </div>
-      </div>						
+                  </div>
+                  <div class="product__item__text">
+                      <h6><a href="#">{{producto.nombre_prod}}</a></h6>
+                      <h5>{{producto.precio}} €</h5>
+                  </div>
+              </div>
+          </div>
+      </ng-container>
     </div>
   </div>
-</div>
+</section>

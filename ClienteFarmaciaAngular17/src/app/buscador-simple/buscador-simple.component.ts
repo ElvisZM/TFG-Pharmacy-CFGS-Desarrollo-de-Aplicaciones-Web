@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { DatosService } from '../servicios/datos.service';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '../servicios/auth.service';
+import { CartInfoService } from '../servicios/cart-info.service';
 
 @Component({
   selector: 'app-buscador-simple',
@@ -19,9 +22,11 @@ export class BuscadorSimpleComponent implements OnInit {
   textoInfo: string = 'Estos son los productos que hemos encontrado para ti con: '
   mostrarMensaje: boolean = false;
   mostrarImagen: boolean = false;
-  public urlPath = environment.apiImageUrl
+  public url = environment.apiImageUrl
 
-  constructor(private datosService: DatosService) { }
+  productosAnadidos: Set<number> = new Set<number>();
+
+  constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService) { }
 
   ngOnInit(): void {
       this.palabraBuscada = this.datosService.getPalabraBuscada();
@@ -63,4 +68,28 @@ export class BuscadorSimpleComponent implements OnInit {
         })
     }
   }
+
+
+  addProductToCart(producto_id: number){
+    if(this.authService.getTokenCookie()){
+      this.cartInfo.addProduct(producto_id).subscribe(response => {
+        this.productosAnadidos.add(producto_id)
+        setTimeout(() => {
+          this.productosAnadidos.delete(producto_id)
+        }, 3000)
+        console.log(response)
+      }, error => {
+        console.log(error)
+      })
+    }else{
+      this.router.navigate(['login-register'])
+    }
+  }
+
+
+  getProductInfo(cn_prod: number, cif_farm:string){
+    this.router.navigate(['/detalles/producto', cn_prod, cif_farm])
+  }
+
+
 }

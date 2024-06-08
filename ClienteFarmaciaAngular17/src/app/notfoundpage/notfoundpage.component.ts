@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-notfoundpage',
@@ -8,9 +9,18 @@ import { Router } from '@angular/router';
   templateUrl: './notfoundpage.component.html',
   styleUrl: './notfoundpage.component.scss'
 })
-export class NotfoundpageComponent {
+export class NotfoundpageComponent implements OnInit{
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private viewportScroller: ViewportScroller){}
+
+
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
+  }
 
   backToIndex(){
     this.router.navigate([''])

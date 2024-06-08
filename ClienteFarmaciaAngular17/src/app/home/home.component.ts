@@ -4,8 +4,9 @@ import { TypewriterService} from '../servicios/typewriter.service';
 import { Title, bootstrapApplication } from '@angular/platform-browser';
 import 'zone.js';
 import { isEmpty, map } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, ViewportScroller } from '@angular/common';
 import { AuthService } from '../servicios/auth.service';
+import { NavigationEnd, Router } from '@angular/router';
 
 
 @Component({
@@ -26,9 +27,15 @@ export class HomeComponent implements OnInit, DoCheck{
   typedText$!: any;
   titles!: Array<string>;
 
-  constructor(private authService: AuthService, private titleService: Title){ }
+  constructor(private authService: AuthService, private titleService: Title, private router: Router, private viewportScroller: ViewportScroller){ }
 
   ngOnInit(): void {  
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
+
     this.usernameTitleAnimated();
     this.authService.getUserRol()
     this.titleService.setTitle('P.Sur Pharmacy | Farmacia online');
