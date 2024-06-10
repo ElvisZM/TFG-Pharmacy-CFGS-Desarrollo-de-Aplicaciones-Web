@@ -132,11 +132,15 @@ def producto_eliminar(request, cn_prod, cif_farm):
 
 
 @api_view(['GET'])
-# @permission_classes([AllowAny])
 def producto_obtener(request, cn_prod, cif_farm):
-    producto = Producto.objects.get(cn_prod=cn_prod, cif_farm=cif_farm)
-    serializer = ProductoSerializer(producto)
-    return Response(serializer.data)
+    try:
+        producto = Producto.objects.get(cn_prod=cn_prod, cif_farm=cif_farm)
+        serializer = ProductoSerializer(producto)
+        return Response(serializer.data)
+    except Producto.DoesNotExist:
+        return Response("Producto no encontrado")
+    except Exception as error:
+        return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])
@@ -203,3 +207,77 @@ def productos_recomendados(request, nombre_cat):
     productos_recomendados = Producto.objects.filter(categoria_id=categoria)
     productos_serializer = ProductoSerializer(productos_recomendados, many=True)
     return Response(productos_serializer.data)
+
+
+@api_view(['GET'])
+def productos_cat_analgesicos(request):
+    categoria = Categoria.objects.filter(nombre_cat="Analgesicos").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+
+@api_view(['GET'])
+def productos_cat_antiacidos(request):
+    categoria = Categoria.objects.filter(nombre_cat="Antiacidos").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+
+@api_view(['GET'])
+def productos_cat_antialergicos(request):
+    categoria = Categoria.objects.filter(nombre_cat="Antialergicos").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+@api_view(['GET'])
+def productos_cat_antisepticos(request):
+    categoria = Categoria.objects.filter(nombre_cat="Antisepticos").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+@api_view(['GET'])
+def productos_cat_hipolipemiantes(request):
+    categoria = Categoria.objects.filter(nombre_cat="Hipolipemiantes").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+@api_view(['GET'])
+def productos_cat_asma(request):
+    categoria = Categoria.objects.filter(nombre_cat="Asma").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+@api_view(['GET'])
+def productos_cat_vitaminas(request):
+    categoria = Categoria.objects.filter(nombre_cat="Vitaminas").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+
+
+
+@api_view(['GET'])
+def productos_cat_corticosteroides(request):
+    categoria = Categoria.objects.filter(nombre_cat="Corticosteroides").first()
+    productos = Producto.objects.filter(categoria_id=categoria)
+    productos_serializer = ProductoSerializer(productos, many=True)
+    return Response(productos_serializer.data)
+

@@ -102,4 +102,8 @@ export class ShoppingCartComponent implements OnInit {
     })
   }
 
+  getProductDetails(cn_prod: number, cif_farm:string){
+    this.router.navigate(['/detalles/producto', cn_prod, cif_farm])
+  }
+
 }

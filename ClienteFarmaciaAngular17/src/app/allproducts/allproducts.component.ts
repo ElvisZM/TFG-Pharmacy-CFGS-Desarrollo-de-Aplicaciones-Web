@@ -104,9 +104,6 @@ export class AllproductsComponent implements OnInit, DoCheck {
 
   getProductInfo(cn_prod: number, cif_farm:string){
     this.router.navigate(['/detalles/producto', cn_prod, cif_farm])
-    setTimeout(() => {
-      window.location.reload();
-    });
   }
 
 

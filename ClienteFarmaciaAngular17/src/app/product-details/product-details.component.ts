@@ -279,4 +279,36 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
     return Array.from({ length: stock }, (_, i) => i + 1);
   }
 
+
+  goCategory(categoria: string){
+    if(categoria === 'Analgesicos'){
+      this.router.navigate(['/categoria/analgesicos'])
+
+    }else if(categoria === 'Antialergicos'){
+      this.router.navigate(['/categoria/antialergicos'])
+    
+    }else if(categoria === 'Antiacidos'){
+      this.router.navigate(['/categoria/antiacidos'])
+    
+    }else if(categoria === 'Antisepticos'){
+      this.router.navigate(['/categoria/antisepticos'])
+    
+    }else if(categoria === 'Asma'){
+      this.router.navigate(['/categoria/broncodilatadores'])
+    
+    }else if(categoria === 'Hipolipemiantes'){
+      this.router.navigate(['/categoria/hipolipemiantes'])
+    
+    }else if(categoria === 'Vitaminas'){
+      this.router.navigate(['/categoria/suplementos'])
+    
+    }else if(categoria === 'Corticosteroides'){
+      this.router.navigate(['/categoria/corticosteroides'])
+    
+    }else{
+      this.router.navigate(['/'])
+      console.log('Categoria no encontrada')
+    }
+  }
+
 }

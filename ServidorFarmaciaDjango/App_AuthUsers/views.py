@@ -77,36 +77,52 @@ def obtener_usuario_token(request,token):
     
     ModeloToken = AccessToken.objects.get(token=token)
     usuario = Usuario.objects.get(id=ModeloToken.user_id)
+    if (usuario.is_superuser):
+        usuario.first_name = 'Administrador'
+        usuario.rol=1
+        usuario.save()
     usuario_serializer = UsuarioSerializer(usuario)
     data_user = usuario_serializer.data
     
-    if data_user['rol'] == 1:
-        admin_data = Administrador.objects.all()
-        admin_data = admin_data.get(usuario_id=data_user['id'])
-        administrador_serializer = AdministradorSerializer(admin_data)
-        
-        response_data = {"usuario": data_user, "administrador":administrador_serializer.data}
-    
-    elif data_user['rol'] == 2:
-        cliente_data = Cliente.objects.get(usuario=data_user['id'])
-        cliente_serializer = ClienteSerializer(cliente_data)
+    try:
+        if data_user['rol'] == 1:
+            admin_data = Administrador.objects.all()
+            admin_data = admin_data.get(usuario_id=data_user['id'])
+            administrador_serializer = AdministradorSerializer(admin_data)
             
-        response_data = {"usuario": data_user, "cliente":cliente_serializer.data}
-    
-    elif data_user['rol'] == 3:
-        empleado_data = Empleado.objects.get(usuario=data_user['id'])
-        empleado_serializer = EmpleadoSerializer(empleado_data)
+            response_data = {"usuario": data_user, "administrador":administrador_serializer.data}
         
-        response_data = {"usuario": data_user, "empleado":empleado_serializer.data}
-    
-    elif data_user['rol'] == 4:
-        gerente_data = Gerente.objects.get(usuario=data_user['id'])
-        gerente_serializer = GerenteSerializer(gerente_data)
+        elif data_user['rol'] == 2:
+            cliente_data = Cliente.objects.get(usuario=data_user['id'])
+            cliente_serializer = ClienteSerializer(cliente_data)
+                
+            response_data = {"usuario": data_user, "cliente":cliente_serializer.data}
         
-        response_data = {"usuario": data_user, "gerente":gerente_serializer.data}
+        elif data_user['rol'] == 3:
+            empleado_data = Empleado.objects.get(usuario=data_user['id'])
+            empleado_serializer = EmpleadoSerializer(empleado_data)
+            
+            response_data = {"usuario": data_user, "empleado":empleado_serializer.data}
+        
+        elif data_user['rol'] == 4:
+            gerente_data = Gerente.objects.get(usuario=data_user['id'])
+            gerente_serializer = GerenteSerializer(gerente_data)
+            
+            response_data = {"usuario": data_user, "gerente":gerente_serializer.data}
+        
+        else:
+            return Response('Invalid')
     
-    else:
-        return Response('Invalid')  
+    except Administrador.DoesNotExist as error:
+        if data_user['rol'] == 1:
+            grupo = Group.objects.get(name='Administrador') 
+            grupo.user_set.add(usuario)
+            administrador = Administrador.objects.create( usuario = usuario, source='app')
+            administrador.save()
+            
+            administrador_serializer = AdministradorSerializer(administrador)
+
+            response_data = {"usuario": data_user, "administrador":administrador_serializer.data}   
 
     return Response(response_data)
 

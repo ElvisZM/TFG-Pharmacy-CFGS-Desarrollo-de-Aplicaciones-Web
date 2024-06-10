@@ -1,1 +1,81 @@
-<p>cat-suplementos works!</p>
+
+
+
+<section class="breadcrumb-section set-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Suplementos Vitamínicos</h2>
+                    <div class="breadcrumb__option">
+                        <a style="cursor: pointer;" (click)="goIndex()">Home</a>
+                        <span>Suplementos Vitamínicos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  
+  
+  
+  <section>
+    <div class="container">
+  
+      <div class="filter__item">
+          <div class="row">
+              <div class="col-lg-4 col-md-5">
+                  <div class="filter__sort ms-3">
+                      <span>Ordenar por:</span>
+                      <select class="ms-4" [(ngModel)]="valorOrden" (change)="getOrden()">
+                          <option value="0" [selected]>Recomendados</option>
+                          <option value="1">Mejor valorados</option>
+                          <option value="2">Precio: Menor a Mayor</option>
+                          <option value="3">Precio: Mayor a Menor</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-lg-4 col-md-4">
+                  <div class="filter__found">
+                      <h6 *ngIf="AllProducts"><span>{{AllProducts.length}}</span> Productos encontrados</h6>
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+      <div class="row">
+        <ng-container *ngFor="let producto of AllProducts">
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product__item ">
+                    <div class="product__item__pic"
+                        style="cursor: pointer;">
+                        <img *ngIf="producto.imagen_prod" class="product__details__pic__item--large"
+                            [src]="url+producto.imagen_prod" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)" loading="lazy">
+                        <img *ngIf="!producto.imagen_prod" class="product__details__pic__item--large"
+                            src="../../assets/imagenes/NoProductImageAvailable.png" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)" loading="lazy">
+                        <ul class="product__item__pic__hover" *ngIf="!productosAnadidos.has(producto.id)">
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
+                            <li><a style="cursor: pointer;" (click)="producto.stock > 0 && addProductToCart(producto.id)" [class.disabled]="producto.stock === 0"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+  
+                        <ul class="product__item__pic__hover " *ngIf="productosAnadidos.has(producto.id)">
+                            <li>
+                                <div class="alert alert-danger">
+                                    <h6>Añadido al carrito</h6>
+                                </div>
+                            </li>
+                        </ul>
+  
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">{{producto.nombre_prod}} </a></h6>
+                        <h5>{{producto.precio}} €</h5>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+  

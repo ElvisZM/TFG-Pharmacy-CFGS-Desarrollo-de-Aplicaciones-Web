@@ -15,5 +15,13 @@ urlpatterns = [
     path('producto/<int:cn_prod>/<str:cif_farm>', views.producto_obtener),
     path('proveedor/<str:nombre_prov>', views.helper_cif_prov),
     path('categoria/<str:nombre_cat>', views.helper_id_cat),
-    path('producto/recomendado/<str:nombre_cat>', views.productos_recomendados)
+    path('producto/recomendado/<str:nombre_cat>', views.productos_recomendados),
+    path('productos/categoria/analgesicos', views.productos_cat_analgesicos),
+    path('productos/categoria/antiacidos', views.productos_cat_antiacidos),
+    path('productos/categoria/antialergicos', views.productos_cat_antialergicos),
+    path('productos/categoria/antisepticos', views.productos_cat_antisepticos),
+    path('productos/categoria/hipolipemiantes', views.productos_cat_hipolipemiantes),
+    path('productos/categoria/asma', views.productos_cat_asma),
+    path('productos/categoria/vitaminas', views.productos_cat_vitaminas),
+    path('productos/categoria/corticosteroides', views.productos_cat_corticosteroides),
 ]

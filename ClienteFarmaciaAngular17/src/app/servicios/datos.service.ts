@@ -91,4 +91,52 @@ export class DatosService {
     return this.http.get<any>(this.urlPath+'farmacia/'+name, headers)
   }
 
+  
+  getProductsAnalgesicos(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/analgesicos', headers)
+  }
+
+
+  getProductsAntiacidos(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/antiacidos', headers)
+  }
+
+
+  getProductsAntialergicos(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/antialergicos', headers)
+  }
+
+
+  getProductsAntisepticos(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/antisepticos', headers)
+  }
+
+
+  getProductsHipolipemiantes(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/hipolipemiantes', headers)
+  }
+
+
+  getProductsAsma(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/asma', headers)
+  }
+
+
+  getProductsVitaminas(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/vitaminas', headers)
+  }
+
+
+  getProductsCorticosteroides(): Observable<any> {
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/categoria/corticosteroides', headers)
+  }
+
 }

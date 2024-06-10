@@ -6,8 +6,8 @@
                     <div class="breadcrumb__text">
                         <h2>{{product.nombre_prod}}</h2>
                         <div class="breadcrumb__option">
-                            <a href="./index.html">Categorías</a>
-                            <a href="./index.html">{{product.categoria_id.nombre_cat}}</a>
+                            <a >Categorías</a>
+                            <a style="cursor: pointer; text-decoration:underline" (click)="goCategory(product.categoria_id.nombre_cat)">{{product.categoria_id.nombre_cat}}</a>
                             <span>{{product.nombre_prod}}</span>
                         </div>
                     </div>
@@ -72,18 +72,17 @@
 
                             </div>
                             <div class="col-md-6 col-8 d-flex ms-3 mt-4"> 
-                                <button class="cart-button me-4" (click)="addProductToCart(product.id, quantitySelected)" [disabled]="product.stock === 0">
-                                    <span class="add-to-cart">Añadir</span>
-                                    <span class="added">Añadido</span>
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <i class="fas fa-box"></i>
-                                </button>
-                                <button class="favorite-button">
-                                    <div class="icon">
-                                        <div class="star"></div>
-                                    </div>
-                                    <span>Favorito</span>
-                                </button>
+                                <div class="d-flex gap-2 d-md-flex">
+                                    <button class="btn btn-primary" (click)="addProductToCart(product.id, quantitySelected)" [disabled]="product.stock === 0">
+                                        <span class="fw-bold me-2">Añadir</span>
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                    <button class="btn btn-primary fav">
+                                        <span class="fw-bold me-2">Favorito</span>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </button>
+                                </div>
+                                
                             </div>
                         </div>
 
@@ -133,7 +132,7 @@
                                             <h2 class="fs-6 text-secondary mb-4 text-uppercase text-center">
                                                 ¡CUENTANOS TU EXPERIENCIA CON ESTE PRODUCTO!</h2>
 
-                                            <div class="height-100 d-flex justify-content-center align-items-center container w-75 mb-4">
+                                            <div class="addcomentario height-100 d-flex justify-content-center align-items-center container w-75 mb-4">
                                                 <div class="card p-4 shadow-sm container">
                                                     <div class="d-flex align-items-center mb-3">
                                                       <img src="../../assets/imagenes/usuario-noimg.webp" alt="No Photo" class="user-photo rounded-circle" *ngIf="!userLoged" loading="lazy">

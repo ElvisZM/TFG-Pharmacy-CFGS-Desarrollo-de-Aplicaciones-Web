@@ -2,3 +2,17 @@ img{
     width: 20em;
     height: 20em;
 }
+
+@media (min-width: 809px) and (max-width: 1200px) {
+    
+    .img-footer{
+        display: block !important;
+        margin-bottom: 100rem !important;
+        width: 15em;
+        height: 15em;
+    }
+
+    img{
+        margin: auto;
+    }
+}

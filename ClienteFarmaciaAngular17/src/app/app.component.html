@@ -2,68 +2,95 @@
   <div class="header">
     <div class="logo">
       <a routerLink="/" routerLinkActive="active">
-        <img class="imagen-logo" src="../assets/imagenes/Logo.jpg" alt="logotipo web"/>
+        <img class="imagen-logo" src="../assets/imagenes/Logo.jpg" alt="logotipo web" />
       </a>
     </div>
     <nav class="menu-expansible">
       <ul>
         <li class="apartados ms-5">
-          <a href="#">
+          <a style="cursor: pointer;">
             <div class="letras-animacion d-flex">
               <h5 class="me-2">Categorías</h5>
               <i class="fa-solid fa-list"></i>
             </div>
           </a>
           <ul>
-            <li class="apartados-interior"><a (click)="analgesicosProducts()" style="cursor: pointer;">Analgésicos y Antiinflamatorios</a></li>
-            <li class="apartados-interior"><a (click)="antiacidosProducts()" style="cursor: pointer;">Antiácidos</a></li>
-            <li class="apartados-interior"><a (click)="antialergicosProducts()" style="cursor: pointer;">Antialérgicos</a></li>
-            <li class="apartados-interior"><a (click)="antisepticosProducts()" style="cursor: pointer;">Antisépticos</a></li>
-            <li class="apartados-interior"><a (click)="hipolipemiantesProducts()" style="cursor: pointer;">Hipolipemiantes</a></li>
-            <li class="apartados-interior"><a (click)="broncodilatadoresProducts()" style="cursor: pointer;">Broncodilatadores</a></li>
-            <li class="apartados-interior"><a (click)="suplementosProducts()" style="cursor: pointer;">Suplementos Vitamínicos</a></li>
-            <li class="apartados-interior"><a (click)="corticosteroidesProducts()" style="cursor: pointer;">Corticosteroides</a></li>
+            <li class="apartados-interior"><a (click)="analgesicosProducts()" style="cursor: pointer;">Analgésicos y
+                Antiinflamatorios</a></li>
+            <li class="apartados-interior"><a (click)="antiacidosProducts()" style="cursor: pointer;">Antiácidos</a>
+            </li>
+            <li class="apartados-interior"><a (click)="antialergicosProducts()"
+                style="cursor: pointer;">Antialérgicos</a></li>
+            <li class="apartados-interior"><a (click)="antisepticosProducts()" style="cursor: pointer;">Antisépticos</a>
+            </li>
+            <li class="apartados-interior"><a (click)="hipolipemiantesProducts()"
+                style="cursor: pointer;">Hipolipemiantes</a></li>
+            <li class="apartados-interior"><a (click)="broncodilatadoresProducts()"
+                style="cursor: pointer;">Broncodilatadores</a></li>
+            <li class="apartados-interior"><a (click)="suplementosProducts()" style="cursor: pointer;">Suplementos
+                Vitamínicos</a></li>
+            <li class="apartados-interior"><a (click)="corticosteroidesProducts()"
+                style="cursor: pointer;">Corticosteroides</a></li>
           </ul>
         </li>
-        <li class="apartados ms-4"><a href="#"><div class="letras-animacion d-flex"><h5 class="me-2">Promociones</h5> <i class="fa-solid fa-percent"></i></div></a></li>
-        <li class="apartados"><a (click)="products()" style="cursor: pointer;"><div class="letras-animacion d-flex"><h5 class="me-2">Productos</h5><i class="pildora fa-solid fa-pills"></i></div></a></li>
+        <li class="apartados ms-4"><a style="cursor: pointer;">
+            <div class="letras-animacion d-flex">
+              <h5 class="me-2">Promociones</h5> <i class="fa-solid fa-percent"></i>
+            </div>
+          </a></li>
+        <li class="apartados"><a (click)="products()" style="cursor: pointer;">
+            <div class="letras-animacion d-flex">
+              <h5 class="me-2">Productos</h5><i class="pildora fa-solid fa-pills"></i>
+            </div>
+          </a></li>
         <li>
           <div class="busqueda" (submit)="buscar()">
-            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos" aria-label="Search" [(ngModel)]="palabraBusqueda" (keyup.enter)="buscar()" (input)="actualizarPalabra()">
-            <button class="btn btn-light btn-outline-dark" type="button" (click)="buscar()">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
+            <input name="textoBusqueda" class="form-control me-2" type="search"
+              placeholder="Busca entre nuestros productos" aria-label="Search" [(ngModel)]="palabraBusqueda"
+              (keyup.enter)="buscar()" (input)="actualizarPalabra()">
+            <button class="btn btn-light btn-outline-dark" type="button" (click)="buscar()">Buscar <i
+                class="fa-solid fa-magnifying-glass"></i></button>
           </div>
         </li>
         <li class="apartado-cuenta" *ngIf="!token">
-          <a href="#">
+          <a style="cursor: pointer;">
             <div class="letras-animacion d-flex">
               <i class="me-2 fa-regular fa-user"></i>
               <h5>Cuenta</h5>
             </div>
           </a>
           <ul>
-            <li class="apartado-cuenta-interior"><h5>¿Todavía no conoces nuestras ventajas?</h5></li>
+            <li class="apartado-cuenta-interior">
+              <h5>¿Todavía no conoces nuestras ventajas?</h5>
+            </li>
             <span class="nav_image"></span>
-            <li class="apartado-cuenta-interior"><button routerLink="/login-register" routerLinkActive="active">¡Empieza ya!</button></li>
-            <li class="apartado-cuenta-interior"><p>Regístrate o inicia sesión</p></li>
+            <li class="apartado-cuenta-interior"><button routerLink="/login-register" routerLinkActive="active">¡Empieza
+                ya!</button></li>
+            <li class="apartado-cuenta-interior">
+              <p>Regístrate o inicia sesión</p>
+            </li>
           </ul>
         </li>
         <li class="apartado-cuenta-logeado" *ngIf="token">
-          <a href="#">
+          <a style="cursor: pointer;">
             <div class="letras-animacion d-flex" *ngIf="picture && (source === 'google' || source==='facebook')">
-              <img class="profile-picture" [src]="picture" alt="Profile Picture" loading="lazy"><h5>{{name}}</h5>
+              <img class="profile-picture" [src]="picture" alt="Profile Picture" loading="lazy">
+              <h5>{{name}}</h5>
             </div>
             <div class="letras-animacion d-flex" *ngIf="picture && source === 'app'">
-              <img class="profile-picture" [src]="url + picture" alt="Profile Picture" loading="lazy"><h5>{{name}}</h5>
+              <img class="profile-picture" [src]="url + picture" alt="Profile Picture" loading="lazy">
+              <h5>{{name}}</h5>
             </div>
             <div class="letras-animacion d-flex" *ngIf="!picture">
-              <img class="profile-picture" src="../../assets/imagenes/usuario-noimg.webp" alt="No Profile Picture" loading="lazy">
+              <img class="profile-picture" src="../../assets/imagenes/usuario-noimg.webp" alt="No Profile Picture"
+                loading="lazy">
               <h5>{{name}}</h5>
             </div>
           </a>
           <ul class="ul-cuenta-interior">
             <li class="apartado-cuenta-interior">
               <div class="google-facebook" *ngIf="rol!=='1'">
-                <button (click)="carritoCompra()">Mi carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
+                <button (click)="carritoCompra()">Carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
               </div>
             </li>
             <li class="apartado-cuenta-interior" *ngIf="rol==='1'">
@@ -72,7 +99,8 @@
               </div>
             </li>
             <li class="apartado-cuenta-interior">
-              <button (click)="logoutAccount()">Desconectarse <i class="fa-solid fa-right-from-bracket ms-2"></i></button>
+              <button (click)="logoutAccount()">Desconectarse <i
+                  class="fa-solid fa-right-from-bracket ms-2"></i></button>
             </li>
           </ul>
         </li>
