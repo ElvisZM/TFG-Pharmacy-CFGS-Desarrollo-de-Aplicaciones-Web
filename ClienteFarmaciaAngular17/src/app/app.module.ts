@@ -27,6 +27,14 @@ import { ConfirmationPaymentComponent } from './confirmation-payment/confirmatio
 import { DatePipe } from '@angular/common';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 
+import { CatAnalgesicosComponent } from './cat-analgesicos/cat-analgesicos.component';
+import { CatAntiacidosComponent } from './cat-antiacidos/cat-antiacidos.component';
+import { CatAntialergicosComponent } from './cat-antialergicos/cat-antialergicos.component';
+import { CatAntisepticosComponent } from './cat-antisepticos/cat-antisepticos.component';
+import { CatBroncodilatadoresComponent } from './cat-broncodilatadores/cat-broncodilatadores.component';
+import { CatCorticosteroidesComponent } from './cat-corticosteroides/cat-corticosteroides.component';
+import { CatHipolipemiantesComponent } from './cat-hipolipemiantes/cat-hipolipemiantes.component';
+import { CatSuplementosComponent } from './cat-suplementos/cat-suplementos.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +64,15 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
     ShoppingCartComponent,
     PaymentComponent,
     ConfirmationPaymentComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    CatAnalgesicosComponent,
+    CatAntiacidosComponent,
+    CatAntialergicosComponent,
+    CatAntisepticosComponent,
+    CatBroncodilatadoresComponent,
+    CatCorticosteroidesComponent,
+    CatHipolipemiantesComponent,
+    CatSuplementosComponent
   ],
   providers: [ CsvproductosService, DatePipe],
   bootstrap: [AppComponent]

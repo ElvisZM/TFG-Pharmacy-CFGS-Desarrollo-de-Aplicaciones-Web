@@ -17,20 +17,42 @@ import { ConfirmationPaymentComponent } from './confirmation-payment/confirmatio
 import { ProductDetailsComponent } from './product-details/product-details.component';
 
 
+import { CatAnalgesicosComponent } from './cat-analgesicos/cat-analgesicos.component';
+import { CatAntiacidosComponent } from './cat-antiacidos/cat-antiacidos.component';
+import { CatAntialergicosComponent } from './cat-antialergicos/cat-antialergicos.component';
+import { CatAntisepticosComponent } from './cat-antisepticos/cat-antisepticos.component';
+import { CatBroncodilatadoresComponent } from './cat-broncodilatadores/cat-broncodilatadores.component';
+import { CatCorticosteroidesComponent } from './cat-corticosteroides/cat-corticosteroides.component';
+import { CatHipolipemiantesComponent } from './cat-hipolipemiantes/cat-hipolipemiantes.component';
+import { CatSuplementosComponent } from './cat-suplementos/cat-suplementos.component';
+
+import { authGuard } from './auth.guard';
+import { adminGuard } from './admin.guard';
+import { confirmationpaymentGuard } from './confirmationpayment.guard';
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login-register', component: LoginRegisterComponent },
   { path: 'nosotros', component: NosotrosComponent },
   { path: 'politica/cookies', component: PoliticacookiesComponent },
-  { path: 'admin/panel', component: AdminPanelComponent},
+  { path: 'admin/panel', component: AdminPanelComponent, canActivate: [adminGuard]},
   { path: 'admin/panel/create/product', component: FormproductComponent},
   { path: 'admin/panel/update/product/:cn_prod/:cif_farm', component: FormproductupdateComponent},
   { path: 'productos/buscador/query/:palabra', component: BuscadorSimpleComponent},
   { path: 'productos/lista/completa', component: AllproductsComponent},
-  { path: 'carrito/productos/lista', component: ShoppingCartComponent},
+  { path: 'carrito/productos/lista', component: ShoppingCartComponent, canActivate: [authGuard]},
   { path: 'tipo/pago', component: PaymentComponent},
-  { path: 'confirmacion/pago', component: ConfirmationPaymentComponent },
+  { path: 'confirmacion/pago', component: ConfirmationPaymentComponent, canActivate: [confirmationpaymentGuard] },
   { path: 'detalles/producto/:cn_prod/:cif_farm', component: ProductDetailsComponent},
+  { path: 'categoria/analgesicos', component: CatAnalgesicosComponent},
+  { path: 'categoria/antiacidos', component: CatAntiacidosComponent},
+  { path: 'categoria/antialergicos', component: CatAntialergicosComponent},
+  { path: 'categoria/antisepticos', component: CatAntisepticosComponent},
+  { path: 'categoria/broncodilatadores', component: CatBroncodilatadoresComponent},
+  { path: 'categoria/corticosteroides', component: CatCorticosteroidesComponent},
+  { path: 'categoria/hipolipemiantes', component: CatHipolipemiantesComponent},
+  { path: 'categoria/suplementos', component: CatSuplementosComponent},
+
 
   { path: '**', component: NotfoundpageComponent}
 ];

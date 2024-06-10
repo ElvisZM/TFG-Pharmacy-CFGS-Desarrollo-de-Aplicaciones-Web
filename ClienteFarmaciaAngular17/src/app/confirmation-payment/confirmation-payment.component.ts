@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SavepaymentService } from '../servicios/savepayment.service';
 import { AuthService } from '../servicios/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-confirmation-payment',
@@ -9,7 +10,7 @@ import { AuthService } from '../servicios/auth.service';
   templateUrl: './confirmation-payment.component.html',
   styleUrl: './confirmation-payment.component.scss'
 })
-export class ConfirmationPaymentComponent implements OnInit {
+export class ConfirmationPaymentComponent implements OnInit, OnDestroy {
 
   nombre_cliente: string = "";
   fecha_compra: any;
@@ -18,10 +19,17 @@ export class ConfirmationPaymentComponent implements OnInit {
   address: string = "";
   telefono: string = "";
 
-  constructor(private savePayment:SavepaymentService, private authService: AuthService){}
+  constructor(private savePayment:SavepaymentService, private authService: AuthService, private titleService: Title){}
 
   ngOnInit(): void {
     this.getData();
+    this.titleService.setTitle('Confirmación de pago');
+
+  }
+
+  ngOnDestroy(): void {
+    this.savePayment.clearAccessToConfirmationPage();
+
   }
 
   getData(){

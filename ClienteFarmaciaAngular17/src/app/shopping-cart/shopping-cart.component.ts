@@ -5,6 +5,7 @@ import { CartInfoService } from '../servicios/cart-info.service';
 import { environment } from '../../environments/environment';
 import { tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 
 
@@ -25,7 +26,7 @@ export class ShoppingCartComponent implements OnInit {
 
   productoAnadido: boolean = false;
 
-  constructor(private cartInfo: CartInfoService, private router: Router){}
+  constructor(private cartInfo: CartInfoService, private router: Router, private titleService: Title){}
 
   ngOnInit() {
     this.loadCartInfo();
@@ -33,17 +34,14 @@ export class ShoppingCartComponent implements OnInit {
     setTimeout(() => {
       this.productoAnadido = false
     }, 4000)
-  }
+    this.titleService.setTitle('Tu carrito');
 
-  ngDoCheck(): void {
   }
 
 
   loadCartInfo() {
     this.cartInfo.getCartInfo().subscribe(response => {
-      console.log(response)
       this.carrito = response;
-      
       this.empty = this.carrito.productos.length === 0;
     });
   }

@@ -6,7 +6,7 @@
 <div class="container" *ngIf="empty">
     <div class="row">
         <div class="card border shadow-none emptycart">
-            <img src="../../assets/imagenes/emptycart.jpg" alt="">
+            <img src="../../assets/imagenes/emptycart.jpg" alt="" loading="lazy">
             <h1 class="text-center fw-bold">Su carro esta vacío.</h1>
             <h4 class="text-center pb-4">Parece que no ha añadido nada a su carrito. ¡Adelante y explore todos nuestros productos!</h4>
         </div>
@@ -29,8 +29,8 @@
 
                             <div class="d-flex align-items-start border-bottom pb-3">
                                 <div class="me-4 productoimage">
-                                    <img [src]="urlPicture + producto.producto_id.imagen_prod" alt="" class="" *ngIf="producto.producto_id.imagen_prod">
-                                    <img src="../../assets/imagenes/NoProductImageAvailable.png" class="" alt="producto.producto_id.nombre_prod" *ngIf="!producto.producto_id.imagen_prod">									
+                                    <img [src]="urlPicture + producto.producto_id.imagen_prod" alt="" class="" *ngIf="producto.producto_id.imagen_prod" loading="lazy">
+                                    <img src="../../assets/imagenes/NoProductImageAvailable.png" class="" alt="producto.producto_id.nombre_prod" *ngIf="!producto.producto_id.imagen_prod" loading="lazy">									
 
                                 </div>
                                 <div class="flex-grow-1 overflow-hidden">
@@ -141,8 +141,8 @@
                                         <ul class="list-unstyled mt-3">
                                             <ng-container *ngFor="let productoRecomendado of carrito.productos_recomendados">
                                                 <li class="d-flex mt-4">
-                                                    <img [src]="urlPicture + productoRecomendado.imagen_prod" alt="productoRecomendado.nombre_prod" class="avatar-lg rounded" *ngIf="productoRecomendado.imagen_prod">
-                                                    <img src="../../assets/imagenes/NoProductImageAvailable.png" class="avatar-lg rounded" alt="productoRecomendado.nombre_prod" *ngIf="!productoRecomendado.imagen_prod">
+                                                    <img [src]="urlPicture + productoRecomendado.imagen_prod" alt="productoRecomendado.nombre_prod" class="avatar-lg rounded" *ngIf="productoRecomendado.imagen_prod" loading="lazy">
+                                                    <img src="../../assets/imagenes/NoProductImageAvailable.png" class="avatar-lg rounded" alt="productoRecomendado.nombre_prod" *ngIf="!productoRecomendado.imagen_prod" loading="lazy">
                                                     <div class="ms-3">	
                                                         <a class="d-block" style="cursor: pointer;">{{ productoRecomendado.nombre_prod }}</a>
                                                         <div class="star-rating mt-1">

@@ -11,7 +11,11 @@
                         <h5 class="text-center"><b>¡Gracias por tu compra en Polígono Sur Pharmacy!</b></h5>
 
                         <span class="font-weight-bold d-block mt-4">Hola, {{nombre_cliente}}</span>
-                        <span>Nos complace informarte que tu pedido ha sido confirmado y está en proceso de preparación. A continuación, te proporcionamos los detalles de tu compra:</span>
+                        <span >Nos complace informarte que tu pedido ha sido confirmado y está en proceso de preparación. A continuación, te proporcionamos los detalles de tu compra:</span>
+
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <strong>Importante:</strong> Si recargas esta página o te sales de ella, no podrás volver a acceder.
+                        </div>
 
                         <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
 
@@ -65,7 +69,7 @@
 
                         <p>En breve recibirás un correo electrónico con la factura de tu pedido adjunta en formato PDF. Por favor, guarda este correo para cualquier inconveniente o reclamación.
 
-                        <p>Si deseas descargar tu factura inmediatamente, por favor haz clic <a style="cursor: pointer;" (click)="downloadPDF()">aquí</a>.</p>
+                        <p>Si deseas descargar tu factura inmediatamente, por favor haz clic <a style="cursor: pointer; text-decoration:underline; color:blue;" (click)="downloadPDF()">aquí</a>.</p>
                             
                         <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos en servicioalcliente.psurpharmacy&#64;hotmail.com o llamarnos al {{telefono}}.</p>
                         

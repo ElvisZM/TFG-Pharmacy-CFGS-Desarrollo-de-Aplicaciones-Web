@@ -67,11 +67,14 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
       const cif_farm = params.get('cif_farm')!;
       this.datosService.getProduct(cn_prod, cif_farm).subscribe(
         response => {
-
-          this.getProductDetails(response);
-
+          if (response === 'Producto no encontrado'){
+            this.router.navigate(['not-found'])
+          }else{
+            this.getProductDetails(response);
+          }
           }, error =>{
-            console.log(error)
+            console.log(error);
+            this.router.navigate(['not-found'])
         }
       )
 

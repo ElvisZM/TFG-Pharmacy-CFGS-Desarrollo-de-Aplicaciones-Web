@@ -29,16 +29,21 @@ nav ul li a{
 nav ul li:hover a{
     padding-left: 40px;
     font-weight: bold;
-
 }
 
 a{
     text-decoration: none;
-    color: white;
+    color: white !important;
     cursor: pointer;
 }
 
 a:hover{
     font-weight: bold;
-    color: white;
+    color: black !important;
+}
+
+.nav-link.active {
+    background-color: white;
+    color: black !important;
+    font-weight: bold;
 }

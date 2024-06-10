@@ -474,7 +474,6 @@ export class PaymentComponent implements OnInit{
     
     let num_tarjeta = this.FormPaymentProduct.get('payment_numero_tarjeta')?.value
 
-
     this.savePayment.nombre_cli = this.carrito.cliente.usuario.first_name + ' ' + this.carrito.cliente.usuario.last_name
     this.savePayment.id_pedido = this.carrito.codigo_compra
     this.savePayment.metodo_pago = "creditcard"
@@ -484,6 +483,8 @@ export class PaymentComponent implements OnInit{
     this.generateAndSendPDF(data);
     data!.style.display = 'none';
     this.savePayment.savingData(this.carrito.usuario.id);
+    this.savePayment.allowAccessToConfirmationPage()
+
     this.router.navigate(['/confirmacion/pago'])
   }
 

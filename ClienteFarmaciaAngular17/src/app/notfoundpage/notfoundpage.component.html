@@ -1,4 +1,10 @@
-<div class="notfound">
-    <img src="../../assets/imagenes/404.jpg" alt="url not found"/>
+<div class="notfound container">
+    <img src="../../assets/imagenes/404.jpg" alt="url not found" loading="lazy"/>
 </div>
-<button (click)="backToIndex()"></button>
+<div class="container-center">
+    <h1 class="fw-bold text-center mb-4">Página no encontrada</h1>
+    <h3 class="text-center">Oops! Parece que has seguido un link incorrecto. Si crees que esto es un problema nuestro, por favor contacta con nosotros.</h3>
+
+    <button (click)="backToIndex()"><i class="fa-solid fa-arrow-left-long me-1"></i> Volver al Inicio</button>
+
+</div>

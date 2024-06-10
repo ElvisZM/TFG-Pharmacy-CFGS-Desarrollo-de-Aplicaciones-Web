@@ -14,7 +14,7 @@
             <div role="separator" class="dropdown-divider my-1"></div>
             <a class="dropdown-item d-flex align-items-center" href="#">
 
-                Upgrade to Pro
+                Más vendidos
             </a>
         </div>
     </div>
@@ -105,17 +105,16 @@
                 </thead>
                 <tbody class="align-middle">
 
-                    <!-- Item -->
                     <tr *ngFor="let item of myProductsList;">
                         <td><a class="text-primary fw-bold" (click)="updateProduct(item.cn_prod, item.cif_farm)" style="cursor: pointer;">{{ item.cn_prod }} </a> </td>
                         <td>
                             
                             <a class="d-flex align-items-center" *ngIf="!item.imagen_prod" (click)="updateProduct(item.cn_prod, item.cif_farm)" style="cursor: pointer;" >
-                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/NoProductImageAvailable.png">
+                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/NoProductImageAvailable.png" loading="lazy">
                             </a>
 
                             <a class="d-flex align-items-center" *ngIf="item.imagen_prod" (click)="updateProduct(item.cn_prod, item.cif_farm)" style="cursor: pointer;">
-                                <img class="me-2 image image-small rounded-circle" alt="Image existe"  [src]="urlPicture + item.imagen_prod">
+                                <img class="me-2 image image-small rounded-circle" alt="Image existe"  [src]="urlPicture + item.imagen_prod" loading="lazy">
                             </a>
                         </td>
 

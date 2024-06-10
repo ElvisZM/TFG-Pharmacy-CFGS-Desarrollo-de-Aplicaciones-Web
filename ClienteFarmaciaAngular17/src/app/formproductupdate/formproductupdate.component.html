@@ -12,11 +12,11 @@
                                     <h2 class="h5 mb-4 fw-bold">Select product photo</h2>
                                     <div class="d-flex align-items-center">
                                         <div class="me-3">
-                                            <img class="rounded avatar" src="../assets/imagenes/NoProductImageAvailable.png" alt="change avatar" *ngIf="!pic_existe && !api_imagen_existe">
+                                            <img class="rounded avatar" src="../assets/imagenes/NoProductImageAvailable.png" alt="change avatar" *ngIf="!pic_existe && !api_imagen_existe" loading="lazy">
 
-                                            <img class="rounded avatar" [src]="picture_url" alt="new_product_image" *ngIf="pic_existe && !api_imagen_existe">
+                                            <img class="rounded avatar" [src]="picture_url" alt="new_product_image" *ngIf="pic_existe && !api_imagen_existe" loading="lazy">
 
-                                            <img class="rounded avatar" [src]="url + product.imagen_prod" alt="api_product image" *ngIf="api_imagen_existe && !pic_existe">
+                                            <img class="rounded avatar" [src]="url + product.imagen_prod" alt="api_product image" *ngIf="api_imagen_existe && !pic_existe" loading="lazy">
 
                                         </div>
                                         <div class="file-field">

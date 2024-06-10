@@ -32,6 +32,9 @@ export class SavepaymentService {
   private urlPowerAutomate = environment.powerAutomateFlujoEmail
   private urlPath = environment.apiSellsSubs
 
+  private canAccessConfirmationPage = false;
+
+
   constructor(private http:HttpClient, private datePipe: DatePipe, private authService: AuthService) { }
 
 
@@ -128,5 +131,16 @@ export class SavepaymentService {
   }
 
 
+  allowAccessToConfirmationPage() {
+    this.canAccessConfirmationPage = true;
+  }
+
+  clearAccessToConfirmationPage(){
+    this.canAccessConfirmationPage = false;
+  }
+
+  getAccessToConfirmationPage(){
+    return this.canAccessConfirmationPage;
+  }
 
 }

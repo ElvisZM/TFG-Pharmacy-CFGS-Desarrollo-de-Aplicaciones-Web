@@ -6,6 +6,8 @@ import { FacebookLoginProvider} from '@abacritt/angularx-social-login';
 import { CartInfoService } from './servicios/cart-info.service';
 import { environment } from '../environments/environment';
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -67,6 +69,39 @@ export class AppComponent implements OnInit, DoCheck {
       window.location.reload()
     );
   }
+
+  analgesicosProducts(){
+    this.router.navigate(['categoria/analgesicos']);
+  }
+
+  antiacidosProducts(){
+    this.router.navigate(['categoria/antiacidos']);
+  }
+
+  antialergicosProducts(){
+    this.router.navigate(['categoria/antialergicos']);
+  }
+
+  antisepticosProducts(){
+    this.router.navigate(['categoria/antisepticos']);
+  }
+
+  broncodilatadoresProducts(){
+    this.router.navigate(['categoria/broncodilatadores']);
+  }
+
+  corticosteroidesProducts(){
+    this.router.navigate(['categoria/corticosteroides']);
+  }
+
+  hipolipemiantesProducts(){
+    this.router.navigate(['categoria/hipolipemiantes']);
+  }
+
+  suplementosProducts(){
+    this.router.navigate(['categoria/suplementos']);
+  }
+
 
   adminPanel(){
     this.router.navigate(['/admin/panel']);

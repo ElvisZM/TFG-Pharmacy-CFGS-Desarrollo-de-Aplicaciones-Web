@@ -1,111 +1,165 @@
 <div class="container-menu">
-
-    <div class="header">
-      <div class="logo">
-          <a routerLink="/" routerLinkActive="active"><img class="imagen-logo" src="../assets/imagenes/Logo.jpg" alt="logotipo web"/></a>
-      </div>
-      <div class="menu-expansible">
-          <ul>
-              <li class="apartados ms-5"><a href="#"><div class="letras-animacion d-flex"><h5 class="me-2">Categorías</h5> <i class="fa-solid fa-list"></i></div></a>
-                  <ul>
-                      <li class="apartados-interior"><a href="#">Analgésicos y Antiinflamatorios</a>
-                      </li>
-                      
-                      <li class="apartados-interior"><a href="#">Antiácidos</a>
-                      </li>
-                      
-                      <li class="apartados-interior"><a href="#">Antialérgicos</a>
-                      </li>
-
-                      <li class="apartados-interior"><a href="#">Antisépticos</a>
-                      </li>
-
-                      <li class="apartados-interior"><a href="#">Hipolipemiantes</a>
-                      </li>
-                      
-                      <li class="apartados-interior"><a href="#">Broncodilatadores</a>
-                      </li>
-                      
-                      <li class="apartados-interior"><a href="#">Suplementos Vitamínicos</a>
-                      </li>
-                      
-                      <li class="apartados-interior"><a href="#">Corticosteroides</a>
-                      </li>
-                  </ul>
-              </li>
-              <li class="apartados ms-4"><a href="#"><div class="letras-animacion d-flex"> <h5 class="me-2">Promociones</h5> <i class="fa-solid fa-percent"></i></div></a>
-              </li>
-              <li class="apartados"><a (click)="products()" style="cursor: pointer;"><div class="letras-animacion d-flex"><h5 class="me-2">Productos</h5><i class="pildora fa-solid fa-pills"></i></div></a>
-              </li>    
-              <li>
-                  <div class="busqueda" (submit)="buscar()">
-                    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos"  aria-label="Search" [(ngModel)]="palabraBusqueda" (keyup.enter)="buscar()" (input)="actualizarPalabra()">
-                    <button class="btn btn-light btn-outline-dark" type="button" (click)="buscar()">Buscar <i class="fa-solid fa-magnifying-glass" ></i></button>
-                  </div>
-              </li>
-  
-              <li class="apartado-cuenta" *ngIf="!token"><a href="#"><div class="letras-animacion d-flex">
-                
-                <i class="me-2 fa-regular fa-user"></i><h5>Cuenta</h5></div> </a>
-                  <ul > 
-                      <li class="apartado-cuenta-interior" ><h5>¿Todavía no conoces nuestras ventajas?</h5></li>
-                      <span class="nav_image">
-                      </span>
-                      <li class="apartado-cuenta-interior"><button routerLink="/login-register" routerLinkActive="active">¡Empieza ya!</button></li>
-                      <li class="apartado-cuenta-interior">
-                          <p>o si lo prefieres</p>
-                      </li>
-                      <li class="apartado-cuenta-interior">
-                          <div class="google-facebook">
-                              <button><i class="fa-brands fa-google fa-xl"></i></button>
-                              <button><i class="fa-brands fa-facebook fa-xl"></i></button>
-                          </div>
-
-                      </li>
-                  </ul>
-              </li>
-              <li class="apartado-cuenta-logeado" *ngIf="token">
-                <a href="#">
-                    <div class="letras-animacion d-flex" *ngIf="picture && (source === 'google' || source==='facebook')">
-                        <img class="profile-picture" [src]="picture" alt="Profile Picture" ><h5>{{name}}</h5>
-                    </div>
-
-                    <div class="letras-animacion d-flex" *ngIf="picture && source === 'app'">
-                        <img class="profile-picture" [src]="url + picture" alt="Profile Picture" ><h5>{{name}}</h5>
-                    </div>
-
-                    <div class="letras-animacion d-flex" *ngIf="!picture">
-                        <img class="profile-picture" src="../../assets/imagenes/usuario-noimg.webp" alt="No Profile Picture" >
-                        <h5>{{name}}</h5>
-                    </div>
-                </a>
-                
-                  <ul class="ul-cuenta-interior">
-                      <li class="apartado-cuenta-interior">
-                          <div class="google-facebook" *ngIf="rol!=='1'">
-                              <button (click)="carritoCompra()">Mi carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
-                          </div>
-                      </li>
-                      <li class="apartado-cuenta-interior" *ngIf="rol==='1'">
-                        <div class="google-facebook">
-                            <button (click)="adminPanel()">Panel de Control <i class="fa-solid fa-desktop ms-2"></i></button>
-                        </div>
-                    </li>
-                      <li class="apartado-cuenta-interior">
-                        <button (click)="logoutAccount()">Desconectarse <i class="fa-solid fa-right-from-bracket ms-2"></i></button>
-                      </li>
-                  </ul>
-              </li>
-          </ul>
-      </div>
+  <div class="header">
+    <div class="logo">
+      <a routerLink="/" routerLinkActive="active">
+        <img class="imagen-logo" src="../assets/imagenes/Logo.jpg" alt="logotipo web"/>
+      </a>
     </div>
+    <nav class="menu-expansible">
+      <ul>
+        <li class="apartados ms-5">
+          <a href="#">
+            <div class="letras-animacion d-flex">
+              <h5 class="me-2">Categorías</h5>
+              <i class="fa-solid fa-list"></i>
+            </div>
+          </a>
+          <ul>
+            <li class="apartados-interior"><a (click)="analgesicosProducts()" style="cursor: pointer;">Analgésicos y Antiinflamatorios</a></li>
+            <li class="apartados-interior"><a (click)="antiacidosProducts()" style="cursor: pointer;">Antiácidos</a></li>
+            <li class="apartados-interior"><a (click)="antialergicosProducts()" style="cursor: pointer;">Antialérgicos</a></li>
+            <li class="apartados-interior"><a (click)="antisepticosProducts()" style="cursor: pointer;">Antisépticos</a></li>
+            <li class="apartados-interior"><a (click)="hipolipemiantesProducts()" style="cursor: pointer;">Hipolipemiantes</a></li>
+            <li class="apartados-interior"><a (click)="broncodilatadoresProducts()" style="cursor: pointer;">Broncodilatadores</a></li>
+            <li class="apartados-interior"><a (click)="suplementosProducts()" style="cursor: pointer;">Suplementos Vitamínicos</a></li>
+            <li class="apartados-interior"><a (click)="corticosteroidesProducts()" style="cursor: pointer;">Corticosteroides</a></li>
+          </ul>
+        </li>
+        <li class="apartados ms-4"><a href="#"><div class="letras-animacion d-flex"><h5 class="me-2">Promociones</h5> <i class="fa-solid fa-percent"></i></div></a></li>
+        <li class="apartados"><a (click)="products()" style="cursor: pointer;"><div class="letras-animacion d-flex"><h5 class="me-2">Productos</h5><i class="pildora fa-solid fa-pills"></i></div></a></li>
+        <li>
+          <div class="busqueda" (submit)="buscar()">
+            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Busca entre nuestros productos" aria-label="Search" [(ngModel)]="palabraBusqueda" (keyup.enter)="buscar()" (input)="actualizarPalabra()">
+            <button class="btn btn-light btn-outline-dark" type="button" (click)="buscar()">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
+        </li>
+        <li class="apartado-cuenta" *ngIf="!token">
+          <a href="#">
+            <div class="letras-animacion d-flex">
+              <i class="me-2 fa-regular fa-user"></i>
+              <h5>Cuenta</h5>
+            </div>
+          </a>
+          <ul>
+            <li class="apartado-cuenta-interior"><h5>¿Todavía no conoces nuestras ventajas?</h5></li>
+            <span class="nav_image"></span>
+            <li class="apartado-cuenta-interior"><button routerLink="/login-register" routerLinkActive="active">¡Empieza ya!</button></li>
+            <li class="apartado-cuenta-interior"><p>Regístrate o inicia sesión</p></li>
+          </ul>
+        </li>
+        <li class="apartado-cuenta-logeado" *ngIf="token">
+          <a href="#">
+            <div class="letras-animacion d-flex" *ngIf="picture && (source === 'google' || source==='facebook')">
+              <img class="profile-picture" [src]="picture" alt="Profile Picture" loading="lazy"><h5>{{name}}</h5>
+            </div>
+            <div class="letras-animacion d-flex" *ngIf="picture && source === 'app'">
+              <img class="profile-picture" [src]="url + picture" alt="Profile Picture" loading="lazy"><h5>{{name}}</h5>
+            </div>
+            <div class="letras-animacion d-flex" *ngIf="!picture">
+              <img class="profile-picture" src="../../assets/imagenes/usuario-noimg.webp" alt="No Profile Picture" loading="lazy">
+              <h5>{{name}}</h5>
+            </div>
+          </a>
+          <ul class="ul-cuenta-interior">
+            <li class="apartado-cuenta-interior">
+              <div class="google-facebook" *ngIf="rol!=='1'">
+                <button (click)="carritoCompra()">Mi carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
+              </div>
+            </li>
+            <li class="apartado-cuenta-interior" *ngIf="rol==='1'">
+              <div class="google-facebook">
+                <button (click)="adminPanel()">Panel de Control <i class="fa-solid fa-desktop ms-2"></i></button>
+              </div>
+            </li>
+            <li class="apartado-cuenta-interior">
+              <button (click)="logoutAccount()">Desconectarse <i class="fa-solid fa-right-from-bracket ms-2"></i></button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
   </div>
-  
-  
+</div>
+
 <div>
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>
 
 <div class="mt-5">
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 </div>
+
+
+
+<!-- 
+
+
+<nav>
+    <div class="wrapper">
+      <div class="logo"><a href="#">Logo</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li>
+          <a href="#" class="desktop-item">Dropdown Menu</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dropdown Menu</label>
+          <ul class="drop-menu">
+            <li><a href="#">Drop menu 1</a></li>
+            <li><a href="#">Drop menu 2</a></li>
+            <li><a href="#">Drop menu 3</a></li>
+            <li><a href="#">Drop menu 4</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="desktop-item">Mega Menu</a>
+          <input type="checkbox" id="showMega">
+          <label for="showMega" class="mobile-item">Mega Menu</label>
+          <div class="mega-box">
+            <div class="content">
+              <div class="row">
+                <img src="https://fadzrinmadu.github.io/hosted-assets/responsive-mega-menu-and-dropdown-menu-using-only-html-and-css/img.jpg" alt="">
+              </div>
+              <div class="row">
+                <header>Design Services</header>
+                <ul class="mega-links">
+                  <li><a href="#">Graphics</a></li>
+                  <li><a href="#">Vectors</a></li>
+                  <li><a href="#">Business cards</a></li>
+                  <li><a href="#">Custom logo</a></li>
+                </ul>
+              </div>
+              <div class="row">
+                <header>Email Services</header>
+                <ul class="mega-links">
+                  <li><a href="#">Personal Email</a></li>
+                  <li><a href="#">Business Email</a></li>
+                  <li><a href="#">Mobile Email</a></li>
+                  <li><a href="#">Web Marketing</a></li>
+                </ul>
+              </div>
+              <div class="row">
+                <header>Security services</header>
+                <ul class="mega-links">
+                  <li><a href="#">Site Seal</a></li>
+                  <li><a href="#">VPS Hosting</a></li>
+                  <li><a href="#">Privacy Seal</a></li>
+                  <li><a href="#">Website design</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="#">Feedback</a></li>
+      </ul>
+      <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  
+  <div class="body-text">
+    <div class="title">Responsive Dropdown and Mega Menu</div>
+    <div class="sub-title">using only HTML & CSS</div>
+  </div> -->

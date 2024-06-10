@@ -7,6 +7,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../servicios/auth.service';
 import { ReviewsService } from '../servicios/reviews.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-allproducts',
@@ -25,7 +26,7 @@ export class AllproductsComponent implements OnInit, DoCheck {
 
   valorOrden: number = 0;
 
-  constructor(private datosService: DatosService, private cartInfo: CartInfoService, private router:Router, private viewportScroller: ViewportScroller, private authService: AuthService, private reviewsService: ReviewsService, private cdRef: ChangeDetectorRef){}
+  constructor(private datosService: DatosService, private cartInfo: CartInfoService, private router:Router, private viewportScroller: ViewportScroller, private authService: AuthService, private reviewsService: ReviewsService, private cdRef: ChangeDetectorRef, private titleService: Title){}
 
   ngOnInit(): void {
     this.getAllProducts();
@@ -34,6 +35,8 @@ export class AllproductsComponent implements OnInit, DoCheck {
         this.viewportScroller.scrollToPosition([0, 0]);
       }
     });      
+    this.titleService.setTitle('Nuestros productos');
+
   }
 
   ngDoCheck(){

@@ -36,8 +36,8 @@ export class AuthService {
   }
 
   getNamePicture(){
-    const name = this.cookies.get("name");
-    const picture = this.cookies.get("picture_url");
+    const name:string = this.cookies.get("name");
+    const picture:string = this.cookies.get("picture_url");
     return {name, picture};
   }
 
@@ -46,7 +46,8 @@ export class AuthService {
   }
 
   getUserRol(){
-    return this.cookies.get("user_rol")
+    const rol: string = this.cookies.get("user_rol");
+    return rol
   }
 
   setSource(source:string){
@@ -113,6 +114,7 @@ export class AuthService {
         this.setUserRol(rol.toString())
         
         if (response.administrador){
+          console.log("hola admin")
           this.setNamePicture(response.usuario.first_name, response.administrador.profile_pic)
           this.setSource(response.administrador.source)
         }
@@ -132,6 +134,7 @@ export class AuthService {
 
         }
       },error => {
+        console.log("no hay usuario")
         console.log(error)
       }
     )
