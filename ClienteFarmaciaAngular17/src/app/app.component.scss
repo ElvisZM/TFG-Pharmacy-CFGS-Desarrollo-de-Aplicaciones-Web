@@ -394,6 +394,7 @@ font-size: 2rem;
         display: flex;
         flex-direction: column;
         width: 100%;
+        margin: auto;
         margin-bottom: 3rem;
         ul{
             width: 100%;
@@ -420,12 +421,16 @@ font-size: 2rem;
         font-size: 13px !important;
     }
 
-
     .letras-animacion > h5{
         font-size: 17px !important;
     }
 
+    .barra{
+        width: 70%;
+    }
+
     .busqueda{
+        width: 100%;
         input{
             width: 70%;
         }
@@ -441,6 +446,21 @@ font-size: 2rem;
             }
         }
         width: 100%;
+        border-radius: 0.5em;
+    }
+
+
+    .apartado-cuenta> ul{
+        width: 130%;
+        li{
+            text-align: center;
+            width: 100%;
+            button{
+                width: 100%;
+                height: 10%;
+                font-size: 15px;
+            }
+        }
         border-radius: 0.5em;
     }
 

@@ -274,3 +274,109 @@
     right: 5px;
     cursor: pointer;
 }
+
+
+@media (min-width: 375px) and (max-width: 809px) {
+
+    .creacuenta{
+        margin-top: 3.5rem;
+    }
+
+
+    .ele-form .form-control, .phone-form .form-control, .birthday-form .form-control, .dom-nom-form .form-group{
+    
+        width: 5em;
+
+    }
+
+    .form-group > label, .phone-form > label{
+        font-size: 10px;
+    }
+
+    .facebook{
+        position: absolute;
+        left: 2%;
+    }
+
+    .dom-nom-form{
+        width: 168%;
+        .form-group{
+            width: 100%;
+            margin-right: 10rem !important;
+            input{
+                width: 100%;
+            }
+        }
+    }
+
+    .boton-registro{
+        padding: 10px 0 !important;
+        width: 160%;
+        letter-spacing: 0 !important;
+    }
+
+    .position-relative{
+        width: 160%;
+        input{
+            width: 100% !important;
+        }
+    }
+
+    .username{
+        width: 160% !important;
+    }
+
+    .facebook{
+        position: absolute;
+        width: 97%;
+        h6{
+            font-size: 10px !important;
+            margin: 0 !important;
+        }
+    }
+
+    .social-icons{
+        padding: 0;
+        width: 170% !important;
+    }
+
+    #google-btn{
+        background-color: red;
+        width: 100% !important;
+        padding: 0 !important;
+        margin-right: 150rem !important;
+    }
+
+
+}
+
+
+@media (min-width: 800px) and (max-width: 1200px) {
+
+    .ele-form .form-control, .phone-form .form-control, .birthday-form .form-control, .dom-nom-form .form-group{
+    
+        width: 11.5em;
+
+    }
+
+    .form-group > label, .phone-form > label{
+        font-size: 13px;
+    }
+
+    .facebook{
+        position: absolute;
+        left: 2%;
+    }
+
+    .dom-nom-form{
+        width: 120%;
+        .form-group{
+            width: 100%;
+            margin-right: 10rem !important;
+            input{
+                width: 100%;
+            }
+        }
+    }
+
+}

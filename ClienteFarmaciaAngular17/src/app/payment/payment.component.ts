@@ -513,7 +513,7 @@ export class PaymentComponent implements OnInit{
       reader.readAsDataURL(pdfBlob);
       reader.onloadend = () => {
           const base64data = reader.result as string;
-          // this.savePayment.sendToPowerAutomate(base64data, this.carrito, this.PayPalData);
+          this.savePayment.sendToPowerAutomate(base64data, this.carrito, this.PayPalData);
       };
 
       this.savePayment.pdfStored = pdfBlob;

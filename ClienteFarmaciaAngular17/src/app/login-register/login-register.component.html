@@ -1,7 +1,7 @@
 <div class="container" id="container">
   <div class="form-container sign-up" >
     <form class="custom-form" [formGroup]="FormRegister" (ngSubmit)="register()">
-      <h1>Crea tu cuenta</h1>
+      <h1 class="creacuenta">Crea tu cuenta</h1>
 
       <span>rellena este formulario para registrarte</span>
 
@@ -54,7 +54,7 @@
 
         <div class="birthday-form">
           <div class="form-group">
-            <label for="register_phone">Fecha de nacimiento</label>
+            <label for="register_phone">Fecha nac.</label>
               <input type="date" class="form-control" id="register_birthday" name="register_birthday" formControlName="register_birthday"/>
           </div>
           <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_birthday')!.touched && FormRegister.get('register_birthday')!.hasError('required')">
@@ -101,7 +101,7 @@
         
 
         <div class="form-group">
-          <label for="password2">Confirmar contraseña</label>
+          <label for="password2">Confirmar</label>
             <input type="password" class="form-control" id="register_password2" name="register_password2" formControlName="register_password2"/>
             <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_password2')!.touched && FormRegister.get('register_password2')!.hasError('required')">
               <h6>Necesita rellenar este campo.</h6>
@@ -113,7 +113,7 @@
       </div>
 
 
-      <button type="submit" name="register" [disabled]="!FormRegister.valid">Registrarse</button>
+      <button class="boton-registro" type="submit" name="register" [disabled]="!FormRegister.valid">Registrarse</button>
       <div class="d-block mb-5">
         <p>Al hacer clic en 'Registrarse' estás aceptando el <a routerLink="#" routerLinkActive="active"><b>Términos de uso</b></a> y <a routerLink="#" routerLinkActive="active"><b>Política de Privacidad</b></a> de P.Sur Pharmacy.</p>
         <p ><a routerLink="/" routerLinkActive="active"><i class="fa-solid fa-arrow-left fa-sm"></i> Volver</a></p>
@@ -144,7 +144,7 @@
 
       <span class="mb-3">o usa tu usuario y clave</span>
       
-      <input type="text" name="username" id="username" placeholder="Usuario" [(ngModel)]="login_username"/>
+      <input class="username" type="text" name="username" id="username" placeholder="Usuario" [(ngModel)]="login_username"/>
 
       <div class="position-relative" *ngIf="!passwordVisibility">
         <input type="password" name="password" id="password" placeholder="Contraseña" [(ngModel)]="login_password"/>

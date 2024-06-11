@@ -7,17 +7,19 @@
       <h4>{{ textoInfo }}<b>{{ palabraBuscada }}</b></h4>
   
     </div>
-    <div *ngIf="mostrarImagen" class="nodata">
-      <h1>No se han encontrado resultados</h1>
-      <img src="../../assets/imagenes/no-data-found.jpg" alt="" loading="lazy">
-  
-    </div>
+
   
 
     <div class="row ms-2 mt-3 d-flex align-items-center">
       <h4 class="d-flex align-items-center">
         <b class="me-2" *ngIf="productos">{{productos.length}}</b> resultados
       </h4>
+    </div>
+
+    <div *ngIf="mostrarImagen" class="nodata">
+      <h1>No se han encontrado resultados</h1>
+      <img src="../../assets/imagenes/no-data-found.jpg" alt="" loading="lazy">
+  
     </div>
 
     <div class="row mt-2" *ngIf="productos">

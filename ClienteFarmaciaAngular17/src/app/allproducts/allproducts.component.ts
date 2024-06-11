@@ -47,6 +47,8 @@ export class AllproductsComponent implements OnInit, DoCheck {
       response => {
           this.AllProducts = response
 
+      }, error=>{
+        console.log(error)
       }
     )
   }

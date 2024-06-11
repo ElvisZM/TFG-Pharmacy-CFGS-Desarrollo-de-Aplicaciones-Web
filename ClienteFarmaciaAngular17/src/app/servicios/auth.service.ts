@@ -98,6 +98,12 @@ export class AuthService {
       })}
   }
 
+
+  getHeadersInfoAPIProbando(){
+    return this.APITokenNoLoggedIn
+  }
+
+
   getHeadersInfoAPI(){
     return {
       headers: new HttpHeaders({
