@@ -37,7 +37,7 @@ export class CatSuplementosComponent implements OnInit{
         this.viewportScroller.scrollToPosition([0, 0]);
       }
     });      
-    this.titleService.setTitle('Nuestros productos');
+    this.titleService.setTitle('Suplementos');
   }
 
 
@@ -101,6 +101,7 @@ export class CatSuplementosComponent implements OnInit{
     }
   }
 
+  
   getProductInfo(cn_prod: number, cif_farm:string){
     this.router.navigate(['/detalles/producto', cn_prod, cif_farm])
   }

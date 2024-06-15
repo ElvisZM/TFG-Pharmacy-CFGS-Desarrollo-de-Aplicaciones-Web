@@ -25,9 +25,5 @@ export class ReviewsService {
     return this.http.get(this.urlPath + 'product/review/'+product_id, headers)
   }
 
-  getAverageProductReview(){
-    
-  }
-
 
 }

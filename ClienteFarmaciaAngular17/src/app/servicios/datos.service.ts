@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
@@ -37,13 +37,9 @@ export class DatosService {
   }
 
   getProductsList(): Observable<any> {
-    const token = this.authService.getHeadersInfoAPI();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.get<any>(this.urlPath + 'productos/list', { headers: headers });
+    const headers = this.authService.getHeadersInfoAPI()
+    return this.http.get<any>(this.urlPath+'productos/list', headers)
   }
-  
 
   getPharmaciesList(): Observable<any> {
     const headers = this.authService.getHeadersUserInfo()

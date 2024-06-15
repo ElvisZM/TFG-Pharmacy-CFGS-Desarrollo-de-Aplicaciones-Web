@@ -115,7 +115,7 @@
 
 .carrusel{
   width: 90%;
-  height: auto;
+  height: 80%;
   margin: 3% auto;
   overflow: hidden;
   border-radius: 3em;
@@ -125,8 +125,8 @@
 .carrusel ul{
   display: flex;
   padding: 0;
-  width: 500%;
-  animation: carrusel 20s infinite ease-in-out;
+  width: 300%;
+  animation: carrusel 30s infinite ease-in-out;
 }
 
 .carrusel li{
@@ -160,59 +160,22 @@
   margin-top: 10px;
 }
 
-.texto1 button{
-  width: 25%;
-  padding: 10px;
-  margin-top: 50px;
-  background-color: black;
-  color: white;
-  border: 1px solid white;
-}
-
 .texto h2 {
   font-family:'Times New Roman', Times, serif;
   font-size: 60px;
 }
 
-.texto p {
-  font-family: Arial, Helvetica, sans-serif;
-  width: 80%;
-  margin-top: 10px;
-}
-
-.texto button {
-  width: 25%;
-  padding: 10px;
-  margin-top: 50px;
-  background-color: #262b4f;
-  color: white;
-}
-
-.texto {
-  position: absolute;
-  text-align: left;
-  width: 40%;
-  top: 50px;
-  color: #262b4f;
-  padding: 40px;
-}
 
 @keyframes carrusel{
   0% {margin-left: 0;}
-  15% {margin-left: 0;}
+  28% {margin-left: 0;}
 
-  20% {margin-left: -100%;}
-  35% {margin-left: -100%;}
+  33% {margin-left: -100%;}
+  62% {margin-left: -100%;}
   
-  40% {margin-left: -200%;}
-  55% {margin-left: -200%;}
+  67% {margin-left: -200%;}
+  95% {margin-left: -200%;}
   
-  60% {margin-left: -300%;}
-  75% {margin-left: -300%;}
-
-  80% {margin-left: -400%;}
-  95% {margin-left: -400%;}
-
   100% {margin-left: 0;}
 
 }
@@ -230,6 +193,10 @@
     font-size: 25px;
   }
 
+  .banner2 > h1{
+    font-size: 19px !important;
+  }
+
   .carrusel{
     width: 90%;
     height: 16%;
@@ -239,28 +206,30 @@
 
   .carrusel img{
     width: 100%;
-    height: 100% !important;
+    height: 70% !important;
   }  
 
-  .texto1, .texto {
+  .texto1 {
     position: absolute;
-    top: -25%;
+    top: -12%;
     left: -10%;
     bottom: 100%;
     width: 70%;
   }
+ 
 
-  .texto > h2,
-  .texto > p, 
+  .texto1 > h2{
+    font-weight: bold;
+  }
+
   .texto1 > h2, 
   .texto1 > p{
     margin-bottom: 7%;
-    font-size: 10px;
+    font-size: 11px;
     bottom: 100%;
     right: 70%;
   }
-
-  .texto > button, 
+ 
   .texto1 > button{
     margin: 0;
     padding: 2%;
@@ -278,20 +247,46 @@
 
 @media (min-width: 800px) and (max-width: 1200px) {
 
-  .texto, .texto1 {
-    top: -8%;
+
+  .banner{
+    height: 10%;
+  }
+
+  .banner > h1{
+    margin: auto;
+    margin-top: 5%;
+    font-size: 25px;
+  }
+
+
+  .carrusel{
+    width: 90%;
+    height: 26%;
+    border-radius: 0.5rem !important;
+  }
+
+
+  .carrusel img{
+    width: 100%;
+    height: 70% !important;
+  }  
+
+  .texto1 {
+    top: 1%;
     width: 60%;
     left: -3%;
   }
 
-  .texto > h2,
-  .texto > p,
-  .texto1 > h2,
-  .texto1 > p {
-    font-size: 18px;
+  .texto1 > h2{
+    font-weight: bold;
   }
 
-  .texto > button, .texto1 > button {
+  .texto1 > h2,
+  .texto1 > p {
+    font-size: 20px;
+  }
+
+  .texto1 > button {
     width: 50%;
     height: 20% !important;
     border-radius: 0.5rem;

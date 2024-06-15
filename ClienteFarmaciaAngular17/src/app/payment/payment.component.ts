@@ -294,6 +294,8 @@ export class PaymentComponent implements OnInit{
     this.generateAndSendPDF(data);
     data!.style.display = 'none';
     this.savePayment.savingData(this.carrito.usuario.id);
+    this.savePayment.allowAccessToConfirmationPage()
+
     this.router.navigate(['/confirmacion/pago'])
 
   }

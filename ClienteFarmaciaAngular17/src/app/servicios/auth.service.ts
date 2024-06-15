@@ -120,7 +120,6 @@ export class AuthService {
         this.setUserRol(rol.toString())
         
         if (response.administrador){
-          console.log("hola admin")
           this.setNamePicture(response.usuario.first_name, response.administrador.profile_pic)
           this.setSource(response.administrador.source)
         }
@@ -140,7 +139,6 @@ export class AuthService {
 
         }
       },error => {
-        console.log("no hay usuario")
         console.log(error)
       }
     )

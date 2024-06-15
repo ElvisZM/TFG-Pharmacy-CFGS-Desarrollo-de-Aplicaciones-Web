@@ -29,6 +29,7 @@ import { CatSuplementosComponent } from './cat-suplementos/cat-suplementos.compo
 import { authGuard } from './auth.guard';
 import { adminGuard } from './admin.guard';
 import { confirmationpaymentGuard } from './confirmationpayment.guard';
+import { paymentGuard } from './payment.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -41,7 +42,7 @@ const routes: Routes = [
   { path: 'productos/buscador/query/:palabra', component: BuscadorSimpleComponent},
   { path: 'productos/lista/completa', component: AllproductsComponent},
   { path: 'carrito/productos/lista', component: ShoppingCartComponent, canActivate: [authGuard]},
-  { path: 'tipo/pago', component: PaymentComponent},
+  { path: 'tipo/pago', component: PaymentComponent, canActivate: [paymentGuard]},
   { path: 'confirmacion/pago', component: ConfirmationPaymentComponent, canActivate: [confirmationpaymentGuard] },
   { path: 'detalles/producto/:cn_prod/:cif_farm', component: ProductDetailsComponent},
   { path: 'categoria/analgesicos', component: CatAnalgesicosComponent},

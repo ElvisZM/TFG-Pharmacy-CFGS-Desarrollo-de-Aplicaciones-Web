@@ -35,7 +35,7 @@ export class CatAnalgesicosComponent implements OnInit {
         this.viewportScroller.scrollToPosition([0, 0]);
       }
     });      
-    this.titleService.setTitle('Nuestros productos');
+    this.titleService.setTitle('Analgésicos y Antiinflamatorios');
   }
 
 

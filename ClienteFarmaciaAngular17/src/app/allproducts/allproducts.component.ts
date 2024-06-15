@@ -63,8 +63,8 @@ export class AllproductsComponent implements OnInit, DoCheck {
     return average
   }
 
+  
   async getOrden() {
-    console.log(this.valorOrden);
     if (+this.valorOrden === 0) {
       this.getAllProducts();
     } else if (+this.valorOrden === 1) {
