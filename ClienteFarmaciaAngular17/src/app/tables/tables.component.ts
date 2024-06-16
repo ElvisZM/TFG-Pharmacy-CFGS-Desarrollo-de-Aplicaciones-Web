@@ -6,6 +6,7 @@ import { AdminPanelComponent } from '../admin-panel/admin-panel.component';
 import { Router } from '@angular/router';
 import { CrudproductService } from '../servicios/crudproduct.service';
 import { environment } from '../../environments/environment';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-tables',
@@ -32,7 +33,6 @@ export class TablesComponent implements OnInit, DoCheck {
 
   ngDoCheck(){
   }
-// ************************************PRODUCTOS*********************************************
 
 
   async importDataFromCSV(event: any) {
@@ -76,14 +76,16 @@ export class TablesComponent implements OnInit, DoCheck {
   }
 
   productsList(){
-    this.datosService.getProductsList().subscribe(
-      response => {
-        this.myProductsList = response;
-        console.log(this.myProductsList)
-    },
-    error => {
-      console.log(error);
-    })
+    this.datosService.getProductsList().pipe(
+      catchError(
+        error => {
+          return throwError(error);
+        })
+      )
+      .subscribe(
+        response => {
+          this.myProductsList = response;
+      })
   }
 
   getProgressBarColor(stock: number, maxStock: number): string {

@@ -135,24 +135,32 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
             farmacia_id = modeloFarmacia,
             )
         else:
+            fileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+            maxFileSize = 900*1024; #921kb
             
             format, img_str = self.initial_data['imagen_prod'].split(';base64,')
-            
             ext = format.split('/')[-1] 
-
             archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
         
-            modeloProducto = Producto.objects.create(
-            cn_prod = validated_data['cn_prod'],
-            imagen_prod = archivo,
-            nombre_prod = validated_data['nombre_prod'],
-            descripcion = validated_data['descripcion'],
-            precio = validated_data['precio'],
-            stock = validated_data['stock'],
-            cif_farm = validated_data['cif_farm'],
-            categoria_id = modeloCategoria,
-            farmacia_id = modeloFarmacia,
-            )
+          
+            if archivo.size > maxFileSize:
+                raise serializers.ValidationError('La imagen no puede superar los 900KB')
+            
+            elif format.split(':')[-1] not in fileTypes:
+                raise serializers.ValidationError('El formato de la imagen no es válido')    
+                
+            else:
+                modeloProducto = Producto.objects.create(
+                cn_prod = validated_data['cn_prod'],
+                imagen_prod = archivo,
+                nombre_prod = validated_data['nombre_prod'],
+                descripcion = validated_data['descripcion'],
+                precio = validated_data['precio'],
+                stock = validated_data['stock'],
+                cif_farm = validated_data['cif_farm'],
+                categoria_id = modeloCategoria,
+                farmacia_id = modeloFarmacia,
+                )
         
         fecha_hoy = date.today()
         
@@ -195,23 +203,31 @@ class ProductoSerializerCreate(serializers.ModelSerializer):
             
         
         else:
+            fileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+            maxFileSize = 900*1024; #921kb
+            
             
             format, img_str = self.initial_data['imagen_prod'].split(';base64,')
-            
-            ext = format.split('/')[-1] 
-
+            ext = '.'+format.split('/')[-1] 
             archivo = ContentFile(base64.b64decode(img_str), name=validated_data['nombre_prod']+ ext)
+            
+            if archivo.size > maxFileSize:
+                raise serializers.ValidationError('La imagen no puede superar los 900KB')
+            
+            elif format.split(':')[-1] not in fileTypes:
+                raise serializers.ValidationError('El formato de la imagen no es válido')    
                 
-            instance.cn_prod = validated_data['cn_prod']
-            instance.imagen_prod = archivo
-            instance.nombre_prod = validated_data['nombre_prod']
-            instance.descripcion = validated_data['descripcion']
-            instance.precio = validated_data['precio']
-            instance.stock = validated_data['stock']
-            instance.cif_farm = validated_data['cif_farm']
-            instance.categoria_id = modeloCategoria
-            instance.farmacia_id = modeloFarmacia
-            instance.save()
+            else:                 
+                instance.cn_prod = validated_data['cn_prod']
+                instance.imagen_prod = archivo
+                instance.nombre_prod = validated_data['nombre_prod']
+                instance.descripcion = validated_data['descripcion']
+                instance.precio = validated_data['precio']
+                instance.stock = validated_data['stock']
+                instance.cif_farm = validated_data['cif_farm']
+                instance.categoria_id = modeloCategoria
+                instance.farmacia_id = modeloFarmacia
+                instance.save()
             
         
         precio_compra_proveedor = validated_data['precio'] * 0.6

@@ -23,7 +23,7 @@ export class CatCorticosteroidesComponent implements OnInit{
 
   AllProducts: Array<any> = [];
 
-  valorOrden: any;
+  valorOrden: number=0;
 
   productosAnadidos: Set<number> = new Set<number>();
 
@@ -62,7 +62,6 @@ export class CatCorticosteroidesComponent implements OnInit{
   }
 
   async getOrden() {
-    console.log(this.valorOrden);
     if (+this.valorOrden === 0) {
       this.getAllProducts();
     } else if (+this.valorOrden === 1) {

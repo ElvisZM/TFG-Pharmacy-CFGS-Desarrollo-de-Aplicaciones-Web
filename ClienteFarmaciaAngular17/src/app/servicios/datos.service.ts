@@ -71,10 +71,10 @@ export class DatosService {
     return this.http.get<any>(this.urlPath+'productos/buscador/query/simple/'+palabraBuscada, headers)
   }
 
-  getProvider(cn_prod: number): Observable<any> {
-    const headers = this.authService.getHeadersUserInfo()
-    return this.http.get<any>(this.urlPath+'proveedor/'+cn_prod, headers)
-  }
+  // getProvider(cn_prod: number): Observable<any> {
+  //   const headers = this.authService.getHeadersUserInfo()
+  //   return this.http.get<any>(this.urlPath+'proveedor/'+cn_prod, headers)
+  // }
 
   helperGetCategoryIdbyName(cat_name: string): Observable<any> {
     const headers = this.authService.getHeadersUserInfo()

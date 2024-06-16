@@ -78,7 +78,7 @@
     <div class="validaciones alert alert-danger" *ngIf="datosService.errorCreateProductMessage">
         <h6>{{ datosService.errorProductMessage }}</h6>
     </div>
-    <div class="validaciones alert alert-danger" *ngIf="datosService.createProductMessage">
+    <div class="validaciones alert alert-warning" *ngIf="datosService.createProductMessage">
         <h6>{{ datosService.successProductMessage }}</h6>
     </div>
     
@@ -110,7 +110,7 @@
                         <td>
                             
                             <a class="d-flex align-items-center" *ngIf="!item.imagen_prod" (click)="updateProduct(item.cn_prod, item.cif_farm)" style="cursor: pointer;" >
-                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/NoProductImageAvailable.png" loading="lazy">
+                                <img class="me-2 image image-small rounded-circle" alt="Image no existe"  src="../../assets/imagenes/no_product.png" loading="lazy">
                             </a>
 
                             <a class="d-flex align-items-center" *ngIf="item.imagen_prod" (click)="updateProduct(item.cn_prod, item.cif_farm)" style="cursor: pointer;">

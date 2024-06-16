@@ -25,6 +25,15 @@ export class AppComponent implements OnInit, DoCheck {
 
   public url = environment.apiImageUrl
 
+  showChatbot = false;
+  userMessage = '';
+  messages = [
+    { text: 'Hola, ¿cómo puedo ayudarte?', sender: 'bot' }
+  ];
+
+
+  chatOpen: boolean = false;
+  
 
   constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService) { }
 
@@ -122,6 +131,16 @@ export class AppComponent implements OnInit, DoCheck {
   actualizarPalabra(){
     this.datosService.setPalabraBuscada(this.palabraBusqueda);
   }
+
+  
+  openChatbot() {
+    this.showChatbot = true;
+  }
+
+  closeChatbot() {
+    this.showChatbot = false;
+  }
+
 
 }
 

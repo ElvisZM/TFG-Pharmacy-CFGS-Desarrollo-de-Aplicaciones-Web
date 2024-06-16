@@ -87,10 +87,24 @@ export class FormproductComponent implements OnInit, DoCheck{
     this.emptyFieldsFunction();
   }
 
+
   onFileSelected(event: any) {
+    const fileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+    const maxFileSize = 900*1024; //921kb
     const file: File = event.target.files[0];
-    this.picture_copy = file;
-    if (file) {
+    if (!fileTypes.includes(file.type)) {
+      this.pic_existe = false;
+      this.FormCreateProduct.get('register_picture')?.setValue('');
+      alert('El archivo debe ser PNG, JPEG, JPG o WEBP.')
+
+    }else if (file.size > maxFileSize){
+      this.pic_existe = false;
+      this.FormCreateProduct.get('register_picture')?.setValue('');
+      alert('La imagen es demasiado grande')
+
+    }else{
+      this.picture_copy = file;
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
@@ -102,10 +116,6 @@ export class FormproductComponent implements OnInit, DoCheck{
 
   emptyFieldsFunction(){
     let emptyField = false;
-
-    this.FormCreateProduct.get('register_categoria_id')?.setValue(this.selectedCategoryOption)
-    this.FormCreateProduct.get('register_farmacia_id')?.setValue(this.selectedPharmacyOption)
-    this.FormCreateProduct.get('register_proveedor_id')?.setValue(this.selectedProviderOption)
 
     if(this.FormCreateProduct.get('register_categoria_id')?.value === undefined ||
        this.FormCreateProduct.get('register_farmacia_id')?.value === undefined || 
@@ -129,7 +139,6 @@ export class FormproductComponent implements OnInit, DoCheck{
     const myForm = this.FormCreateProduct.value;
     const product_pic = this.picture_copy
   
-    // Verificar si product_pic es un archivo
     if (product_pic instanceof File) {
       const reader = new FileReader();
       reader.readAsDataURL(product_pic);

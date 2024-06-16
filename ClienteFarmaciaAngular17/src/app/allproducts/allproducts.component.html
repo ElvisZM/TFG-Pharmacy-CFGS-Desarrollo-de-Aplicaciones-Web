@@ -54,14 +54,14 @@
                       <img *ngIf="!producto.imagen_prod" class="product__details__pic__item--large"
                           src="../../assets/imagenes/no_product.png" alt="" (click)="getProductInfo(producto.cn_prod, producto.cif_farm)" loading="lazy">
                       <ul class="product__item__pic__hover" *ngIf="!productosAnadidos.has(producto.id)">
-                          <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                          <li><a href="#"><i class="fa-solid fa-share"></i></a></li>
+                          <li><a class="disabled"><i class="fa fa-heart"></i></a></li>
+                          <li><a class="disabled"><i class="fa-solid fa-share"></i></a></li>
                           <li><a style="cursor: pointer;" (click)="producto.stock > 0 && addProductToCart(producto.id)" [class.disabled]="producto.stock === 0"><i class="fa fa-shopping-cart"></i></a></li>
                       </ul>
 
                       <ul class="product__item__pic__hover " *ngIf="productosAnadidos.has(producto.id)">
                           <li>
-                              <div class="alert alert-danger">
+                              <div class="alert alert-warning">
                                   <h6>Añadido al carrito</h6>
                               </div>
                           </li>

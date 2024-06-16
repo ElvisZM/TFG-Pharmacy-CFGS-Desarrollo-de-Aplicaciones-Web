@@ -21,7 +21,7 @@ export class CatAntisepticosComponent {
 
   AllProducts: Array<any> = [];
 
-  valorOrden: any;
+  valorOrden: number=0;
 
   productosAnadidos: Set<number> = new Set<number>();
 
@@ -60,7 +60,6 @@ export class CatAntisepticosComponent {
   }
 
   async getOrden() {
-    console.log(this.valorOrden);
     if (+this.valorOrden === 0) {
       this.getAllProducts();
     } else if (+this.valorOrden === 1) {

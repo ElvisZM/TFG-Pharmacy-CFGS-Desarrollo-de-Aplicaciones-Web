@@ -30,7 +30,7 @@
                             <div class="d-flex align-items-start border-bottom pb-3">
                                 <div class="me-4 productoimage" style="cursor: pointer;" (click)="getProductDetails(producto.producto_id.cn_prod, producto.producto_id.cif_farm)">
                                     <img [src]="urlPicture + producto.producto_id.imagen_prod" alt="" class="" *ngIf="producto.producto_id.imagen_prod" loading="lazy">
-                                    <img src="../../assets/imagenes/NoProductImageAvailable.png" class="" alt="producto.producto_id.nombre_prod" *ngIf="!producto.producto_id.imagen_prod" loading="lazy">									
+                                    <img src="../../assets/imagenes/no_product.png" class="" alt="producto.producto_id.nombre_prod" *ngIf="!producto.producto_id.imagen_prod" loading="lazy">									
 
                                 </div>
                                 <div class="flex-grow-1 overflow-hidden">
@@ -142,7 +142,7 @@
                                             <ng-container *ngFor="let productoRecomendado of carrito.productos_recomendados">
                                                 <li class="d-flex mt-4">
                                                     <img [src]="urlPicture + productoRecomendado.imagen_prod" alt="productoRecomendado.nombre_prod" class="avatar-lg rounded" *ngIf="productoRecomendado.imagen_prod" loading="lazy" style="cursor: pointer;" (click)="getProductDetails(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
-                                                    <img src="../../assets/imagenes/NoProductImageAvailable.png" class="avatar-lg rounded" alt="productoRecomendado.nombre_prod" *ngIf="!productoRecomendado.imagen_prod" loading="lazy" style="cursor: pointer;" (click)="getProductDetails(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
+                                                    <img src="../../assets/imagenes/no_product.png" class="avatar-lg rounded" alt="productoRecomendado.nombre_prod" *ngIf="!productoRecomendado.imagen_prod" loading="lazy" style="cursor: pointer;" (click)="getProductDetails(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">
                                                     <div class="ms-3">	
                                                         <a class="d-block" style="cursor: pointer;" (click)="getProductDetails(productoRecomendado.cn_prod, productoRecomendado.cif_farm)">{{ productoRecomendado.nombre_prod }}</a>
                                                         <div class="star-rating mt-1">

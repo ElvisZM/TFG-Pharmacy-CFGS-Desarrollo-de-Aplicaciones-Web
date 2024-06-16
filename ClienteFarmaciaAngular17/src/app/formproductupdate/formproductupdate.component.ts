@@ -124,9 +124,21 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
 
 
   onFileSelected(event: any) {
+    const fileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+    const maxFileSize = 900*1024; //921kb
     const file: File = event.target.files[0];
-    this.picture_copy = file;
-    if (file) {
+    if(!fileTypes.includes(file.type)){
+      this.pic_existe = false;
+      this.FormUpdateProduct.get('update_picture')?.setValue('');
+      alert('El archivo debe ser PNG, JPEG, JPG o WEBP.')
+    
+    }else if (file.size > maxFileSize){
+      this.pic_existe = false;
+      this.FormUpdateProduct.get('update_picture')?.setValue('');
+      alert('La imagen es demasiado grande')
+    
+    }else{
+      this.picture_copy = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
@@ -142,22 +154,25 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   emptyFieldsFunction(){
     let emptyField = false;
 
-    if(this.FormUpdateProduct.get('update_categoria_id')?.value === undefined ||
-       this.FormUpdateProduct.get('update_categoria_id')?.value === "" ||
-       this.FormUpdateProduct.get('update_farmacia_cif')?.value === undefined || 
-       this.FormUpdateProduct.get('update_farmacia_cif')?.value === "" || 
-       this.FormUpdateProduct.get('update_proveedor_cif')?.value === undefined || 
-       this.FormUpdateProduct.get('update_proveedor_cif')?.value === "" ) {
+    if (this.FormUpdateProduct){
+      if(this.FormUpdateProduct.get('update_categoria_id')?.value === undefined ||
+        this.FormUpdateProduct.get('update_categoria_id')?.value === "" ||
+        this.FormUpdateProduct.get('update_farmacia_cif')?.value === undefined || 
+        this.FormUpdateProduct.get('update_farmacia_cif')?.value === "" || 
+        this.FormUpdateProduct.get('update_proveedor_cif')?.value === undefined || 
+        this.FormUpdateProduct.get('update_proveedor_cif')?.value === "" ) {
+    
         emptyField=true;
-    }
-
-    Object.keys(this.FormUpdateProduct.controls).forEach(control => {
-      if(control !== 'update_picture' && this.FormUpdateProduct.get(control)?.value=== ''){
-        emptyField = true;
-      }else if(control !== 'update_picture' && this.FormUpdateProduct.get(control)?.value=== null){
-        emptyField = true;
       }
-    })
+
+      Object.keys(this.FormUpdateProduct.controls).forEach(control => {
+        if(control !== 'update_picture' && this.FormUpdateProduct.get(control)?.value=== ''){
+          emptyField = true;
+        }else if(control !== 'update_picture' && this.FormUpdateProduct.get(control)?.value=== null){
+          emptyField = true;
+        }
+      })
+    }
     this.campoFormVacio = emptyField;
   }
 

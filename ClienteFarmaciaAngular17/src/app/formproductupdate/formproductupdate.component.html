@@ -12,7 +12,7 @@
                                     <h2 class="h5 mb-4 fw-bold">Select product photo</h2>
                                     <div class="d-flex align-items-center">
                                         <div class="me-3">
-                                            <img class="rounded avatar" src="../assets/imagenes/NoProductImageAvailable.png" alt="change avatar" *ngIf="!pic_existe && !api_imagen_existe" loading="lazy">
+                                            <img class="rounded avatar" src="../assets/imagenes/no_product.png" alt="change avatar" *ngIf="!pic_existe && !api_imagen_existe" loading="lazy">
 
                                             <img class="rounded avatar" [src]="picture_url" alt="new_product_image" *ngIf="pic_existe && !api_imagen_existe" loading="lazy">
 
@@ -25,7 +25,7 @@
                                                     
                                                     <input type="file" (change)="onFileSelected($event)" formControlName="update_picture">
                                                     <div class="d-md-block mt-3">
-                                                        <div class="text-gray small fw-bold ">JPG, GIF or PNG. Max size of 800K</div>
+                                                        <div class="text-gray small fw-bold ">PNG, JPEG, JPG or WEBP. Max size of 900K</div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -29,48 +29,52 @@ class registrar_usuario(generics.CreateAPIView):
     permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
-        serializers = UsuarioSerializerRegistro(data=request.data)
-        
-        if serializers.is_valid():
-            try:
-                rol = int(request.data.get('rol'))
-                user = Usuario.objects.create_user(
-                        username = serializers.data.get("username"),
-                        first_name = serializers.data.get("first_name"),
-                        email = serializers.data.get("email"), 
-                        password = serializers.data.get("password1"),
-                        rol = rol,
-                        )
-                if(rol == Usuario.CLIENTE):
-                    grupo = Group.objects.get(name='Cliente') 
-                    grupo.user_set.add(user)
-                    cliente = Cliente.objects.create( usuario = user, source='app',direccion_cli = serializers.data.get("domicilio"), telefono_cli = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
-                    cliente.save()
+        if request.method == 'POST':
+            serializers = UsuarioSerializerRegistro(data=request.data)
+            
+            if serializers.is_valid():
+                try:
+                    rol = int(request.data.get('rol'))
+                    user = Usuario.objects.create_user(
+                            username = serializers.data.get("username"),
+                            first_name = serializers.data.get("first_name"),
+                            email = serializers.data.get("email"), 
+                            password = serializers.data.get("password1"),
+                            rol = rol,
+                            )
+                    if(rol == Usuario.CLIENTE):
+                        grupo = Group.objects.get(name='Cliente') 
+                        grupo.user_set.add(user)
+                        cliente = Cliente.objects.create( usuario = user, source='app',direccion_cli = serializers.data.get("domicilio"), telefono_cli = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                        cliente.save()
+                        
+                    elif(rol == Usuario.EMPLEADO):
+                        grupo = Group.objects.get(name='Empleado') 
+                        grupo.user_set.add(user)
+                        empleado = Empleado.objects.create( usuario = user, source='app', direccion_emp = serializers.data.get("domicilio"), telefono_emp = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                        empleado.save()
                     
-                elif(rol == Usuario.EMPLEADO):
-                    grupo = Group.objects.get(name='Empleado') 
-                    grupo.user_set.add(user)
-                    empleado = Empleado.objects.create( usuario = user, source='app', direccion_emp = serializers.data.get("domicilio"), telefono_emp = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
-                    empleado.save()
-                
-                elif(rol == Usuario.GERENTE):
-                    grupo = Group.objects.get(name='Gerente') 
-                    grupo.user_set.add(user)
-                    gerente = Gerente.objects.create( usuario = user, source='app', direccion_ger = serializers.data.get("domicilio"), telefono_ger = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
-                    gerente.save()
-                    
-                elif(rol == Usuario.ADMINISTRADOR):
-                    grupo = Group.objects.get(name='Administrador') 
-                    grupo.user_set.add(user)
-                    administrador = Administrador.objects.create( usuario = user, source='app', direccion_admin = serializers.data.get("domicilio"), telefono_admin = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
-                    administrador.save()
-                    
-                usuarioSerializado = UsuarioSerializer(user)
-                return Response(usuarioSerializado.data)
-            except Exception as error:
-                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    elif(rol == Usuario.GERENTE):
+                        grupo = Group.objects.get(name='Gerente') 
+                        grupo.user_set.add(user)
+                        gerente = Gerente.objects.create( usuario = user, source='app', direccion_ger = serializers.data.get("domicilio"), telefono_ger = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                        gerente.save()
+                        
+                    elif(rol == Usuario.ADMINISTRADOR):
+                        grupo = Group.objects.get(name='Administrador') 
+                        grupo.user_set.add(user)
+                        administrador = Administrador.objects.create( usuario = user, source='app', direccion_admin = serializers.data.get("domicilio"), telefono_admin = serializers.data.get("telefono"), birthday_date = serializers.data.get("birthday_date"))
+                        administrador.save()
+                        
+                    usuarioSerializado = UsuarioSerializer(user)
+                    return Response(usuarioSerializado.data)
+                except Exception as error:
+                    return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            
         else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response('Metodo no permitido', status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 @api_view(['GET'])
 def obtener_usuario_token(request,token):

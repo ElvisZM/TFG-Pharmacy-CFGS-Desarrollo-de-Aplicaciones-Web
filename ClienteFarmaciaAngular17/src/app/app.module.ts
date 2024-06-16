@@ -36,6 +36,8 @@ import { CatCorticosteroidesComponent } from './cat-corticosteroides/cat-cortico
 import { CatHipolipemiantesComponent } from './cat-hipolipemiantes/cat-hipolipemiantes.component';
 import { CatSuplementosComponent } from './cat-suplementos/cat-suplementos.component';
 
+import { ChatbotComponent } from './chatbot/chatbot.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,7 +74,8 @@ import { CatSuplementosComponent } from './cat-suplementos/cat-suplementos.compo
     CatBroncodilatadoresComponent,
     CatCorticosteroidesComponent,
     CatHipolipemiantesComponent,
-    CatSuplementosComponent
+    CatSuplementosComponent,
+    ChatbotComponent
   ],
   providers: [ CsvproductosService, DatePipe],
   bootstrap: [AppComponent]

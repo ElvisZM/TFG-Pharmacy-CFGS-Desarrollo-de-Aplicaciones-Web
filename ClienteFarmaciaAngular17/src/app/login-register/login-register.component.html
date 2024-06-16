@@ -78,7 +78,7 @@
       <div class="dom-nom-form">
         <div class="form-group">
           <label for="register_username">Usuario</label>
-            <input type="text" class="form-control" id="register_username" name="register_username" formControlName="register_username"/>
+            <input type="text" class="form-control" id="register_username" name="register_username" formControlName="register_username" autocomplete="off"/>
         </div>
         <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_username')!.touched && FormRegister.get('register_username')!.hasError('required')">
           <h6>Necesita rellenar este campo.</h6>
@@ -92,7 +92,7 @@
       <div class="ele-form d-flex justify-content-between">
         <div class="form-group me-5">
           <label for="register_password1">Contraseña</label>
-            <input type="password" class="form-control" id="register_password1" name="register_password" formControlName="register_password1"/>
+            <input type="password" class="form-control" id="register_password1" name="register_password" formControlName="register_password1" autocomplete="off"/>
             <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_password1')!.touched && FormRegister.get('register_password1')!.hasError('required')">
               <h6>Necesita rellenar este campo.</h6>
             </div>
@@ -102,7 +102,7 @@
 
         <div class="form-group">
           <label for="password2">Confirmar</label>
-            <input type="password" class="form-control" id="register_password2" name="register_password2" formControlName="register_password2"/>
+            <input type="password" class="form-control" id="register_password2" name="register_password2" formControlName="register_password2" autocomplete="off"/>
             <div class="validaciones alert alert-danger" *ngIf="FormRegister.get('register_password2')!.touched && FormRegister.get('register_password2')!.hasError('required')">
               <h6>Necesita rellenar este campo.</h6>
             </div>
