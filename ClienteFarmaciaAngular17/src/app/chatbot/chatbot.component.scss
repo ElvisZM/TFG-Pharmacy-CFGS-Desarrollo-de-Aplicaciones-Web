@@ -37,3 +37,42 @@
 .input-mensajes{
     width: 100% !important;
 }
+
+.small{
+    text-align: left;
+    width: 95% !important;
+    word-wrap: break-word;
+    max-width: 44vh;
+}
+
+
+@media (min-width: 375px) and (max-width: 809px) {
+
+    .card{
+        width: 100% !important;
+    }
+
+    .recuadro{
+        margin: 0 !important;
+    }
+}
+
+
+@media (min-width: 800px) and (max-width: 1200px) {
+
+    .container{
+        width: 200% !important;
+    }
+
+    .row{
+        height: 100% !important;
+    }
+
+    .card{
+        width: 100% !important;
+    }
+
+    .recuadro{
+        margin: 0 !important;
+    }
+}

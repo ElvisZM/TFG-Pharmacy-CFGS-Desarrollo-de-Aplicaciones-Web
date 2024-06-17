@@ -388,7 +388,7 @@ font-size: 2rem;
 .fixed-button {
     position: fixed;
     right: 20px;
-    top: 50%;
+    bottom: 0;
     transform: translateY(-50%);
     z-index: 1000;
     background-color: #007bff;
@@ -529,6 +529,11 @@ font-size: 2rem;
         border-radius: 0.5em;
     }
 
+    .modal{
+        width:  90% !important;
+        margin: 5% !important;
+    }
+
 
 
 }
@@ -612,6 +617,27 @@ font-size: 2rem;
         border-radius: 0.5em;
     }
 
+
+    .modal{
+        width:  90% !important;
+        margin: 5% !important;
+
+    }
+
+    .modal-body{
+        width: 100% !important;
+    }
+
+    .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: auto;
+        padding: 0;
+        width: 100% !important;
+        max-width: 90vh;
+    }
 
 }
 

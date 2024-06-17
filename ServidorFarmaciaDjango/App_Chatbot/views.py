@@ -57,6 +57,7 @@ def get_answer_bot_openai(request):
                     datos_farmacias = preparar_datos_farmacias()
                     datos_proveedores = preparar_datos_proveedores()
                     datos_usuario = preparar_user_data(request.user.id)
+                    datos_conversacion = preparar_datos_conversacion(request.user.id)
                     
                     pregunta_usuario = serializers.data.get('texto')
                       
@@ -74,9 +75,25 @@ def get_answer_bot_openai(request):
                             
                             You can extract and provide information about products, categories, reviews, providers and sales. 
                             
-                            You can take your time searching for the correct information. 
+                            You must take your time searching for the correct information. 
                             
-                            If anyone asks you something else that is not about the products, categories, reviews, providers, sales, self user info or any other topic related with our pharmacy, you just say that you are a virtual assistant for the pharmacy and you can only provide information about products in our pharmacy.
+                            You must answer questions about products, categories, illnes or pain getting the information for the answer in ProductsData.
+                            
+                            You must answer questions about products reviews or valoration of the customers in products getting the information for the answer in ReviewsData.
+                            
+                            You must answer questions about providers getting the information for the answer in ProvidersData.
+                            
+                            You must answer questions about sales, economy balance  getting the information for the answer in ProductsData. Give the answer only to the Administrator. You must read UserRolData for checking if the user is Administrator.
+                            
+                            You must recommend a product for the pain, illness or sickness of the user getting the information for the answer in the description of products in ProductsData.
+
+                            You must answer questions about pharmacy contact information getting the information for the answer in PharmacyData.
+                            
+                            You must recommend a product or medicine for the user to his problem. You must get the answer reading the description of all products in ProductsData.
+                            
+                            You must give an alternative product if the user asks any other opcion or alternative about the product you recommend first. You must get the answer reading the description of all products in ProductsData. If we do not have another product say to the user.
+                            
+                            If anyone asks you something else that is not related with the topics related before you just say that you are a virtual assistant for the pharmacy and you can only provide information about products in our pharmacy.
                             
                             If someone asks you what the amount of money the pharmacy has made so far with sales is, you must check the UserRolData and if it is Administrador respond with the answer. For answer this question you must check the Sales in total venta and then summarize the total_venta of each sale.
                             
@@ -96,6 +113,21 @@ def get_answer_bot_openai(request):
                             
                             If someone asks you for the total number of reviews, you must provide the answer only if the user is Administrador. You can get the user information from the UserRolData and the review information from the ReviewsData.
                             
+                            If someone asks you about what kind of medicine he needs for his pain or any kind of illnes he has, you must read the description of each product in ProductsData and then give an answer about what he needs. Make sure before you give an answer that you have already read the description of all products in ProductsData.
+                            
+                            If we don't have a medicine for the illness of the user, you must provide an answer appropriate for the user saying that you are not sure about what he exactly needs so you recommend him to visit a doctor.
+                            
+                            You must remember all the questions from the user. You have all the questions that the user has been doing in the conversation in ChatData so if he asks you for something that he already asked you before you must know what he is talking about.
+                            
+                            You must remember your answers for have a context in the conversation.
+                            
+                            You must provide a url to the product following always this pattern '<a href='http://localhost:4200/detalles/producto/"codigo_nacional_product"/"cif_farmacia"'>Nombre del Producto</a>'.
+                            
+                            The only html component you must provide is the url to the products when you give info about them.
+                            
+                            It is important that your answer must not start with the same sentence the user gave you.
+                            
+                            
                         """, 'role': 'system'},
                     {'content': f'''User: {pregunta_usuario}\n
                                     \n
@@ -103,6 +135,8 @@ def get_answer_bot_openai(request):
                                     \n
                                     UserRolData: {datos_usuario[1]}\n
                                     \n
+                                    ChatData: {datos_conversacion}\n
+                                    \n                                    
                                     PharmacyData: {datos_farmacias}\n
                                     \n
                                     ProductsData: {datos_productos}\n
@@ -114,7 +148,7 @@ def get_answer_bot_openai(request):
                                     ReviewsData: {datos_reviews}\n
                                     \n
                                     ''',
-                    'role': 'user'}], temperature=0, max_tokens=100
+                    'role': 'user'}], temperature=0, max_tokens=200
                     )
                     respuesta_gtp = response.choices[0].message.content
                     
@@ -256,3 +290,20 @@ def preparar_user_data(id_usuario):
     else:
         return Response('El usuario no tiene un rol asignado', status=status.HTTP_400_BAD_REQUEST)
     return user_info
+
+
+def preparar_datos_conversacion(id_usuario):
+    chat = Chat.objects.filter(usuario_id = id_usuario, fecha_fin = None).first()
+    mensajes = Mensajes.objects.filter(chat_id = chat, author = 'user').all()
+    
+    datos_conversacion_total = []
+    for mensaje in mensajes:
+        datos_conversacion = {
+            'author': mensaje.author,
+            'texto': mensaje.texto,
+            'hora': mensaje.hora,
+        }
+        datos_conversacion_total.append(datos_conversacion)
+    return datos_conversacion_total
+    
+    

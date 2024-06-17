@@ -6,8 +6,8 @@
                     <h5 class="mb-0 input-mensajes fw-bold">Doc - OpenAI</h5>
                 </div>
                 <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 500px; overflow-y: auto; ">
-                    <ng-container *ngFor="let message of messages">
-                        <div class="d-flex flex-row justify-content-{{ message.author === 'user' ? 'end' : 'start' }} w-100 mensajes">
+                    <ng-container *ngFor="let message of messages" >
+                        <div class="d-flex flex-row justify-content-{{ message.author === 'user' ? 'end' : 'start' }} w-100 mensajes" >
 
                             <img *ngIf="message.author === 'user' && !picture "
                                 src="../../assets/imagenes/usuario-noimg.webp" alt="avatar 1"
@@ -24,8 +24,8 @@
 
                             <div>
                                 <p class="small p-2 {{ message.author === 'user' ? 'me-3' : 'ms-3' }} mb-1 rounded-3"
-                                    [style.background-color]="message.author === 'user' ? '#f5f6f7' : '#3f51b5'"
-                                    [style.color]="message.author === 'user' ? 'black' : 'white'">{{ message.text }}</p>
+                                    [style.background-color]="message.author === 'user' ? '#f5f6f7' : '#ADD8E6'"
+                                    [style.color]="message.author === 'user' ? 'black' : 'black'" [innerHTML]="message.text">{{ message.text }}</p>
                                 <p
                                     class="small {{ message.author === 'user' ? 'me-3' : 'ms-3' }} mb-3 rounded-3 text-muted d-flex justify-content-{{ message.author === 'user' ? 'end' : 'start' }}">
                                     {{ message.time }}</p>

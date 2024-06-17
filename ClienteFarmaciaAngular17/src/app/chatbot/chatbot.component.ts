@@ -6,11 +6,12 @@ import { environment } from '../../environments/environment';
 import { BotService } from '../servicios/bot.service';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
 
 interface Message {
-  text: string;
+  text: string | SafeHtml;
   author: 'user' | 'bot';
   time: string;
 }
@@ -23,6 +24,8 @@ interface Message {
   styleUrl: './chatbot.component.scss'
 })
 export class ChatbotComponent implements OnInit, DoCheck{
+  public safeHtmlContent: SafeHtml = '';
+
 
   public url: string = environment.apiImageUrl
 
@@ -43,7 +46,8 @@ export class ChatbotComponent implements OnInit, DoCheck{
   ];
 
 
-  constructor(private authService: AuthService, private botService: BotService, private router: Router){}
+
+  constructor(private authService: AuthService, private botService: BotService, private router: Router, private sanitizer: DomSanitizer){}
 
   ngOnInit(): void {
       if (this.authService.getTokenCookie()){
@@ -92,8 +96,9 @@ export class ChatbotComponent implements OnInit, DoCheck{
           const respuesta_bot = response.respuesta_bot
           const datetime_bot = new Date
           const time_bot_now = datetime_bot.getHours() + ":" + datetime_bot.getMinutes() + ":" + datetime_bot.getSeconds();
-          this.messages.push({ text: respuesta_bot, author: 'bot', time: time_bot_now });
-          console.log(response)
+          this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(respuesta_bot);
+
+          this.messages.push({ text: this.safeHtmlContent, author: 'bot', time: time_bot_now });
         });
       
         
