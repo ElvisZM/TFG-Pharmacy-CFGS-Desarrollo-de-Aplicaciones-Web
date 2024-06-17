@@ -53,6 +53,7 @@ PROJECT_APPS = [
     'App_CartPromos',
     'App_ProductProvider',
     'App_SellsSubs',
+    'App_Chatbot',
 ]
 
 #Nuestros paquetes de requirements.txt irán aqui

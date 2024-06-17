@@ -20,3 +20,5 @@ Pillow
 mysqlclient==2.1.0
 mysql-connector-python~=8.0.0
 numpy==1.26.4
+openai==0.28
+#spacy
