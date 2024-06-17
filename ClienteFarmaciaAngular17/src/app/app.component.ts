@@ -5,6 +5,7 @@ import { AuthService } from './servicios/auth.service';
 import { FacebookLoginProvider} from '@abacritt/angularx-social-login';
 import { CartInfoService } from './servicios/cart-info.service';
 import { environment } from '../environments/environment';
+import { BotService } from './servicios/bot.service';
 
 
 
@@ -25,17 +26,14 @@ export class AppComponent implements OnInit, DoCheck {
 
   public url = environment.apiImageUrl
 
-  showChatbot = false;
+  showChatbot!: boolean;
   userMessage = '';
   messages = [
     { text: 'Hola, ¿cómo puedo ayudarte?', sender: 'bot' }
   ];
 
 
-  chatOpen: boolean = false;
-  
-
-  constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService) { }
+  constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService, private botService: BotService) { }
 
   ngOnInit(){
     if (this.authService.getTokenCookie()){
@@ -134,11 +132,13 @@ export class AppComponent implements OnInit, DoCheck {
 
   
   openChatbot() {
-    this.showChatbot = true;
+    this.botService.chatOpen = true
+    this.showChatbot = this.botService.chatOpen;
   }
 
   closeChatbot() {
-    this.showChatbot = false;
+    this.botService.chatOpen = false
+    this.showChatbot = this.botService.chatOpen;
   }
 
 

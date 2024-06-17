@@ -14,8 +14,13 @@
     text-align: center;
     margin: 0;
     padding: 0;
-    padding-right: 50% !important;
     width: 198% !important;
+}
+
+.card-body{
+    padding: 0.5rem;
+    margin: 0;
+    width: 100% !important;
 }
 
 .recuadro{
@@ -26,9 +31,9 @@
 }
 
 .mensajes{
-    width: 137% !important;
+    width: 100% !important;
 }
 
 .input-mensajes{
-    width: 134% !important;
+    width: 100% !important;
 }
