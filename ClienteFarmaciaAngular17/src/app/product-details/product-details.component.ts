@@ -113,7 +113,7 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
 
     this.initializeForm();
 
-    this.reviewService.getProductReviews(this.product.id).subscribe(
+    this.reviewService.getProductReviewsService(this.product.id).subscribe(
       response => {
 
         this.getProductReviews(response);
@@ -152,7 +152,7 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
 
   getProductRecommended(categoria: string){
     this.datosService.getProductRecommended(categoria).subscribe(response => {
-      this.productos_recomendados = response
+      this.productos_recomendados = response.slice(0,4)
     })
   }
 
@@ -231,7 +231,7 @@ export class ProductDetailsComponent implements OnInit, DoCheck{
 
       console.log(reviewData)
       this.reviewService.createReview(reviewData).subscribe(response => {
-        this.reviewService.getProductReviews(reviewData.producto_id).subscribe(response => {
+        this.reviewService.getProductReviewsService(reviewData.producto_id).subscribe(response => {
           this.FormReviewProduct.reset();
           this.initializeForm()
           this.getProductReviews(response)

@@ -476,7 +476,25 @@ export class PaymentComponent implements OnInit{
     
     let num_tarjeta = this.FormPaymentProduct.get('payment_numero_tarjeta')?.value
 
-    this.savePayment.nombre_cli = this.carrito.cliente.usuario.first_name + ' ' + this.carrito.cliente.usuario.last_name
+    if (this.carrito.cliente){
+      this.savePayment.nombre_cli = this.carrito.cliente.usuario.first_name + ' ' + this.carrito.cliente.usuario.last_name
+
+    }
+    else if (this.carrito.administrador){
+      this.savePayment.nombre_cli = this.carrito.administrador.usuario.first_name + ' ' + this.carrito.administrador.usuario.last_name
+
+    }
+    else if (this.carrito.gerente){
+      this.savePayment.nombre_cli = this.carrito.cliente.gerente.first_name + ' ' + this.carrito.cliente.gerente.last_name
+
+    }
+    else if (this.carrito.empleado){
+      this.savePayment.nombre_cli = this.carrito.cliente.empleado.first_name + ' ' + this.carrito.empleado.usuario.last_name
+
+    }
+    else {
+      console.error('Error: User not found')
+    }
     this.savePayment.id_pedido = this.carrito.codigo_compra
     this.savePayment.metodo_pago = "creditcard"
     this.savePayment.telefono_farm = this.getPharmaInfo().telefono

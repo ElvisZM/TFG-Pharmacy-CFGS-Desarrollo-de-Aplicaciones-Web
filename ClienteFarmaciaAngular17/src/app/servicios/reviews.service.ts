@@ -20,7 +20,7 @@ export class ReviewsService {
   return this.http.post(this.urlPath + 'create/review' , reviewData, headers)
   }
 
-  getProductReviews(product_id: number): Observable<any> {
+  getProductReviewsService(product_id: number): Observable<any> {
     const headers = this.authService.getHeadersInfoAPI();
     return this.http.get(this.urlPath + 'product/review/'+product_id, headers)
   }

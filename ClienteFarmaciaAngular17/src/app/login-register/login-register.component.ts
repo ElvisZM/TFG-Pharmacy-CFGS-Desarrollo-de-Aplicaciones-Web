@@ -179,7 +179,7 @@ export class LoginRegisterComponent implements OnInit{
       this.router.navigate(['/']);
       setTimeout(() => {
         window.location.reload();
-      }, 300);
+      }, 500);
     }, error => {
       this.errorCredentials = 'Credenciales incorrectas. Por favor, inténtelo de nuevo.';
       this.invalidLogin = true;

@@ -88,16 +88,19 @@
             </div>
           </a>
           <ul class="ul-cuenta-interior">
-            <li class="apartado-cuenta-interior">
-              <div class="google-facebook" *ngIf="rol!=='1'">
-                <button (click)="carritoCompra()">Carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
-              </div>
-            </li>
+
             <li class="apartado-cuenta-interior" *ngIf="rol==='1'">
               <div class="google-facebook">
                 <button (click)="adminPanel()">Panel de Control <i class="fa-solid fa-desktop ms-2"></i></button>
               </div>
             </li>
+
+            <li class="apartado-cuenta-interior">
+              <div class="google-facebook">
+                <button (click)="carritoCompra()">Carrito <i class="fa-solid fa-cart-shopping ms-2"></i></button>
+              </div>
+            </li>
+            
             <li class="apartado-cuenta-interior">
               <button (click)="logoutAccount()">Desconectarse <i
                   class="fa-solid fa-right-from-bracket ms-2"></i></button>

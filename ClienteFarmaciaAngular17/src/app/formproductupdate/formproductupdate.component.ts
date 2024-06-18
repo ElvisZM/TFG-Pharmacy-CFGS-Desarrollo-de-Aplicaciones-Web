@@ -1,9 +1,9 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink, NavigationEnd } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CrudproductService } from '../servicios/crudproduct.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { DatosService } from '../servicios/datos.service';
 import { environment } from '../../environments/environment';
@@ -60,11 +60,18 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
   falloServidor: boolean = false;
   errorFalloServidor: string = 'Error en el servidor. Inténtelo más tarde.';
 
-  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) { }
+  constructor(private router: Router, private route:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService, private viewportScroller: ViewportScroller) { }
 
   ngOnInit(): void {
   
     this.titleService.setTitle('Sitio Administrativo | Modificar producto');
+
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
 
     this.route.paramMap.subscribe(params => {
       const cn_prod = +params.get('cn_prod')!;
@@ -127,7 +134,7 @@ export class FormproductupdateComponent implements OnInit, DoCheck{
     const fileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp']
     const maxFileSize = 900*1024; //921kb
     const file: File = event.target.files[0];
-    if(!fileTypes.includes(file.type)){
+    if(file && !fileTypes.includes(file.type)){
       this.pic_existe = false;
       this.FormUpdateProduct.get('update_picture')?.setValue('');
       alert('El archivo debe ser PNG, JPEG, JPG o WEBP.')

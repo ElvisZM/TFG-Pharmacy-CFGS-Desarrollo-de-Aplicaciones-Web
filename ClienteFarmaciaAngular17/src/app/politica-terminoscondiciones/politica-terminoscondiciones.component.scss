@@ -1,0 +1,25 @@
+.politica{
+    width: 100%;
+    background-color: rgb(255, 160, 122, 0.2);
+    margin-top: 2%;
+    margin-bottom: 4%;
+    > *{
+        width: 62%;
+        margin: auto;
+    }
+    >h2{
+        font-weight: bold;
+        padding: 3%;
+        text-align: center;
+    }
+    > h3{
+        font-weight: bold;
+        padding-bottom: 2%;
+    }
+    >p{
+        padding-bottom: 2%;
+    }
+    >h5{
+        margin-bottom: 2%;        
+    }
+}

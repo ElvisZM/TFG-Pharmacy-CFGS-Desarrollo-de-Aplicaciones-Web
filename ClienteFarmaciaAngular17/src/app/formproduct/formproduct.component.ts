@@ -1,9 +1,9 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink, NavigationEnd } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CrudproductService } from '../servicios/crudproduct.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { DatosService } from '../servicios/datos.service';
 
@@ -47,7 +47,7 @@ export class FormproductComponent implements OnInit, DoCheck{
   errorFormulario: boolean = false;
   formError: string = 'El producto ya existe.';
 
-  constructor(private router: Router, private activatedRoute:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService) {
+  constructor(private router: Router, private activatedRoute:ActivatedRoute, private crudProduct: CrudproductService, public fb: FormBuilder, private titleService: Title, private datosService: DatosService, private viewportScroller: ViewportScroller) {
     this.FormCreateProduct = this.fb.group({
       register_cn_prod:['', Validators.required],
       register_picture:[''],
@@ -65,6 +65,13 @@ export class FormproductComponent implements OnInit, DoCheck{
 
   ngOnInit(): void {
     this.titleService.setTitle('Sitio Administrativo | Añadir producto');
+
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
 
     this.datosService.getCategoriesList()
     .subscribe(categories => {

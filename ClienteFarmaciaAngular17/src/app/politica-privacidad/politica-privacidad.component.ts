@@ -4,19 +4,19 @@ import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-nosotros',
+  selector: 'app-politica-privacidad',
   standalone: true,
   imports: [],
-  templateUrl: './nosotros.component.html',
-  styleUrl: './nosotros.component.scss'
+  templateUrl: './politica-privacidad.component.html',
+  styleUrl: './politica-privacidad.component.scss'
 })
-export class NosotrosComponent implements OnInit {
+export class PoliticaPrivacidadComponent implements OnInit{
 
-  constructor(private router: Router, private viewportScroller: ViewportScroller, private titleService: Title) {}
+
+  constructor(private titleService: Title, private router: Router, private viewportScroller: ViewportScroller){}
 
   ngOnInit() {
-
-    this.titleService.setTitle('Nosotros');
+    this.titleService.setTitle('Privacidad');
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.viewportScroller.scrollToPosition([0, 0]);

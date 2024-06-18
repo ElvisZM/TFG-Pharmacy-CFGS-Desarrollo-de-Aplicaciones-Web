@@ -30,12 +30,22 @@ import { authGuard } from './auth.guard';
 import { adminGuard } from './admin.guard';
 import { confirmationpaymentGuard } from './confirmationpayment.guard';
 import { paymentGuard } from './payment.guard';
+import { PoliticaAvisolegalComponent } from './politica-avisolegal/politica-avisolegal.component';
+import { PoliticaTerminoscondicionesComponent } from './politica-terminoscondiciones/politica-terminoscondiciones.component';
+import { PoliticaPrivacidadComponent } from './politica-privacidad/politica-privacidad.component';
+import { PoliticaDevolucionesComponent } from './politica-devoluciones/politica-devoluciones.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login-register', component: LoginRegisterComponent },
+
   { path: 'nosotros', component: NosotrosComponent },
   { path: 'politica/cookies', component: PoliticacookiesComponent },
+  { path: 'politica/aviso/legal', component: PoliticaAvisolegalComponent},
+  { path: 'politica/terminos/condiciones', component: PoliticaTerminoscondicionesComponent},
+  { path: 'politica/privacidad', component: PoliticaPrivacidadComponent},
+  { path: 'politica/devoluciones', component: PoliticaDevolucionesComponent},
+
   { path: 'admin/panel', component: AdminPanelComponent, canActivate: [adminGuard]},
   { path: 'admin/panel/create/product', component: FormproductComponent},
   { path: 'admin/panel/update/product/:cn_prod/:cif_farm', component: FormproductupdateComponent},
@@ -45,6 +55,7 @@ const routes: Routes = [
   { path: 'tipo/pago', component: PaymentComponent, canActivate: [paymentGuard]},
   { path: 'confirmacion/pago', component: ConfirmationPaymentComponent, canActivate: [confirmationpaymentGuard] },
   { path: 'detalles/producto/:cn_prod/:cif_farm', component: ProductDetailsComponent},
+  
   { path: 'categoria/analgesicos', component: CatAnalgesicosComponent},
   { path: 'categoria/antiacidos', component: CatAntiacidosComponent},
   { path: 'categoria/antialergicos', component: CatAntialergicosComponent},

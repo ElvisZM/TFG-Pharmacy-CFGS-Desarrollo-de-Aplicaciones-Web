@@ -1,5 +1,6 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
@@ -11,15 +12,17 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class PoliticacookiesComponent implements OnInit{
 
-  constructor(private router: Router, private viewportScroller: ViewportScroller) { }
+  constructor(private router: Router, private viewportScroller: ViewportScroller, private titleService: Title) { }
 
 
   ngOnInit() {
-  this.router.events.subscribe((event) => {
-    if (event instanceof NavigationEnd) {
-      this.viewportScroller.scrollToPosition([0, 0]);
-    }
-  });
+    this.titleService.setTitle('Política de Cookies');
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
   }
 
 }

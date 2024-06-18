@@ -64,7 +64,7 @@ export class CatAnalgesicosComponent implements OnInit {
     } else if (+this.valorOrden === 1) {
 
       const reviewPromises = this.AllProducts.map(async (product: any) => {
-        const reviews = await this.reviewsService.getProductReviews(product.id).toPromise();
+        const reviews = await this.reviewsService.getProductReviewsService(product.id).toPromise();
         product.averageRating = reviews.length ? this.getAverageProductReview(reviews) : 0;
       });
 

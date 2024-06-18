@@ -4,24 +4,24 @@ import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-nosotros',
+  selector: 'app-politica-avisolegal',
   standalone: true,
   imports: [],
-  templateUrl: './nosotros.component.html',
-  styleUrl: './nosotros.component.scss'
+  templateUrl: './politica-avisolegal.component.html',
+  styleUrl: './politica-avisolegal.component.scss'
 })
-export class NosotrosComponent implements OnInit {
+export class PoliticaAvisolegalComponent implements OnInit {
 
-  constructor(private router: Router, private viewportScroller: ViewportScroller, private titleService: Title) {}
+  constructor(private titleService: Title, private router:Router, private viewportScroller: ViewportScroller){}
 
   ngOnInit() {
-
-    this.titleService.setTitle('Nosotros');
+    this.titleService.setTitle('Aviso Legal');
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.viewportScroller.scrollToPosition([0, 0]);
       }
     });
   }
+
 
 }

@@ -22,12 +22,21 @@ export class BotService {
       'texto': message,
       'author': author
     }
+    console.log(headers)
     return this.http.post(this.urlPath + 'openai/api', body, headers).pipe(catchError(error=>{
       console.log('Error en el servicio de chatbot', error);
       return error;
     }))
   }
 
+  endChatwithBot(): Observable<any>{
+    const headers = this.authService.getHeadersApiRequest();
+    console.log(headers)
+    return this.http.post(this.urlPath + 'end/chat', {}, {headers: headers.headers}).pipe(catchError(error => {
+      console.log('El error',error);
+      return error
+    }))
+  }
 
 
 }

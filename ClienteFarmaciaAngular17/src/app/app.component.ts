@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatosService } from './servicios/datos.service';
 import { AuthService } from './servicios/auth.service';
@@ -14,7 +14,7 @@ import { BotService } from './servicios/bot.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, DoCheck {
+export class AppComponent implements OnInit, DoCheck, OnDestroy {
   palabraBusqueda: string = '';
   token: boolean = false; 
   name: string = '';
@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, DoCheck {
     { text: 'Hola, ¿cómo puedo ayudarte?', sender: 'bot' }
   ];
 
-
+  chatEnded: boolean = false;
   constructor(private datosService: DatosService, private router: Router, private authService: AuthService, private cartInfo: CartInfoService, private botService: BotService) { }
 
   ngOnInit(){
@@ -60,14 +60,20 @@ export class AppComponent implements OnInit, DoCheck {
     }
   }
 
+  ngOnDestroy(): void {
+      this.endChat()
+  }
+
   buscar(){
     this.datosService.setPalabraBuscada(this.palabraBusqueda);
     this.router.navigate(['/productos/buscador/query', this.palabraBusqueda]);
   }
 
   logoutAccount(){
+    this.endChat()
     this.authService.logout();
-    this.token = false; 
+    this.token = false;     
+    
   }
 
   products(){
@@ -139,6 +145,14 @@ export class AppComponent implements OnInit, DoCheck {
   closeChatbot() {
     this.botService.chatOpen = false
     this.showChatbot = this.botService.chatOpen;
+  }
+
+  endChat(){
+    this.botService.endChatwithBot().subscribe(
+      response => {
+        console.log(response);
+      }
+    )
   }
 
 

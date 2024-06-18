@@ -4,24 +4,26 @@ import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-nosotros',
+  selector: 'app-politica-devoluciones',
   standalone: true,
   imports: [],
-  templateUrl: './nosotros.component.html',
-  styleUrl: './nosotros.component.scss'
+  templateUrl: './politica-devoluciones.component.html',
+  styleUrl: './politica-devoluciones.component.scss'
 })
-export class NosotrosComponent implements OnInit {
+export class PoliticaDevolucionesComponent implements OnInit{
 
-  constructor(private router: Router, private viewportScroller: ViewportScroller, private titleService: Title) {}
+  constructor(private router: Router, private viewportScroller: ViewportScroller, private titleService:Title){}
+
 
   ngOnInit() {
+    this.titleService.setTitle('Política de Devoluciones');
 
-    this.titleService.setTitle('Nosotros');
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.viewportScroller.scrollToPosition([0, 0]);
       }
-    });
+    })
   }
+
 
 }

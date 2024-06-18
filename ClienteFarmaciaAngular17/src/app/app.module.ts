@@ -37,6 +37,10 @@ import { CatHipolipemiantesComponent } from './cat-hipolipemiantes/cat-hipolipem
 import { CatSuplementosComponent } from './cat-suplementos/cat-suplementos.component';
 
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { PoliticaAvisolegalComponent } from './politica-avisolegal/politica-avisolegal.component';
+import { PoliticaTerminoscondicionesComponent } from './politica-terminoscondiciones/politica-terminoscondiciones.component';
+import { PoliticaPrivacidadComponent } from './politica-privacidad/politica-privacidad.component';
+import { PoliticaDevolucionesComponent } from './politica-devoluciones/politica-devoluciones.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,10 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     LoginRegisterComponent,
     NosotrosComponent,
     PoliticacookiesComponent,
+    PoliticaAvisolegalComponent,
+    PoliticaTerminoscondicionesComponent,
+    PoliticaPrivacidadComponent,
+    PoliticaDevolucionesComponent,
     DashboardComponent,
     MessagesComponent,
     UserslistComponent,
