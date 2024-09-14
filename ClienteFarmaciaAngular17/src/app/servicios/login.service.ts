@@ -19,8 +19,8 @@ export class LoginService {
     .set('grant_type', 'password')
     .set('username', dataLogIn['username'])
     .set('password', dataLogIn['password'])
-    .set('client_id', 'mi_aplicacion')
-    .set('client_secret', 'mi_clave_secreta');
+    .set('client_id', 'mi_aplicacion_tfg_psur')
+    .set('client_secret', 'mi_clave_secreta_tfg_psur');
     
     const cabecera = {
       'Content-Type': 'application/x-www-form-urlencoded',

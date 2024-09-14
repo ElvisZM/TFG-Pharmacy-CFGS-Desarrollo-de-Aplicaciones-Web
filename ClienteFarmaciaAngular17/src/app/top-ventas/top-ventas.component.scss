@@ -202,3 +202,25 @@
     cursor: not-allowed;
     opacity: 0.6;
 }
+
+
+@media screen and (prefers-color-scheme: dark) {
+
+	.product__item__pic__hover li a {
+		color: #ffffff;
+		border: 1px solid #7fad39;
+		background: #7fad39;
+	}
+
+	.product__item__pic__hover li:hover a i {
+		color: #7fad39;
+	}
+
+	.product__details__pic__item {
+		opacity: 1;
+
+	}
+
+	
+
+}

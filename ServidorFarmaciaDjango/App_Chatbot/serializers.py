@@ -34,13 +34,14 @@ class MensajeSerializer(serializers.ModelSerializer):
             return texto
         
     def validate_hora(self, hora):
-        # Convertir datetime.now() a aware usando la zona horaria local
-        now = datetime.now(timezone.utc).astimezone()
+        # Obtener la hora actual con zona horaria
+        now = timezone.now()
+
         if hora.tzinfo is None or hora.utcoffset() is None:
             # Convertir `hora` a aware si es naive usando la zona horaria local
-            hora = hora.replace(tzinfo=now.tzinfo)
+            hora = timezone.make_aware(hora, timezone.get_current_timezone())
         
         if hora is None or hora > now:
             raise serializers.ValidationError('La hora no es válida')
         return hora
-        
+            

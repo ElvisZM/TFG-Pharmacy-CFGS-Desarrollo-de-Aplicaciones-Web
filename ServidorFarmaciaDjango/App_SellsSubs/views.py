@@ -51,7 +51,18 @@ def save_payment(request):
                 compra_serializer = CompraSerializer(data=compra_data)
                 
                 if pago_serializer.is_valid() and compra_serializer.is_valid():
-                    cliente = Cliente.objects.get(usuario = request.data['cliente'])
+                    if request.data['cliente']:
+                        cliente = Cliente.objects.get(usuario = request.data['cliente'])
+                        
+                    elif request.data['administrador']:
+                        cliente = Administrador.objects.get(usuario = request.data['administrador'])
+                    elif request.data['gerente']:
+                        cliente = Gerente.objects.get(usuario = request.data['gerente'])
+                    elif request.data['empleado']:
+                        cliente = Empleado.objects.get(usuario = request.data['empleado'])
+                    else:
+                        return Response('Usuario invalido', status=status.HTTP_400_BAD_REQUEST)
+                    
                     carrito = CarritoCompra.objects.get(codigo_compra = request.data['carrito'])
                     
                     compra_creada = Compra.objects.create(fecha_compra=compra_serializer.data['fecha_compra'], direccion_envio=compra_serializer.data['direccion_envio'],

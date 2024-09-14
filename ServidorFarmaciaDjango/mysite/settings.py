@@ -169,11 +169,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bbdd_farmacia_tfg',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost', 
-        'PORT': '3306',  
+        'NAME': env('DB_NAME_DEV'),
+        'USER': env('DB_USER_DEV'),
+        'PASSWORD': env('DB_PASSWORD_DEV'),
+        'HOST': env('DB_HOST_DEV'), 
+        'PORT': env('DB_PORT_DEV'),  
     }
 }
 
@@ -255,14 +255,7 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST_DEV')
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
-    "https://localhost:4200",
-    "http://0.0.0.0:4200",
-    "https://0.0.0.0:4200",
-    "http://127.0.0.1:4200",
-    "https://127.0.0.1:4200",
-]
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS_DEV')
 
 PHARMACY_MODEL = 'App_ProductProvider.Farmacia'
 
@@ -294,11 +287,11 @@ if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bbdd_farmacia_tfg',
-            'USER': 'admin',
-            'PASSWORD': 'admin',
-            'HOST': 'localhost', 
-            'PORT': '3306',  
+            'NAME': env('DB_NAME_DEPLOY'),
+            'USER': env('DB_USER_DEPLOY'),
+            'PASSWORD': env('DB_PASSWORD_DEPLOY'),
+            'HOST': env('DB_HOST_DEPLOY'), 
+            'PORT': env('DB_PORT_DEPLOY'),  
         }
     }
     #Para evitar llamadas duplicadas a nuestra base de datos

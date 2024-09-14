@@ -641,3 +641,22 @@ font-size: 2rem;
 
 }
 
+
+
+
+
+@media screen and (prefers-color-scheme: dark) {
+
+    .container-menu{
+        color: #141D35;
+
+    }
+
+    .letras-animacion{
+        color: #141D35;
+        h5{
+            color: #141D35;
+        }
+    }
+
+}

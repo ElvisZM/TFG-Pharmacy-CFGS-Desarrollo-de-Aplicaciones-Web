@@ -4,3 +4,10 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background-color: #b1b2a4 !important;
+        color: #141D35 !important;
+    }
+}

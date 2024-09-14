@@ -702,3 +702,16 @@
 
 }
 
+
+
+
+
+@media screen and (prefers-color-scheme: dark) {
+	.product__details__pic__item > img {
+		opacity: 0.8 !important;
+	}
+
+	.breadcrumb__text{
+		opacity: 0.9;
+	}
+}

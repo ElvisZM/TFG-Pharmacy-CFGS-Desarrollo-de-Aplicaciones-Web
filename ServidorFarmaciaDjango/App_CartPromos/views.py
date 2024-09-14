@@ -88,9 +88,28 @@ def carrito_usuario(request):
             serializer_productos_recomendados = ProductoSerializer(productos_recomendados, many=True)
             serializer['productos_recomendados'] = serializer_productos_recomendados.data
             
-            cliente_usuario = Cliente.objects.get(usuario=request.user)
-            serializer_cliente = ClienteSerializer(cliente_usuario)
-            serializer['cliente'] = serializer_cliente.data
+            if request.user.rol == 1:
+                administrador_usuario = Administrador.objects.get(usuario=request.user)
+                serializer_administrador = AdministradorSerializer(administrador_usuario)
+                serializer['administrador'] = serializer_administrador.data                
+                
+            elif request.user.rol == 2:
+                cliente_usuario = Cliente.objects.get(usuario=request.user)
+                serializer_cliente = ClienteSerializer(cliente_usuario)
+                serializer['cliente'] = serializer_cliente.data
+                
+            elif request.user.rol == 3:
+                empleado_usuario = Empleado.objects.get(usuario = request.user)
+                serializer_empleado = EmpleadoSerializer(empleado_usuario)
+                serializer['empleado'] = serializer_empleado.data
+                
+            elif request.user.rol == 4:
+                gerente_usuario = Gerente.objects.get(usuario = request.user)
+                serializer_gerente = GerenteSerializer(gerente_usuario)
+                serializer['gerente'] = serializer_gerente.data
+                
+            else:
+                return Response('El usuario no es valido', status=status.HTTP_400_BAD_REQUEST)
             
             return Response(serializer)
         

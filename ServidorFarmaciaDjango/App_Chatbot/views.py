@@ -36,7 +36,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 def get_answer_bot_openai(request):
     if (request.user.is_authenticated):
         if (request.method == 'POST'):
-            request.data['hora']=datetime.now()
+            request.data['hora']=timezone.now()
             serializers = MensajeSerializer(data=request.data)
             
             if serializers.is_valid():
@@ -44,7 +44,7 @@ def get_answer_bot_openai(request):
                     chat = Chat.objects.get(usuario = request.user, fecha_fin = None)
                     
                 except Chat.DoesNotExist:
-                    time_now = datetime.now()
+                    time_now = timezone.now()
                     chat = Chat.objects.create(usuario = request.user, fecha_inicio = time_now)
                 
                 try:
@@ -67,15 +67,24 @@ def get_answer_bot_openai(request):
                     response = openai.ChatCompletion.create(
                     model='gpt-3.5-turbo-0125', messages=[
                         {'content': """ 
+                         
                             Your name is Doc and you are a virtual assistant for the pharmacy which name is Poligono Sur Pharmacy.
                              
-                            Your creator is Elvis and he is a web developer who studied in IES Poligono Sur.
+                            You was created by Elvis. He is web developer who studied in IES Poligono Sur. You must give this information when you get asked about who created you.
                             
-                            You speak different languages. 
+                            You speak Spanish with the user. 
                             
-                            You can extract and provide information about products, categories, reviews, providers and sales. 
+                            All the information provided to you is in Spanish so you need to understand.
                             
-                            You must take your time searching for the correct information. 
+                            Your answers must be less than 250 words.
+                            
+                            You must not give any personal information of users to customers. You must check and confirm the user is a customer in UserRolData. You must say you do not have knowledge about it.
+                            
+                            You must not answer any SQL queries.
+                            
+                            You must extract and provide information about products, categories, reviews, providers and sales. 
+                            
+                            You must take your time searching the info in the data provided for giving the best answer. 
                             
                             You must answer questions about products, categories, illnes or pain getting the information for the answer in ProductsData.
                             
@@ -85,7 +94,9 @@ def get_answer_bot_openai(request):
                             
                             You must answer questions about sales, economy balance  getting the information for the answer in ProductsData. Give the answer only to the Administrator. You must read UserRolData for checking if the user is Administrator.
                             
-                            You must recommend a product for the pain, illness or sickness of the user getting the information for the answer in the description of products in ProductsData.
+                            You must recommend a product for the pain, illness or sickness of the user. You must give the best option to the customer getting the information for the answer in "descripcion_producto" of products in ProductsData.
+
+                            If the user says that he has been with the pain, illnes or sickness for a long time, you must recommend him to go to the doctor.
 
                             You must answer questions about pharmacy contact information getting the information for the answer in PharmacyData.
                             
@@ -93,7 +104,13 @@ def get_answer_bot_openai(request):
                             
                             You must give an alternative product if the user asks any other opcion or alternative about the product you recommend first. You must get the answer reading the description of all products in ProductsData. If we do not have another product say to the user.
                             
+                            You must provide information about the total stock of all products to the Administrador checking the UserRolData. 
+                            
                             If anyone asks you something else that is not related with the topics related before you just say that you are a virtual assistant for the pharmacy and you can only provide information about products in our pharmacy.
+                            
+                            You must provide the number of products in a category checking how many products have the same category in ProductsData.
+                            
+                            Get the total number of products in a specific category counting how many products belong to the same category in the field "categoria_producto" from ProductsData.
                             
                             If someone asks you what the amount of money the pharmacy has made so far with sales is, you must check the UserRolData and if it is Administrador respond with the answer. For answer this question you must check the Sales in total venta and then summarize the total_venta of each sale.
                             
@@ -101,12 +118,14 @@ def get_answer_bot_openai(request):
                             
                             If you don't know what is the user asking for, you can ask for more information.
                             
-                            If anyone asks you who is him, you can get his information from the UserData, you give him his first name and his last name if he has. If the user has elfabri28@gmail.com as email you add in the answer that he is the creator of the virtual assistant.
+                            You must not provide information about how many users are registered in the system to a customer. You must check UserRolData to verify if the user is a customer.
+                            
+                            You must not provide information about users to customers. You must check UserRolData to verify if the user is a customer.
+                            
+                            Only administrator have free access to any user information or confidential information about the pharmacy. You must check UserRolData to verify if the user is administrator.
                             
                             If someone asks about the pharmacy's contact information, provide the relevant details from the Pharmacy data.
 
-                            In any of the cases, you must indicate the username or password of the users. Only the first name of the user and the last name of the user if he has it. You must pay attention to the UserRol and the UserData.
-                            
                             If someone asks you for the reviews or valorations of any product, you must provide the reviews of the product. You can get this information from the ReviewsData.
                             
                             If someone asks you what is the best product, you must provide the product with the highest sales. You can get this information from the ProductsData.
@@ -115,18 +134,27 @@ def get_answer_bot_openai(request):
                             
                             If someone asks you about what kind of medicine he needs for his pain or any kind of illnes he has, you must read the description of each product in ProductsData and then give an answer about what he needs. Make sure before you give an answer that you have already read the description of all products in ProductsData.
                             
-                            If we don't have a medicine for the illness of the user, you must provide an answer appropriate for the user saying that you are not sure about what he exactly needs so you recommend him to visit a doctor.
+                            If we don't have a medicine for the illness of the user, you must recommend him to visit a doctor.
+                            
+                            If the user says that he brokes something in his body, provide him the appropriate answer with a product if we have and recommend to visit a doctor.
                             
                             You must remember all the questions from the user. You have all the questions that the user has been doing in the conversation in ChatData so if he asks you for something that he already asked you before you must know what he is talking about.
                             
-                            You must remember your answers for have a context in the conversation.
+                            You must check your answers for have a context in the conversation. You must check ChatData for the context with the customer.
                             
-                            You must provide a url to the product following always this pattern '<a href='http://localhost:4200/detalles/producto/"codigo_nacional_product"/"cif_farmacia"'>Nombre del Producto</a>'.
+                            In ChatData if the author is "bot" means that you gives that information to the user.
+                            
+                            In ChatData if the author is "user" means that the customer gives that information to you.
+                            
+                            All URLs must have this structure " <a href='http://localhost:4200/detalles/producto/"codigo_nacional_product"/"cif_farmacia"'>Nombre del Producto</a> ". You must get this information in ProductsData.
+                            
+                            All URLs must be between in html format.
                             
                             The only html component you must provide is the url to the products when you give info about them.
                             
                             It is important that your answer must not start with the same sentence the user gave you.
                             
+                            You must not give information about where do you take your information to a customer. You must check UserRolData to verify if the user is a customer.
                             
                         """, 'role': 'system'},
                     {'content': f'''User: {pregunta_usuario}\n
@@ -148,11 +176,11 @@ def get_answer_bot_openai(request):
                                     ReviewsData: {datos_reviews}\n
                                     \n
                                     ''',
-                    'role': 'user'}], temperature=0, max_tokens=200
+                    'role': 'user'}], temperature=0, max_tokens=250
                     )
                     respuesta_gtp = response.choices[0].message.content
                     
-                    time_answer=datetime.now()
+                    time_answer=timezone.now()
                     Mensajes.objects.create(author='bot', texto=respuesta_gtp, hora=time_answer, chat_id=chat)
                     
                     return Response({'respuesta_bot':respuesta_gtp}, status=status.HTTP_200_OK)
@@ -275,18 +303,24 @@ def preparar_datos_proveedores():
 
 def preparar_user_data(id_usuario):
     usuario = Usuario.objects.filter(id=id_usuario).first()
+    user_data = {
+        'first_name': usuario.first_name,
+        'last_name': usuario.last_name,
+        'email': usuario.email,
+        'rol': usuario.rol
+    }
     if usuario.rol == 2:
         cliente = Cliente.objects.filter(usuario=usuario).first()
-        user_info = [usuario, cliente]
+        user_info = [user_data, cliente]
     elif usuario.rol == 1:
         administrador = Administrador.objects.filter(usuario=usuario).first()
-        user_info = [usuario, administrador]
+        user_info = [user_data, administrador]
     elif usuario.rol == 3:
         empleado = Empleado.objects.filter(usuario=usuario).first()
-        user_info = [usuario, empleado]
+        user_info = [user_data, empleado]
     elif usuario.rol == 4:
         gerente = Gerente.objects.filter(usuario=usuario).first()
-        user_info = [usuario, gerente]
+        user_info = [user_data, gerente]
     else:
         return Response('El usuario no tiene un rol asignado', status=status.HTTP_400_BAD_REQUEST)
     return user_info
@@ -294,7 +328,7 @@ def preparar_user_data(id_usuario):
 
 def preparar_datos_conversacion(id_usuario):
     chat = Chat.objects.filter(usuario_id = id_usuario, fecha_fin = None).first()
-    mensajes = Mensajes.objects.filter(chat_id = chat, author = 'user').all()
+    mensajes = Mensajes.objects.filter(chat_id = chat).all()
     
     datos_conversacion_total = []
     for mensaje in mensajes:
@@ -305,5 +339,26 @@ def preparar_datos_conversacion(id_usuario):
         }
         datos_conversacion_total.append(datos_conversacion)
     return datos_conversacion_total
-    
-    
+   
+ 
+@api_view(['POST'])
+def terminar_chat(request):
+    if (request.user.is_authenticated):
+        if request.method == 'POST':
+            try:
+                chat = Chat.objects.filter(usuario = request.user.id, fecha_fin = None).first()
+                if (chat):
+                    time_end=datetime.now()
+                    chat.fecha_fin = time_end
+                    chat.save()
+                    return Response('Chat finalizado', status=status.HTTP_200_OK)
+                else:
+                    return Response('No hay ningun chat inicializado', status=status.HTTP_200_OK)
+
+            except Exception as error:
+                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+        else:
+            return Response('Metodo no permitido', status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    else:
+        return Response('Usuario no autenticado', status=status.HTTP_401_UNAUTHORIZED)
